@@ -1,13 +1,12 @@
 services:
   db:
     image: mongo
+    hostname: mongo
     volumes:
       - db_data:/data/db
       - db_config:/data/configdb
     ports:
       - "127.0.0.1:27017:27017"
-    secrets:
-      - db_password
 
   api:
     depends_on:
@@ -22,8 +21,6 @@ services:
       - hmac
 
 secrets:
-   db_password:
-     file: secrets/db_password.txt
    hmac:
      file: secrets/hmac.txt
 
