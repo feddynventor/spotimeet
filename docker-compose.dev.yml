@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mongo
+    volumes:
+      - db_data:/data/db
+      - db_config:/data/configdb
+    ports:
+      - "127.0.0.1:27017:27017"
+    secrets:
+      - db_password
+
+  db-management:
+    image: mongo-express
+    ports:
+      - "127.0.0.1:8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: db
+    depends_on:
+      - db
+    secrets:
+      - db_password
+
+secrets:
+   db_password:
+     file: secrets/db_password.txt
+   hmac:
+     file: secrets/hmac.txt
+
+volumes:
+    db_config:
+    db_data:
