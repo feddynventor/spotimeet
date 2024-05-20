@@ -4,13 +4,20 @@ const Artist = new model('Artist', new Schema({
     name: String,
     age: Number,
     followers: Number,
-    events: [{
+    tours: [{
         name: String,
-        date: Date,
-        location: String,
+        cover: String,
+        events: [{
+            city: String,
+            date: Date,
+            venue: String,
+            url: String,
+        }],
+        lastUpdate: Date,
     }]
 }));
 
+module.exports = Artist;
 
 Artist.findCached = async function (name) {
     const artist = await this.findOne({ name });
@@ -20,5 +27,3 @@ Artist.findCached = async function (name) {
 
     return this.create( /** erigi il tuo empire */);
 }
-
-module.exports = Artist

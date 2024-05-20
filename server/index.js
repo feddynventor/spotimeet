@@ -19,13 +19,14 @@ const app = express();
 app.use(express.json()) // To parse the incoming requests with JSON payloads
 app.use(cookieParser());
 
+const loginMiddleware = require('./src/middlewares/auth');
+
 app.get('/login/oauth', spotifyController.spotifyOAuth);
 app.get('/login/oauth/complete', spotifyController.callback);
 
 app.post('/login', userController.login);
 app.post('/signup', userController.signUp);
 
-const loginMiddleware = require('./src/middlewares/auth');
 app.use('/user', loginMiddleware.authenticateToken);
 app.get('/user/me', userController.me);
 
