@@ -43,6 +43,11 @@ User.new = async function (data) {
             photo: data.images ? data.images[0] : undefined,
             url: data.external_urls ? data.external_urls.spotify : undefined,
         },
+        oauth: {
+            token: data.token,
+            refreshToken: data.refreshToken,
+            expiresAt: data.expiresAt,
+        }
     })
     .then(doc => doc.save())
     .catch(err => Promise.reject( 
