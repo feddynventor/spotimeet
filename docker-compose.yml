@@ -16,7 +16,7 @@ services:
       - "127.0.0.1:8000:80"
     environment:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
-      SECRET: /run/secrets/hmac
+      JWT_SECRET: /run/secrets/hmac
     secrets:
       - hmac
 

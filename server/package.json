@@ -4,12 +4,13 @@
   "description": "Meet new people flowing with music",
   "main": "index.js",
   "scripts": {
-    "dev": "MONGODB_USERNAME=mongodmin MONGODB_PASSWORD=$(cat ../secrets/db_password.txt) NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon index.js"
+    "dev": "SPTF=$(cat ../secrets/spotify.txt) SPTF_SECRET=$(cat ../secrets/spotify_secret.txt) JWT_SECRET=$(cat ../secrets/hmac.txt) NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon index.js"
   },
   "author": "Feddy & nk735",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.8",
+    "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.5"
