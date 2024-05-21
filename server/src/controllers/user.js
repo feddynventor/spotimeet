@@ -16,11 +16,11 @@ module.exports = {
             id: name,
             email,
             password,
-            profile: { displayName: fullname }
+            profile: { display_name: fullname }
         })
         .then(auth.jwtPayload)
         .then(token => res.send({ token }))
         .catch(error => res.status(403).send({error}))
     },
-    me: async (req, res) => res.send(req.user)
+    me: async (req, res) => req.api.get('/me').then( user => res.send(user.data) )
 }

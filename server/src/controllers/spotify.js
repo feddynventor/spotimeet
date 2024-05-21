@@ -28,18 +28,24 @@ module.exports = {
             const { token, refreshToken, expiresAt } = await spotifyRepository
             .getAccessToken(req.query.code, `http://${req.headers.host}/login/oauth/complete`)
             .catch( err => res.status(403).send({error: err.message}) );
-            
-            if (!!token) await spotifyRepository
-                .getCurrentUser(token)
-                .then(data => res.send)
-                // .then(data => User.new({
-                //     ...data,
-                //     oauth: { token, refreshToken, expiresAt }
-                // }))
-                // .then(auth.jwtPayload)
-                // .then(token => res.send({ token }))
+
+            if (token) spotifyRepository
+                .tokenToUser(token)
+                // verify if user is already signed up, the user is already verified by spotify
+                .then( user => User
+                    .byMail(user.email)
+                    .catch(() => Promise.resolve(
+                            User.new({
+                                ...user,
+                                oauth: { token, refreshToken, expiresAt }
+                            })
+                        )
+                    )
+                )
+                .then(auth.jwtPayload)
+                .then(token => res.send({ token }))
                 .catch(error => res.status(403).send({error}))
-            else
+            else 
                 res.status(403).send({error: 'Spotify non ha risposto correttamente'});
         }
     }

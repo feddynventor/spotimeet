@@ -35,19 +35,15 @@ module.exports = User;
  */
 User.new = async function (data) {
     return this.create({
-        name: data.id,
+        username: data.id,
         email: data.email,
         passwordHash: data.password,
         profile: {
-            displayName: data.displayName,
+            displayName: data.display_name,
             photo: data.images ? data.images[0] : undefined,
             url: data.external_urls ? data.external_urls.spotify : undefined,
         },
-        oauth: {
-            token: data.token,
-            refreshToken: data.refreshToken,
-            expiresAt: data.expiresAt,
-        }
+        oauth: data.oauth
     })
     .then(doc => doc.save())
     .catch(err => Promise.reject( 
@@ -84,6 +80,22 @@ User.byCredentials = async function (username, email, password) {
 User.byIdentifier = async function (id) {
     return this.findOne({
         _id: id
+    })
+    .select("-passwordHash -__v")
+    .then(user => {
+        if (!user) return Promise.reject('Utente non trovato');
+        else return user;
+    })
+}
+
+/**
+ * mainly used for OAuth
+ * @param {*} email
+ * @returns the user object
+ */
+User.byMail = async function (email) {
+    return this.findOne({
+        email
     })
     .select("-passwordHash -__v")
     .then(user => {
