@@ -54,6 +54,22 @@ User.new = async function (data) {
 
 /**
  * 
+ * @param {*} uid mongo _id of the user
+ * @param {*} data the new oauth data, access token, refresh token and expiration date
+ * @returns the new mongo object of the user
+ */
+User.refreshToken = async function (uid, data) {
+    return this.updateOne({
+        _id: uid
+    }, {
+        $set: {
+            "oauth": data  // this data is parsed in the repo method
+        }
+    }, { new: true })
+}
+
+/**
+ * 
  * @param {String} name username
  * @param {String} email alternative to username
  * @param {String} password hashed password in simple SHA256

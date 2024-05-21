@@ -19,6 +19,23 @@ module.exports = {
             refreshToken: auth.data.refresh_token,
             expiresAt: new Date(Date.now() + auth.data.expires_in * 1000)
         })),
+    refreshToken: async (refresh_token) => axios({
+            method: 'POST',
+            url: 'https://accounts.spotify.com/api/token',
+            data: {
+                refresh_token,
+                grant_type: 'refresh_token'
+            },
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + (new Buffer.from(process.env.SPTF + ':' + process.env.SPTF_SECRET).toString('base64'))
+            },
+            json: true
+        }).then( auth => ({
+            token: auth.data.access_token,
+            refreshToken: refresh_token,  // the refresh token is reusable
+            expiresAt: new Date(Date.now() + auth.data.expires_in * 1000)
+        })),
     tokenToUser: async (token) => axios
         .get('https://api.spotify.com/v1/me', {
             headers: {

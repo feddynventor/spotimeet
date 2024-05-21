@@ -22,5 +22,8 @@ module.exports = {
         .then(token => res.send({ token }))
         .catch(error => res.status(403).send({error}))
     },
-    me: async (req, res) => req.api.get('/me').then( user => res.send(user.data) )
+    me: async (req, res) => req.api
+    .get('/me')
+    .then( user => res.send(user.data) )
+    .catch( error => res.status(500).send({error}) )
 }
