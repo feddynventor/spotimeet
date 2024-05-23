@@ -28,6 +28,10 @@ const drawerWidth = 320;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
+  margin: "20px 0px 20px 20px",
+  // backgroundColor: '#332D2A', // Sfondo grigio
+  border: '4px solid #FF6D2E', // Bordo arancione
+  borderRadius: '12px', // Bordi arrotondati solo a destra
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -36,6 +40,10 @@ const openedMixin = (theme) => ({
 });
 
 const closedMixin = (theme) => ({
+  margin: "20px 0px 20px 20px",
+  // backgroundColor: '#332D2A', // Sfondo grigio
+  border: '4px solid #FF6D2E', // Bordo arancione
+  borderRadius: '12px', // Bordi arrotondati solo a destra
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -47,7 +55,7 @@ const closedMixin = (theme) => ({
   },
 });
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+const Drawer = styled(MuiDrawer)(
   ({ theme, open }) => ({
     width: drawerWidth,
     flexShrink: 0,
@@ -137,55 +145,32 @@ export default function Sidebar() {
             id="searchBar"
             startAdornment={<InputAdornment position="start"><SearchIcon></SearchIcon></InputAdornment>}
             label="Ricerca"
+            sx={{borderRadius:'25px'}}
           />
         </FormControl> }
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                border: '1px solid',
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
+        {['Artisti', 'Concerti', 'Tourne', 'Drafts'].map((text, index) => (
+          <Box sx={{ m: open ? 2 : null, borderRadius: '10px', border: open ? '2px solid #FF6D2E' : 'unset'}}>
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
+                  minHeight: 72,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
                 }}
               >
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                <MailIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          </Box>
         ))}
       </List>
     </Drawer>
