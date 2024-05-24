@@ -1,15 +1,22 @@
 import React from 'react';
-import { Card, CardContent, Typography, Avatar, Button, Box, Badge } from '@mui/material';
+import { Card, Typography, Avatar, Button, Box, Badge } from '@mui/material';
 import { styled } from '@mui/system';
+//import gradiente from '../assets/gradiente.jpg';
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #ffa69e 0%, #861657 100%)',
-  borderRadius: '16px',
+  backgroundImage: 'url("gradiente")',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundImage: 'linear-gradient(135deg, #ff8a65, #ff6f00)',
+  borderRadius: '12px',
   color: '#fff',
-  padding: theme.spacing(2),
+  padding: theme.spacing(3),
+  margin: '15px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  position: 'relative',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -45,6 +52,11 @@ const ChatBadge = styled(Badge)(({ theme }) => ({
   position: 'absolute',
   top: theme.spacing(2),
   right: theme.spacing(2),
+  height: '32px',
+  width: '32px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 }));
 
 const ConcertCard = ({group}) => {

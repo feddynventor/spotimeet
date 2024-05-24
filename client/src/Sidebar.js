@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -28,7 +28,7 @@ const openedMixin = (theme) => ({
   width: drawerWidth,
   margin: "20px 0px 20px 20px",
   // backgroundColor: '#332D2A', // Sfondo grigio
-  border: '4px solid #FF6D2E', // Bordo arancione
+  //border: '4px solid #FF6D2E', // Bordo arancione
   borderRadius: '12px', // Bordi arrotondati solo a destra
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -40,7 +40,7 @@ const openedMixin = (theme) => ({
 const closedMixin = (theme) => ({
   margin: "20px 0px 20px 20px",
   // backgroundColor: '#332D2A', // Sfondo grigio
-  border: '4px solid #FF6D2E', // Bordo arancione
+  //border: '4px solid #FF6D2E', // Bordo arancione
   borderRadius: '12px', // Bordi arrotondati solo a destra
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -104,12 +104,14 @@ export default function Sidebar() {
       </ListItem>
 
       { open ? <Box fullWidth sx={{ m:2 }}>
-          <Grid container direction="row" alignItems="center">
-            <Avatar sx={{ width: 56, height: 56 }}>NC</Avatar>
-            <Typography sx={{ margin: '1rem' }} variant="h5">
+          <Box  sx={{justifyContent:"center", display:"flex"}}>
+            <Avatar sx={{ width: 100, height: 100,}}>NC</Avatar>
+          </Box>
+          <Box  sx={{justifyContent:"center", display:"flex"}}>
+          <Typography sx={{ margin: '1rem' }} variant="h5">
               Nicola Cucinella
-            </Typography>
-          </Grid>
+          </Typography>
+          </Box>
         </Box> : null}
 
       <List>
@@ -154,6 +156,8 @@ export default function Sidebar() {
                   minHeight: 72,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
+                  transition: 'background-color 0.5s ease',
+                  backgroundColor: open ? '#FF6D2E' : '#332D2A',
                 }}>
                 <ListItemIcon
                   sx={{

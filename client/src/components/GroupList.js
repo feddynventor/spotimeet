@@ -34,8 +34,8 @@ export default function GroupList({ groups }) {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           {groups.map((group) => (
-            <Grid item xs={4}>
-              {/* <Item>                    */}
+            <Grid item xs={12} sm={12} md={6} lg={4}>
+              {/* <Item>  */}
                 <ConcertCard group={group}></ConcertCard>
               {/* </Item> */}
             </Grid>

@@ -62,39 +62,27 @@ root.render(
         <Box sx={{ display: 'flex' }}>
           <Sidebar />
           <Container sx={{ boxSizing: "border-box", overflow: "hidden" }} maxWidth="false">
-            <Box sx={{ position: 'relative', flexGrow: 1 }}>
-                <img src={banner} alt='banner pubblicitario' style={{ width: '100%', maxHeight:"20vh", borderRadius: '12px', marginTop:"20px" }} />
+            <Box sx={{ position: 'relative', flexGrow: 1,  justifyContent: 'center', display:"flex"}}>
+                <img src={banner} alt='banner pubblicitario' style={{ width: '100%', maxHeight:"20vh", borderRadius: '12px', marginTop:"20px", maxWidth:"1100px", display:"flex" }} />
             </Box>
               <Box sx={{
                 overflowY: "scroll",
                 overflowX: "hidden", 
-                marginTop:"20px", 
+                marginTop:"20px",
                 padding:"10px", 
                 minHeight:"75vh", 
                 maxHeight:"75vh", 
-                border: '4px solid #FF6D2E',
+                //border: '4px solid #FF6D2E',
                 borderRadius: '12px', 
                 backgroundColor: '#332D2A',
-                cursor:"pointer",
+                
 
               }}>
             <GroupList groups={groups} />
-            <Typography paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-              enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-              imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-              Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-              Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-              adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-              nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-              leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-              feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-              consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-              sapien faucibus et molestie ac.
-            </Typography>
-          </Container>
-        </Box>
+            <GroupList groups={groups} />
+          </Box>
+        </Container>
+      </Box>
     </ThemeProvider>
   </React.StrictMode>
 );
