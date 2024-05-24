@@ -42,10 +42,23 @@ root.render(
         <CssBaseline />
         <Box sx={{ display: 'flex' }}>
           <Sidebar />
-          <Container sx={{ boxSizing: "border-box" }}>
+          <Container sx={{ boxSizing: "border-box", overflow: "hidden" }} maxWidth="false">
             <Box sx={{ position: 'relative', flexGrow: 1 }}>
-              <img src={banner} alt='banner pubblicitario' style={{ width: '100%' }} />
+                <img src={banner} alt='banner pubblicitario' style={{ width: '100%', maxHeight:"20vh", borderRadius: '12px', marginTop:"20px" }} />
             </Box>
+              <Box sx={{
+                overflowY: "scroll",
+                overflowX: "hidden", 
+                marginTop:"20px", 
+                padding:"10px", 
+                minHeight:"75vh", 
+                maxHeight:"75vh", 
+                border: '4px solid #FF6D2E',
+                borderRadius: '12px', 
+                backgroundColor: '#332D2A',
+                cursor:"pointer",
+
+              }}>
             <GroupList groups={groups} />
             <Typography paragraph>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

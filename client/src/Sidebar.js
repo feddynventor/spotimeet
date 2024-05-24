@@ -11,7 +11,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
@@ -55,25 +54,24 @@ const closedMixin = (theme) => ({
   },
 });
 
-const Drawer = styled(MuiDrawer)(
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
   ({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-    }),
-  }),
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+  ...(open && {
+    ...openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
+     }),
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
+     }),
+  })
 );
 
 export default function Sidebar() {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -95,23 +93,25 @@ export default function Sidebar() {
   return (
     <Drawer variant="permanent" open={open}>
       <ListItem disablePadding>
-        <ListItemButton 
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-              onClick={open ? handleDrawerClose : handleDrawerOpen}>
+        <ListItemButton
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? 'initial' : 'center',
+            px: 2.5,
+          }}
+          onClick={open ? handleDrawerClose : handleDrawerOpen}>
           <MenuIcon />
         </ListItemButton>
       </ListItem>
 
       { open ? <Box fullWidth sx={{ m:2 }}>
-        <Grid container direction="row" alignItems="center">
-          <Avatar sx={{ width: 56, height: 56 }}>NC</Avatar>
-          <Typography sx={{ margin: '1rem' }} variant="h5">Nicola Cucinella</Typography>
-        </Grid>
-      </Box> : null }
+          <Grid container direction="row" alignItems="center">
+            <Avatar sx={{ width: 56, height: 56 }}>NC</Avatar>
+            <Typography sx={{ margin: '1rem' }} variant="h5">
+              Nicola Cucinella
+            </Typography>
+          </Grid>
+        </Box> : null}
 
       <List>
         { !open ? 
@@ -123,7 +123,6 @@ export default function Sidebar() {
               px: 2.5,
             }}
             onClick={()=>{
-
               handleDrawerOpen();
             }}
           >
