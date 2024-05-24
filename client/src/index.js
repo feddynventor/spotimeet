@@ -8,7 +8,7 @@ import { CssBaseline } from '@mui/material';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import GroupList from './GroupList';
+import GroupList from './components/GroupList';
 
 const groups = [{
   name: 'Group 1',
@@ -20,7 +20,26 @@ const groups = [{
   members: 12,
   type: 'cnocert',
   date: '2021-10-01',
-}]
+},
+{name: 'Ciccio',
+members: 12,
+type: 'cnocert',
+date: '2021-10-01'},
+{
+  name: 'Group 1',
+  members: 65,
+  type: 'cnocert',
+  date: '2021-10-01',
+}, {
+  name: 'Group 2',
+  members: 12,
+  type: 'cnocert',
+  date: '2021-10-01',
+},
+{name: 'Ciccio',
+members: 12,
+type: 'cnocert',
+date: '2021-10-01'}]
 
 const darkTheme = createTheme({
   palette: {
