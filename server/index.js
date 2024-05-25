@@ -17,6 +17,7 @@ app.post('/login', userController.login);
 app.post('/signup', userController.signUp);
 
 app.use('/user', require('./src/routes/user'));
+app.use('/artists', require('./src/routes/artists'));
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

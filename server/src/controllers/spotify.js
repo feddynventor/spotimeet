@@ -1,4 +1,4 @@
-const spotifyRepository = require('../repositories/spotify');
+const spotifyRepository = require('../repositories/spotify_oauth');
 const User = require('../models/User');
 const auth = require('../middlewares/auth');
 

@@ -1,26 +1,20 @@
 const axios = require('axios');
-const Artist = require('../models/Artist');
 
 module.exports = {
     fetchByArtist: (artist) => axios
-        .get(`https://api.fedele.website/ticketone/${artist}?uniqueCity=1`)
-        .then( res => {
-            return Promise.all(
-                res.data.map( async event => ({
-                    name: event.name,
-                    cover: event.cover,
-                    dates: event.dates,
-                }) )
-            )
-        }),
-    
-    get: async (artist) => {
-        return Artist
-            .findOne({ name: artist })
-            .then( async res => {
-                if (res) return artist;
-                res = await module.exports.fetchByArtist(artist);
-                console.log(res);
-            })
-    },
+        .get(`https://api.fedele.website/ticketone/${
+            artist.replace(/ /g, '-').replace(/\'/g, '-').toLowerCase()
+        }?uniqueCity=1`)
+        .then( res => res.data )
+        .then( events => events.length>0 ? events : Promise.resolve([]) )
+        .then( events => events.map( event => ({
+                name: event.name,
+                cover: "https://ticketone.it".concat(event.cover),
+                banner: "https://ticketone.it".concat(event.cover.replace('222x222', 'evo/artwork')),
+                dates: event.dates,
+            }) 
+        ))
+        .catch( () => Promise.resolve([]) )
+        // .catch( error => { console.error(error.data); return Promise.resolve([]) })
+    // )
 }

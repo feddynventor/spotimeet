@@ -1,6 +1,6 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const spotifyRepository = require('../repositories/spotify');
+const spotifyRepository = require('../repositories/spotify_oauth');
 const User = require('../models/User');
 
 module.exports = {
@@ -32,7 +32,7 @@ module.exports = {
             .then( async user => {
                 if (!user) return res.sendStatus(401);
 
-                console.log("AUTHENTICATED", user)
+                console.log("AUTHENTICATED", user.oauth.expiresAt, user.email)
                 if (!!user.oauth) {
                     if (user.oauth.expiresAt < new Date()) await spotifyRepository
                         .refreshToken(user.oauth.refreshToken)
