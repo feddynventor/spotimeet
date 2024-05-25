@@ -29,7 +29,8 @@ const openedMixin = (theme) => ({
   margin: "20px 0px 20px 20px",
   // backgroundColor: '#332D2A', // Sfondo grigio
   //border: '4px solid #FF6D2E', // Bordo arancione
-  borderRadius: '12px', // Bordi arrotondati solo a destra
+  borderRadius: '12px',
+  height:'95vh',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -41,7 +42,8 @@ const closedMixin = (theme) => ({
   margin: "20px 0px 20px 20px",
   // backgroundColor: '#332D2A', // Sfondo grigio
   //border: '4px solid #FF6D2E', // Bordo arancione
-  borderRadius: '12px', // Bordi arrotondati solo a destra
+  borderRadius: '12px',
+  height:'95vh',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
