@@ -20,10 +20,12 @@ const User = new model('User', new Schema({
         refreshToken: String,
         expiresAt: Date,
     },
-    // events: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Event',
-    // }],
+    favourites: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
+    }],
+    lastLogin: Date,
+    lastUpdate: Date,
 }));
 
 module.exports = User;
@@ -100,7 +102,12 @@ User.byIdentifier = async function (id) {
     .select("-passwordHash -__v")
     .then(user => {
         if (!user) return Promise.reject('Utente non trovato');
-        else return user;
+        else return this
+        .findOneAndUpdate({
+            _id: id
+        }, {
+            $set: { lastLogin: new Date().toISOString() }
+        })
     })
 }
 
@@ -118,5 +125,13 @@ User.byMail = async function (email) {
         if (!user) return Promise.reject('Utente non trovato');
         else return user;
     })
+}
 
+User.addFavourites = async function (uid, artists) {
+    return this.updateMany({
+        _id: uid
+    }, {
+        $addToSet: { favourites: artists },
+        $set: { lastUpdate: new Date().toISOString() }
+    })
 }

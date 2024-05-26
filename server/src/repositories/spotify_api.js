@@ -19,8 +19,11 @@ module.exports = {
     getArtist: (api, id) => {
         return api
         .get(`/artists/${id}`)
-        .then( res => {
-            return artistSchema(res.data)
-        })
+        .then( res => artistSchema(res.data) )
     },
+    getMyFavouriteArtists: (api) => {
+        return api
+        .get(`/me/following?type=artist&limit=10`)
+        .then( res => res.data.artists.items.map( artistSchema ))
+    }
 }
