@@ -49,6 +49,7 @@ module.exports = {
      * (il flusso di utilizzo sul frontend non vedra' mai un artista non presente in cache)
      * Vengono richiesti i tours se la data di ultimo aggiornamento e' troppo indietro, altrimenti ritorna cache
      * TODO: sarebbe l'ideale triggerare un aggiornamento intorno a mezzanotte (attenzione overload, specifica ulteriore)
+     * Se viene specificato il parametro `all` si aggiornano i tours comunque
      */
     get: (req, res) => {
         const { id } = req.params;
@@ -61,7 +62,7 @@ module.exports = {
                 .getArtist(req.api, id)
                 .then( a=> Artist.addToCache(a.uri, a)) )
         .then( async artist => {
-            if (checkExpired(artist.lastUpdate)) return Artist.updateTours(artist._id, await events.fetchByArtist(artist.name))
+            if (checkExpired(artist.lastUpdate) || !!!req.params.all) return Artist.updateTours(artist._id, await events.fetchByArtist(artist.name))
             else return artist
         } )
         .then( artist => res.send(artist) )

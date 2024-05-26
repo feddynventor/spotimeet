@@ -21,6 +21,7 @@ const Artist = new model('Artist', new Schema({
     tours: [{
         name: String,
         cover: String,
+        banner: String,
         dates: [{
             city: String,
             date: Date,

@@ -6,18 +6,17 @@ module.exports = {
     /**
      * user spotify login form
      */
-    spotifyOAuth: (req, res) => {
+    spotifyOAuth: (req, res) => 
         res.redirect(
             'https://accounts.spotify.com/authorize?' +
             new URLSearchParams({
                 response_type: 'code',
                 client_id: process.env.SPTF,
-                scope: 'user-read-private user-read-email user-read-currently-playing playlist-read-private user-library-read',
+                scope: 'user-read-email user-follow-read user-top-read user-read-currently-playing user-library-read',
                 redirect_uri: `http://${req.headers.host}/login/oauth/complete`,
                 // state: '123'  //custom field passed to callback
             })
-        );
-    },
+        ),
     /**
      * exchange the authorization code for an access token
      */
@@ -34,8 +33,13 @@ module.exports = {
                 // verify if user is already signed up, the user is already verified by spotify
                 .then( user => User
                     .byMail(user.email)
-                    .catch(() => Promise.resolve(
-                            User.new({
+                    .then( user => User
+                        .findByIdAndUpdate(user._id, { 
+                            oauth: { token, refreshToken, expiresAt } 
+                        }) 
+                    )
+                    .catch(() => Promise.resolve(User
+                        .new({
                                 ...user,
                                 oauth: { token, refreshToken, expiresAt }
                             })
