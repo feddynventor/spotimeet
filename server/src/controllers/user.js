@@ -32,15 +32,13 @@ module.exports = {
         .get('/me')
         .then( user => res.send(user.data) )
         .catch( error => res.status(500).send({error}) ),
-    getFavouriteArtists: async (req, res) => User
-        .findById(req.user._id)
-        .then( user => checkExpired(user.lastUpdate) || !!req.query.all
+    getFavouriteArtists: async (req, res) => ( (checkExpired(req.user.lastUpdate) || !!req.query.all)
             ? spotify
                 .getFavouriteArtists(req.api)
                 .then( artists => {
                     res.send(
                         artists.map( a => ({
-                            subscribed: user.favourites.some( f => f.artist == a.id ),
+                            subscribed: req.user.favourites.some( f => f.artist == a.id ),
                             artist: a
                         }))
                     )
@@ -53,6 +51,12 @@ module.exports = {
             : User
                 .getFavourites(req.user._id)
                 .then( artists => res.send(artists) )
-        )
+        ),
+        // .catch( error => res.status(500).send({error}) ),
+    removeFavouriteArtist: async (req, res) => spotify
+        .removeFavouriteArtist(req.api, req.params.id)
+        .then( () => Artist.findOne({ uri: "spotify:artist:".concat(req.params.id) }) )
+        .then( object_id => User.removeFavourite(req.user._id, object_id) )
+        .then( () => res.sendStatus(200) )
         // .catch( error => res.status(500).send({error}) ),
 }

@@ -139,14 +139,27 @@ User.byMail = async function (email) {
  * only the ids are needed for reference
  * @param {*} uid user object id
  * @param {*} artists array of artist objects
- * @returns l'oggetto utente prima dell'aggiornamento
+ * @returns rejected promise se update fallisce
  */
 User.addFavourites = async function (uid, artists) {
     return this.updateMany({
         _id: uid
     }, {
-        $addToSet: { favourites: artists.map(a => ({ artist: a._id })) },
-        $set: { lastUpdate: new Date().toISOString() }
+        $set: { favourites: artists.map(a => ({ artist: a._id })), lastUpdate: new Date().toISOString() },
+    })
+}
+
+/**
+ * Rimuove dai preferiti
+ * @param {*} uid user object id
+ * @param {*} artist artist object id
+ * @returns 
+ */
+User.removeFavourite = async function (uid, artist_id) {
+    return this.updateOne({
+        _id: uid
+    }, {
+        $pull: { favourites: { artist: artist_id } }
     })
 }
 

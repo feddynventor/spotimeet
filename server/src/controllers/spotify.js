@@ -12,7 +12,7 @@ module.exports = {
             new URLSearchParams({
                 response_type: 'code',
                 client_id: process.env.SPTF,
-                scope: 'user-read-email user-follow-read user-top-read user-read-currently-playing user-library-read',
+                scope: 'user-read-email user-follow-read user-follow-modify user-top-read user-read-currently-playing user-library-read',
                 redirect_uri: `http://${req.headers.host}/login/oauth/complete`,
                 // state: '123'  //custom field passed to callback
             })

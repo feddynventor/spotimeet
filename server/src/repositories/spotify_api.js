@@ -25,5 +25,10 @@ module.exports = {
         return api
         .get(`/me/following?type=artist&limit=10`)
         .then( res => res.data.artists.items.map( artistSchema ))
+    },
+    removeFavouriteArtist: (api, id) => {
+        return api
+        .delete(`/me/following?type=artist&ids=${id}`)
+        .then( res => res.status === 204 ? Promise.resolve() : Promise.reject(res.data) )
     }
 }
