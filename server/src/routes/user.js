@@ -11,4 +11,4 @@ router.use(loginMiddleware.authenticateToken);
 
 router.get('/me', userController.me);
 router.get('/token', userController.tokenInfo);
-router.get('/favourites', userController.getFavouritesArtists);
+router.get('/favourites', userController.getFavouriteArtists);

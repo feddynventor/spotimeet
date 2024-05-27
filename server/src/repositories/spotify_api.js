@@ -21,7 +21,7 @@ module.exports = {
         .get(`/artists/${id}`)
         .then( res => artistSchema(res.data) )
     },
-    getMyFavouriteArtists: (api) => {
+    getFavouriteArtists: (api) => {
         return api
         .get(`/me/following?type=artist&limit=10`)
         .then( res => res.data.artists.items.map( artistSchema ))

@@ -21,10 +21,16 @@ const User = new model('User', new Schema({
         expiresAt: Date,
     },
     favourites: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Artist',
+        artist: {
+            type: Schema.Types.ObjectId,
+            ref: 'Artist',
+        },
+        subscribed: {
+            type: Boolean,
+            default: false,
+        },
     }],
-    lastLogin: Date,
+    lastActivity: Date,
     lastUpdate: Date,
 }));
 
@@ -74,7 +80,7 @@ User.refreshToken = async function (uid, data) {
  * 
  * @param {String} name username
  * @param {String} email alternative to username
- * @param {String} password hashed password in simple SHA256
+ * @param {String} password possibilmente hashed password in simple SHA256
  * @returns the user object
  */
 User.byCredentials = async function (username, email, password) {
@@ -106,7 +112,7 @@ User.byIdentifier = async function (id) {
         .findOneAndUpdate({
             _id: id
         }, {
-            $set: { lastLogin: new Date().toISOString() }
+            $set: { lastActivity: new Date().toISOString() }
         })
     })
 }
@@ -127,11 +133,38 @@ User.byMail = async function (email) {
     })
 }
 
+/**
+ * Prende la lista di artisti preferiti dell'utente
+ * Questa funzione completa la funzionalita' di gestione dei gruppi
+ * only the ids are needed for reference
+ * @param {*} uid user object id
+ * @param {*} artists array of artist objects
+ * @returns l'oggetto utente prima dell'aggiornamento
+ */
 User.addFavourites = async function (uid, artists) {
     return this.updateMany({
         _id: uid
     }, {
-        $addToSet: { favourites: artists },
+        $addToSet: { favourites: artists.map(a => ({ artist: a._id })) },
         $set: { lastUpdate: new Date().toISOString() }
     })
+}
+
+/**
+ * applica `populate` all'oggetto utente
+ * @param {*} uid user object id
+ * @returns 
+ */
+User.getFavourites = async function (uid) {
+    return this.findOne({
+        _id: uid
+    }, {
+        _id: 0,
+        favourites: 1,
+    })
+    .populate({
+        path: 'favourites.artist',
+        select: '-__v -tours'
+    })
+    .then(user => user.favourites)
 }
