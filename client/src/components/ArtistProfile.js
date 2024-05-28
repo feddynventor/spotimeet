@@ -14,7 +14,7 @@ const ArtistProfile = () => {
           <Box>
             <Typography variant="h2" sx={{ color: '#332D2A' }}>{name}</Typography>
             <Typography variant="subtitle1" sx={{ color: '#332D2A' }}>{monthlyListeners.toLocaleString()} ascoltatori mensili</Typography>
-            <Button sx={{backgroundColor:'#332D2A', color:'#FF6D2E', textTransform: 'none', justifyContent:'center',minWidth:'200px', borderRadius:'15px'}}>Start following</Button>
+            <Button sx={{backgroundColor:'#332D2A', color:'#FF6D2E', textTransform: 'none', justifyContent:'center',minWidth:'200px', borderRadius:'15px', '&:hover': {backgroundColor: '#235965',},}}>Start following</Button>
           </Box>
         </Box>
         <Box mt={4}>
