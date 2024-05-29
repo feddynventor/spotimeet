@@ -43,7 +43,7 @@ root.render(
           </Box>
 
           <Box sx={{overflowY: "scroll", overflowX: "hidden", marginTop:"20px"}}>
-          <ArtistProfile />
+            <ArtistProfile />
           </Box>
         </Container>
       </Box>
