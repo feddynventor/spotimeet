@@ -47,6 +47,8 @@ module.exports = {
      * Si specifica l'ID di spotify dell'artista nell'URI
      * Si cerca nel DB, se non presente si cerca su spotify e si aggiunge alla cache
      * (il flusso di utilizzo sul frontend non vedra' mai un artista non presente in cache)
+     * Nel caso di GET è bene ritornare un dato aggiornato riguardo i tours, quindi non inviando direttamente la risposta dalla cache,
+     * bensì rallentare la risposta per attendere l'aggiornamento dei tours
      * Vengono richiesti i tours se la data di ultimo aggiornamento e' troppo indietro, altrimenti ritorna cache
      * TODO: sarebbe l'ideale triggerare un aggiornamento intorno a mezzanotte (attenzione overload, specifica ulteriore)
      * Se viene specificato il parametro `all` si aggiornano i tours comunque
@@ -55,14 +57,14 @@ module.exports = {
         const { id } = req.params;
         if (!id) return res.status(400).send({error: 'Specifica un artista'});
         Artist
-        .findOne({ uri: "spotify:artist:".concat(id) })
-        .then( artist => artist 
+        .get(id)
+        .then( artist => artist && !(checkExpired(artist.lastUpdate) || !!req.query.all)
             ? artist 
             : spotify
                 .getArtist(req.api, id)
                 .then( a=> Artist.addToCache(a.uri, a)) )
         .then( async artist => {
-            if (checkExpired(artist.lastUpdate) || !!!req.params.all) return Artist.updateTours(artist._id, await events.fetchByArtist(artist.name))
+            if (checkExpired(artist.lastUpdate) || !!req.query.all) return Artist.updateTours(artist._id, await events.fetchByArtist(artist.name))
             else return artist
         } )
         .then( artist => res.send(artist) )

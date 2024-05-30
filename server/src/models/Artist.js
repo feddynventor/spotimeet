@@ -1,4 +1,5 @@
 const { model, Schema } = require('mongoose');
+const Tour = require('./Tour');
 
 const Artist = new model('Artist', new Schema({
     name: {
@@ -19,15 +20,8 @@ const Artist = new model('Artist', new Schema({
         index: true,
     },
     tours: [{
-        name: String,
-        cover: String,
-        banner: String,
-        dates: [{
-            city: String,
-            date: Date,
-            venue: String,
-            url: String,
-        }],
+        type: Schema.Types.ObjectId,
+        ref: 'Tour',
     }],
     lastUpdate: Date
 }));
@@ -42,6 +36,7 @@ module.exports = Artist;
 Artist.searchCache = async function (name) {
     return this
     .find({ $or: [{ $text: {$search: name} }, { searchTerm: {"$in": [name]} }] })
+    .then( docs => Promise.all(docs.map( d => this.findOneAndUpdate({ uri: d.uri }, { $addToSet: { searchTerm: name } }, { new: true, returnDocument: 'after' }) )) )
 }
 
 /**
@@ -55,9 +50,13 @@ Artist.updateTours = async function (id, tours) {
     return this
     .findByIdAndUpdate(
         id, 
-        { tours, lastUpdate: new Date().toISOString() },
+        {
+            tours: await Promise.all(tours.map( t => Tour.add(t) )),
+            lastUpdate: new Date().toISOString() 
+        },
         { returnDocument: 'after' }
     )
+    .populate('tours')
 }
 
 /**
@@ -81,4 +80,15 @@ Artist.addToCache = async function (uri, artist, query) {
             return doc
         }
     })
+}
+
+/**
+ * populate tours
+ * @param {} id 
+ * @returns 
+ */
+Artist.get = async function (uri) {
+    return this
+    .findOne({ uri })
+    .populate('tours')
 }
