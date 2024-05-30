@@ -47,7 +47,11 @@ module.exports = {
                     )
                 )
                 .then(auth.jwtPayload)
-                .then(token => res.send({ token }))
+                .then(token => res
+                    .cookie("token", token, { httpOnly: true })
+                    .status(301)
+                    .redirect('/')
+                )
                 .catch(error => res.status(403).send({error}))
             else 
                 res.status(403).send({error: 'Spotify non ha risposto correttamente'});

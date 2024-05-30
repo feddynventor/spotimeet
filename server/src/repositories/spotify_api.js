@@ -1,7 +1,7 @@
 
 const artistSchema = artist => ({
     name: artist.name, //.replace(" ", "-").replace("\'", "-").toLowerCase(), // TODO: slug for artist name
-    uri: artist.uri,
+    uri: artist.id,
     image: artist.images.length > 0 ? artist.images[0].url : null,
     url: artist.external_urls ? artist.external_urls.spotify : null,
     followers: artist.followers ? artist.followers.total : null,

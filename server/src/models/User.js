@@ -168,16 +168,18 @@ User.removeFavourite = async function (uid, artist_id) {
  * @param {*} uid user object id
  * @returns 
  */
-User.getFavourites = async function (uid) {
+User.getDetails = async function (uid) {
     return this.findOne({
         _id: uid
-    }, {
-        _id: 0,
-        favourites: 1,
     })
+    .select("-passwordHash -__v")
     .populate({
         path: 'favourites.artist',
         select: '-__v -tours'
     })
+}
+
+User.getFavourites = async function (uid) {
+    return this.getDetails(uid)
     .then(user => user.favourites)
 }

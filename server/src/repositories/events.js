@@ -8,14 +8,12 @@ module.exports = {
         .then( res => res.data )
         .then( events => events.length>0 ? events : Promise.resolve([]) )
         .then( events => events.map( event => ({
-                name: event.name,
-                url: "https://ticketone.it".concat(event.uri),
-                cover: "https://ticketone.it".concat(event.cover),
-                banner: "https://ticketone.it".concat(event.cover.replace('222x222', 'evo/artwork')),
+                name: event.name === "" ? artist : event.name,
+                id: event.id,
+                url: "https://ticketone.it/".concat(event.uri),
+                image: "https://ticketone.it".concat(event.cover),
                 dates: event.dates,
             }) 
         ))
-        .catch( () => Promise.resolve([]) )
-        // .catch( error => { console.error(error.data); return Promise.resolve([]) })
-    // )
+        .catch( () => Promise.resolve( [] ) )
 }
