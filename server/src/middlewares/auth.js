@@ -54,4 +54,25 @@ module.exports = {
             .catch( error => res.status(401).send({ error }) ); // TODO: check if needed
         });
     },
+    authenticateSocket: (sock, next) => {
+        // parse cookie from handshake in format token=xxxxx
+        if (sock.request.headers.cookie === undefined) return sock.disconnect();
+
+        const token = sock.request.headers.cookie.match(/token=[^;]+/)[0].split('=')[1];
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+            if (err) return sock.disconnect();
+            else User
+            .byIdentifier(payload.id)
+            .then( async user => {
+                if (!user) return sock.disconnect();
+                
+                console.log("SOCK", user.profile)
+
+                sock.user = user;
+                next();
+            })
+            .catch( error => sock.disconnect() ); // TODO: check if needed
+        });
+    }
 }
