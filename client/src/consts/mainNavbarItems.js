@@ -8,7 +8,7 @@ export const mainNavbarItems = [
     {
         icon: <FavoriteIcon />,
         label: 'Artisti preferiti',
-        route: 'route'
+        path: '/groupList'
     },
     {
         icon: <MusicNoteIcon />,

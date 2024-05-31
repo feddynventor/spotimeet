@@ -17,6 +17,7 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import { mainNavbarItems } from './consts/mainNavbarItems';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Reference: https://mui.com/material-ui/react-drawer/#mini-variant-drawer
@@ -73,6 +74,12 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 );
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -150,8 +157,8 @@ export default function Sidebar() {
             sx={{borderRadius:'25px'}}
           />
         </FormControl> }
-        {mainNavbarItems.map((text, index) => (
-          <Box sx={{ m: open ? 2 : null, borderRadius: '10px', border: open ? '2px solid #FF6D2E' : 'unset'}}>
+        {mainNavbarItems.map((item, index) => (
+          <Box key={index} sx={{ m: open ? 2 : null, borderRadius: '10px', border: open ? '2px solid #FF6D2E' : 'unset' }}>
             <ListItem key={index} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -160,16 +167,19 @@ export default function Sidebar() {
                   px: 2.5,
                   transition: 'background-color 0.5s ease',
                   backgroundColor: open ? '#FF6D2E' : '#332D2A',
-                }}>
+                }}
+                onClick={() => handleNavigation(item.path)}
+              >
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
-                  }}>
-                    {text.icon}
+                  }}
+                >
+                  {item.icon}
                 </ListItemIcon>
-                <ListItemText primary={text.label} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           </Box>

@@ -4,6 +4,8 @@ import Grid from '@mui/material/Grid';
 // import Paper from '@mui/material/Paper';
 // import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
+import { useParams } from 'react-router-dom';
+import { useEffect } from'react';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,6 +32,12 @@ import Box from '@mui/material/Box';
 // }
 
 export default function GroupList({ groups }) {
+    const { id } = useParams();
+
+    useEffect(() => {
+      console.log(id);
+    }, [id]);
+
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
