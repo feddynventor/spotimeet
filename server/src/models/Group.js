@@ -26,6 +26,10 @@ const Group = new model('Group', new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     }],
+    messages: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Message',
+    }],
 }))
 
 module.exports = Group;
@@ -46,15 +50,14 @@ Group.join = async function (artist_id, event_id, user_id) {
             artist: artist_id,
             event: event_id,
         })
-        return Promise.reject(error.message) //validation error message
+        return Promise.reject({error: error.errors.message}) //validation error message
     })
 }
 
 Group.getGlobal = async function (artist_id) {
     return this.findOne({
         artist: artist_id,
-        tour: null,
-        event: null,
+        event: null,  // forzato null
     })
     .then( group => !!group
         ? group
@@ -62,7 +65,15 @@ Group.getGlobal = async function (artist_id) {
             artist: artist_id,
         })
     )
-    .then( group => group.populate('artist') )
+    .then( group => group
+        .populate({
+            path: 'artist',
+            populate: {
+                path: 'tours',
+            }
+        })
+    )
+    .catch( error => Promise.reject(error.message) )
 }
 
 Group.getEvent = async function (event_id) {
@@ -75,5 +86,14 @@ Group.getEvent = async function (event_id) {
             event: event_id,
         })
     )
-    .then( group => group.populate('event artist') )
+    // TODO: artista non valorizzato
+    .then( group => group
+        .populate({
+            path: 'event',
+            populate: {
+                path: 'tour',
+            }
+        })
+    )
+    .catch( error => Promise.reject(error.message) )
 }

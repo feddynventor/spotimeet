@@ -3,29 +3,23 @@
         <title>Test</title>
         <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
         <script>
-        const socket = io("ws://127.0.0.1:3000/");
+        const socket = io("ws://127.0.0.1:3000?group=665991d8c821eae2645b3d4b");
         window.onload = () => {
             //socket.emit("message","1", (a,b) => console.log(a,b));
         }
         socket.on("connect", () => {
             console.log(socket.connected); // true
-            //console.log(engine.transport.name); // in most cases, prints "polling"
-            //const engine = socket.io.engine;
-          
-            //engine.once("upgrade", () => {
-              // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
-              //console.log(engine.transport.name); // in most cases, prints "websocket"
-            //});
+        });
+        socket.on("message", (data) => {
+            console.log("RECV", data);
         });
         function test() {
-            socket.emit("message","1", (a,b) => console.log(a,b));
+            socket.emit("message", new Date(), (a,b) => console.log(a,b));
         }
         </script>
     </head>
     <body>
         <h1>Test</h1>
         <button onclick=test()>Test</button>
-        <button onclick=test2()>TestRoom</button>
-        <button onclick=join()>Join</button>
     </body>
 </html>

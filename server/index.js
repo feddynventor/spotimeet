@@ -11,6 +11,8 @@ const httpServer = createServer(app);
 app.use(express.json()) // To parse the incoming requests with JSON payloads
 app.use(require("cookie-parser")());
 
+app.use('/socktest', express.static(__dirname + '/socktest.html'));
+
 const { Server } = require('socket.io');
 const websocket = new Server(httpServer);
 
@@ -39,6 +41,9 @@ websocket.use( (sock, next) => {
     });
     next()
 });
+
+const messageController = require('./src/controllers/messages');
+websocket.use( messageController.new );
 
 httpServer.listen(3000, () => {
     console.log('Server running on port 3000');

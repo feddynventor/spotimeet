@@ -2,6 +2,7 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const spotifyRepository = require('../repositories/spotify_oauth');
 const User = require('../models/User');
+const Group = require('../models/Group');
 
 module.exports = {
     /**
@@ -54,24 +55,41 @@ module.exports = {
             .catch( error => res.status(401).send({ error }) ); // TODO: check if needed
         });
     },
+    /**
+     * verifica formato JWT
+     * controlla se esiste utente con ID passato tra gli header della connessione assieme a HTTP 101
+     * se esiste, controlla se appartiene al gruppo indicato
+     * @param {*} sock verra' arricchito con user e group
+     * @param {*} next 
+     * @returns 
+     */
     authenticateSocket: (sock, next) => {
         // parse cookie from handshake in format token=xxxxx
-        if (sock.request.headers.cookie === undefined) return sock.disconnect();
+        if (sock.request.headers.cookie === undefined) return sock.emit('exception', { error: "Token di autenticazione mancante" });
+        if (sock.handshake.query.group === undefined) return sock.emit('exception', { error: "Parametro gruppo mancante" });
 
         const token = sock.request.headers.cookie.match(/token=[^;]+/)[0].split('=')[1];
 
         jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
-            if (err) return sock.disconnect();
+            if (err) return sock.emit('exception', { error: "Token di autenticazione non valido" });
             else User
-            .byIdentifier(payload.id)
-            .then( async user => {
-                if (!user) return sock.disconnect();
-                
-                console.log("SOCK", user.profile)
-
-                sock.user = user;
-                next();
-            })
+        .byIdentifier(payload.id)
+            .then( user => (!user) 
+                ? sock.emit('exception', { error: "Autenticazione fallita" })
+                : Group
+                .findOne({
+                    _id: sock.handshake.query.group,
+                    members: { $in: [user._id] }
+                })
+                .then( group => {
+                    if (!group) return sock.emit('exception', { error: "Non sei un membro del gruppo" });
+                    sock.join(group._id);  // restringe il broadcast dei messaggi al gruppo
+                    sock.to(group._id).emit('message', { text: `${user.profile.displayName} è online` });
+                    sock.group = group;
+                    sock.user = user;
+                    next();
+                })
+            )
             .catch( error => sock.disconnect() ); // TODO: check if needed
         });
     }

@@ -66,7 +66,7 @@ module.exports = {
         return Group
         .getEvent(event)
         .then( group => res.send(group) )
-        // .catch( error => res.status(500).send({error}) )
+        .catch( error => res.status(500).send({error}) )
     },
     getArtistGroup: async (req, res) => {
         const { artist } = req.params;
