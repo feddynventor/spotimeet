@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 // import Paper from '@mui/material/Paper';
 // import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
+import GroupTypeSelector from './GroupTypeSelector';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -32,6 +33,7 @@ import Box from '@mui/material/Box';
 export default function GroupList({ groups }) {
     return (
       <Box sx={{ flexGrow: 1 }}>
+        <GroupTypeSelector />
         <Grid container spacing={2}>
           {groups.map((group) => (
             <Grid item xs={12} sm={12} md={6} lg={4}>
