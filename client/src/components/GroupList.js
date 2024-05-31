@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { useEffect } from'react';
+import GroupTypeSelector from './GroupTypeSelector';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -40,6 +41,7 @@ export default function GroupList({ groups }) {
 
     return (
       <Box sx={{ flexGrow: 1 }}>
+        <GroupTypeSelector />
         <Grid container spacing={2}>
           {groups.map((group) => (
             <Grid item xs={12} sm={12} md={6} lg={4}>
