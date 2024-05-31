@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import GroupList from './components/GroupList';
 import ArtistProfile from './components/ArtistProfile';
+import ArtistList from './components/ArtistList';
 import darkTheme from './theme';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -44,6 +45,8 @@ root.render(
                   
                   <Routes>
                     <Route path="/groupList/:id?" element={<GroupList groups={groups} />} />
+                    <Route path="/artistProfile/:id?" element={<ArtistProfile />} />
+                    <Route path="/artistList/:id?" element={<ArtistList groups={groups} />} />
                   </Routes>
 
               </Box>

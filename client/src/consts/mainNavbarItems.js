@@ -13,12 +13,12 @@ export const mainNavbarItems = [
     {
         icon: <MusicNoteIcon />,
         label: 'Concerti',
-        route: 'route'
+        path: '/artistProfile'
     },
     {
         icon: <TourIcon/>,
         label: 'Tourneè',
-        route: 'route'
+        path: '/artistList'
     },
     {
         icon: <People />,

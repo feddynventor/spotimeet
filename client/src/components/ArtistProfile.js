@@ -9,7 +9,7 @@ const ArtistProfile = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://api.fedele.website/ticketone/nayt')
+    fetch('http://localhost:3000/gruppi.json')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -17,20 +17,20 @@ const ArtistProfile = () => {
         return response.json();
       })
       .then(data => {
-        if (!data || !data[0] || !data[0].dates) {
+        if (!data || !data[0] || !data[0].events) {
           setError("City data is missing or in incorrect format");
           console.error("City data is missing or in incorrect format");
           return;
         }
         setArtistData(data[0]);
-        setLikedcity(data[0].dates.map(() => false));
+        setLikedcity(data[0].events.map(() => false));
       })
       .catch(error => {
         setError(error.message);
         console.error("Error fetching data:", error);
       });
   }, []);
-
+  
   const handleLikeCity = (index) => {
     const newLikedcity = [...likedcity];
     newLikedcity[index] = !newLikedcity[index];
@@ -45,32 +45,32 @@ const ArtistProfile = () => {
     return <div>Loading...</div>;
   }
 
-  const { name, /*monthlyListeners,*/ imageUrl, city } = artistData;
+  const { name, followers, image: imageUrl,  } = artistData;
   
     return (
       <Box sx={{ backgroundColor: '#FF6D2E', borderRadius: '16px', p: 3, boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', width: '100%' }}>
         <Grid container spacing={2}>
-          <Grid item lg={2} xs={12}>
+          <Grid item lg={4} xs={12}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
               <Avatar alt={name} src={imageUrl} sx={{ width: 200, height: 200, mr: 2 }} />
               <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
                 <Typography variant="h2" sx={{ color: '#332D2A', justifyContent:'center' }}>{name}</Typography>
-                {/*<Typography variant="subtitle1" sx={{ color: '#332D2A', justifyContent:'center' }}>{monthlyListeners.toLocaleString()} ascoltatori mensili</Typography>*/}
+                {/*<Typography variant="subtitle1" sx={{ color: '#332D2A', justifyContent:'center' }}>{followers.toLocaleString()} ascoltatori mensili</Typography>*/}
                 <Button sx={{backgroundColor:'#332D2A', color:'#FF6D2E', textTransform: 'none', justifyContent:'center',minWidth:'200px', borderRadius:'15px', '&:hover': {backgroundColor: '#235965',},}}>Start following</Button>
               </Box>
             </Box>
           </Grid>
-            <Grid item lg={10} xs={12}>
+            <Grid item lg={8} xs={12}>
               <Box gap={2}>
                 <Typography variant="h6" sx={{ color: '#332D2A' }}>Cities</Typography>
                 <Grid container spacing={2}>
-                  {artistData.dates.map((city, index) => (
-                    <Grid item lg={2} xs={6} key={index}>
+                  {artistData.events.map((event, index) => (
+                    <Grid item lg={3} md={4} xs={6} key={index}>
                       <Card sx={{ display: 'flex', backgroundColor: '#332D2A', mt:1, borderRadius:'10px' }}>
                         <CardContent>
-                          <Typography component="div" variant="body1">{city.date}</Typography>
-                          <Typography variant="body2" color="text.secondary">{city.city}</Typography>
-                          <Typography variant="body2" color="text.secondary">{city.venue}</Typography>
+                          <Typography component="div" variant="body1">{new Date(event.date).toLocaleDateString()}</Typography>
+                          <Typography variant="body2" color="text.secondary">{event.city}</Typography>
+                          {/*<Typography variant="body2" color="text.secondary">{event.venue}</Typography>*/}
                         </CardContent>
                         <IconButton sx={{ marginLeft: 'auto' }} onClick={() => handleLikeCity(index)}>
                         {likedcity[index] ? <FavoriteIcon /> : <FavoriteBorderIcon />}
