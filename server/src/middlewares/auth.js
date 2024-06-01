@@ -12,7 +12,7 @@ module.exports = {
      */
     jwtPayload: user => jwt.sign({
             id: user._id,
-            username: user.name,
+            username: user.id,
             fullname: user.profile.displayName,
             email: user.email,
         }, process.env.JWT_SECRET
@@ -34,7 +34,7 @@ module.exports = {
                 if (!user) return res.sendStatus(401);
 
                 console.log("AUTHENTICATED", user.oauth.expiresAt, user.email)
-                if (!!user.oauth) {
+                if (!!user.oauth.token) {  // QUERY RITORNA OGGETTO HYDRATED
                     if (user.oauth.expiresAt < new Date()) await spotifyRepository
                         .refreshToken(user.oauth.refreshToken)
                         .then( auth => User.refreshToken(user._id, auth) )
@@ -68,29 +68,50 @@ module.exports = {
         if (sock.request.headers.cookie === undefined) return sock.emit('exception', { error: "Token di autenticazione mancante" });
         if (sock.handshake.query.group === undefined) return sock.emit('exception', { error: "Parametro gruppo mancante" });
 
-        const token = sock.request.headers.cookie.match(/token=[^;]+/)[0].split('=')[1];
+        const regex = sock.request.headers.cookie.match(/token=[^;]+/)
+        if (!!!regex) return sock.emit('exception', { error: "Token di autenticazione mancante" });
+        const token = regex[0].split('=')[1]
 
         jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
             if (err) return sock.emit('exception', { error: "Token di autenticazione non valido" });
             else User
-        .byIdentifier(payload.id)
-            .then( user => (!user) 
-                ? sock.emit('exception', { error: "Autenticazione fallita" })
-                : Group
+            .byIdentifier(payload.id)
+            .then( async user => {
+                if (!user) return sock.emit('exception', { error: "Utente non trovato" });
+                // else
+                console.log("CONNECTED", user.oauth.expiresAt, user.email)
+                sock.user = user;
+                if (!!user.oauth.token) {  // QUERY RITORNA OGGETTO HYDRATED
+                    if (user.oauth.expiresAt < new Date()) await spotifyRepository
+                        .refreshToken(user.oauth.refreshToken)
+                        .then( auth => User.refreshToken(user._id, auth) )
+                        // .then( (err, doc) => { user = doc } )  // update local object  // TODO: check if needed, as the access token have been refreshed
+                        .catch( error => res.status(401).send({ error }) );
+
+                    sock.api = axios.create({
+                        baseURL: 'https://api.spotify.com/v1',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + user.oauth.token
+                        }
+                    });
+                }
+                return Group
                 .findOne({
                     _id: sock.handshake.query.group,
                     members: { $in: [user._id] }
                 })
-                .then( group => {
-                    if (!group) return sock.emit('exception', { error: "Non sei un membro del gruppo" });
-                    sock.join(group._id);  // restringe il broadcast dei messaggi al gruppo
-                    sock.to(group._id).emit('message', { text: `${user.profile.displayName} è online` });
-                    sock.group = group;
-                    sock.user = user;
-                    next();
-                })
-            )
-            .catch( error => sock.disconnect() ); // TODO: check if needed
+            })
+            .then( group => {
+                if (!group) return sock.emit('exception', { error: "Non sei un membro del gruppo" });
+                // else
+                sock.join(group._id);  // restringe il broadcast dei messaggi al gruppo
+                sock.to(group._id).emit('message', { status: `${sock.user.profile.displayName} è online` });
+
+                sock.group = group;
+                next();
+            })
+            .catch( error => sock.emit('exception', { error }) ); // TODO: check if needed
         });
     }
 }
