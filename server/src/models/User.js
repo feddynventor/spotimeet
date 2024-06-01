@@ -1,7 +1,7 @@
 const { model, Schema } = require('mongoose');
 
 const User = new model('User', new Schema({
-    name: {
+    username: {
         type: String,
         unique: true,
     },
@@ -14,6 +14,12 @@ const User = new model('User', new Schema({
         displayName: String,
         photo: String,
         url: String,
+        bio: String,
+        social: [String],
+        city: {
+            type: String,
+            text: true
+        }
     },
     oauth: {
         token: String,
@@ -21,14 +27,8 @@ const User = new model('User', new Schema({
         expiresAt: Date,
     },
     favourites: [{
-        artist: {
-            type: Schema.Types.ObjectId,
-            ref: 'Artist',
-        },
-        subscribed: {
-            type: Boolean,
-            default: false,
-        },
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
     }],
     lastActivity: Date,
     lastUpdate: Date,
@@ -43,7 +43,7 @@ module.exports = User;
  */
 User.new = async function (data) {
     return this.create({
-        username: data.id,
+        username: data.username,
         email: data.email,
         passwordHash: data.password,
         profile: {
@@ -78,13 +78,13 @@ User.refreshToken = async function (uid, data) {
 
 /**
  * 
- * @param {String} name username
+ * @param {String} username username
  * @param {String} email alternative to username
  * @param {String} password possibilmente hashed password in simple SHA256
  * @returns the user object
  */
 User.byCredentials = async function (username, email, password) {
-    const id = username ? ({name: username}) : ({email});
+    const id = username ? ({username}) : ({email});
     return this.findOne({
         ...id,
         passwordHash: password
@@ -145,7 +145,7 @@ User.addFavourites = async function (uid, artists) {
     return this.updateMany({
         _id: uid
     }, {
-        $set: { favourites: artists.map(a => ({ artist: a._id })), lastUpdate: new Date().toISOString() },
+        $set: { favourites: artists.map(a => a._id), lastUpdate: new Date().toISOString() },
     })
 }
 

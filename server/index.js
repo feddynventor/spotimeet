@@ -35,14 +35,8 @@ app.use('/group', require('./src/routes/groups'));
 
 websocket.use( auth.authenticateSocket );  // alla creazione del socket, connessione o riconnessione
 
-websocket.use( (sock, next) => {
-    sock.on('message', (data) => {
-        console.log(sock.user.profile.displayName, data);
-    });
-    next()
-});
-
 const messageController = require('./src/controllers/messages');
+websocket.use( messageController.status );
 websocket.use( messageController.new );
 
 httpServer.listen(3000, () => {

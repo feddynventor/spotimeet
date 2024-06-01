@@ -17,16 +17,16 @@ module.exports = {
     search: (req, res) => {
         const name = req.query.q;
         if (!name) return res.status(400).send({error: 'Specifica un artista'});
-        (req.query.all 
+        (req.query.all && !!req.api
             ? spotify.searchArtist(req.api, name) 
             : Artist.searchCache(name)
-                .then( artists => artists.length>0 
-                    ? artists 
-                    : spotify
+                .then( artists => artists.length==0 && !!req.api
+                    ? spotify
                         .searchArtist(req.api, name)
                         .then(artists => Promise.all(artists.map( 
                             a => Artist.addToCache(a.uri, a, name)
                         )))
+                    : artists
                     )
         )
         .then( artists => {
@@ -58,11 +58,12 @@ module.exports = {
         if (!id) return res.status(400).send({error: 'Specifica un artista'});
         Artist
         .get(id)
-        .then( artist => artist && !(checkExpired(artist.lastUpdate) || !!req.query.all)
-            ? artist 
-            : spotify
+        .then( artist => !!req.api && (!artist || checkExpired(artist.lastUpdate) || !!req.query.all)
+            ? spotify
                 .getArtist(req.api, id)
-                .then( a=> Artist.addToCache(a.uri, a)) )
+                .then( a=> Artist.addToCache(a.uri, a))
+            : artist
+            )
         .then( async artist => {
             if (checkExpired(artist.lastUpdate) || !!req.query.all) return Artist.updateTours(artist._id, await events.fetchByArtist(artist.name))
             else return artist
