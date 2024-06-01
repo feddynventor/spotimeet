@@ -52,7 +52,7 @@ Artist.updateTours = async function (id, tours) {
         id, 
         {
             tours: await Promise.all(tours.map( t => Tour.add(t) )),
-            lastUpdate: new Date().toISOString() 
+            lastUpdate: (new Date()).toISOString() 
         },
         { returnDocument: 'after' }
     )

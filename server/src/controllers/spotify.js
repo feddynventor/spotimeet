@@ -49,7 +49,6 @@ module.exports = {
                 .then(auth.jwtPayload)
                 .then(token => res
                     .cookie("token", token, { httpOnly: true })
-                    .status(301)
                     .redirect('/')
                 )
                 .catch(error => res.status(403).send({error}))

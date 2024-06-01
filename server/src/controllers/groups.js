@@ -4,6 +4,10 @@ const Event = require('../models/Event');
 const Artist = require('../models/Artist');
 
 module.exports = {
+    /**
+     * passato ID documento artista
+     * @returns oggetto gruppo
+     */
     joinArtist: async (req, res) => {
         const { artist } = req.params;
         return Group
@@ -11,14 +15,14 @@ module.exports = {
         .then( group => res.send(group) )
         .catch( error => res.status(500).send({error}) )
     },
+    /**
+     * passato ID documento evento
+     * @returns oggetto gruppo, con tour popolato
+     */
     joinEvent: async (req, res) => {
         const { event } = req.params;
-        await Event
-        .findOne({ _id: event })
-        .populate('tour')
-        // event.tour ha il tour _id che viene referenziato in array `tours` di Artist
-        .then( event => Artist.findOne({ tours: { $in: [event.tour] } }) )
-        .then( artist => Group.join(artist._id, event, req.user._id) )
+        await Group
+        .join(null, event, req.user._id)
         .then( group => res.send(group) )
         .catch( error => res.status(500).send({error}) )
     },

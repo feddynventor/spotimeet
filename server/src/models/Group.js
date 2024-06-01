@@ -44,7 +44,10 @@ Group.join = async function (artist_id, event_id, user_id) {
         new: true,
         upsert: true,
     })
-    .then( doc => doc.validate() )
+    .then( async doc => {
+        await doc.validate()
+        return doc
+    })
     .catch( async error => {
         await this.deleteOne({
             artist: artist_id,
@@ -59,6 +62,7 @@ Group.getGlobal = async function (artist_id) {
         artist: artist_id,
         event: null,  // forzato null
     })
+    .select('-messages')
     .then( group => !!group
         ? group
         : this.create({
@@ -79,7 +83,9 @@ Group.getGlobal = async function (artist_id) {
 Group.getEvent = async function (event_id) {
     return this.findOne({
         event: event_id,
+        artist: null // non è necessario ai fini della query
     })
+    .select('-messages')
     .then( group => !!group
         ? group
         : this.create({
