@@ -20,11 +20,12 @@ module.exports = {
     },
     signUp: async (req, res) => {
         const { username, fullname, email, password } = req.body;
+        if (!fullname || !email || !password) return res.status(400).send({error: "Campi mancanti"});
         User.new({
             username,
             email,
             password,
-            profile: { display_name: fullname }
+            fullname
         })
         .then(auth.jwtPayload)
         .then(token => res

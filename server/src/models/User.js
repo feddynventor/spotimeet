@@ -43,12 +43,12 @@ module.exports = User;
  */
 User.new = async function (data) {
     return this.create({
-        username: data.username,
+        username: data.username ? data.username : data.email.split('@')[0],
         email: data.email,
         passwordHash: data.password,
         profile: {
-            displayName: data.display_name,
-            photo: data.images ? data.images[0] : undefined,
+            displayName: data.fullname || data.display_name,  // display_name is from OAuth spotify
+            photo: data.images ? data.images.pop().url : undefined,
             url: data.external_urls ? data.external_urls.spotify : undefined,
         },
         oauth: data.oauth
@@ -172,7 +172,7 @@ User.getDetails = async function (uid) {
     return this.findOne({
         _id: uid
     })
-    .select("-passwordHash -__v")
+    .select("-passwordHash -__v -oauth -lastUpdate")
     .populate({
         path: 'favourites.artist',
         select: '-__v -tours'

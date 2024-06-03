@@ -12,9 +12,9 @@ module.exports = {
      */
     jwtPayload: user => jwt.sign({
             id: user._id,
-            username: user.profile.displayName ? user.profile.displayName.replace(" ","-").toLowerCase() : user.id,
-            fullname: user.profile.displayName,
-            email: user.email,
+            // username: user.username ? user.username : user.profile.displayName ? user.profile.displayName.replace(" ","-").toLowerCase() : user.id,
+            // fullname: user.profile.displayName,
+            // email: user.email,
         }, process.env.JWT_SECRET
     ),
     /**
