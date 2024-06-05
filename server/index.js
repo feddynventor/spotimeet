@@ -12,7 +12,7 @@ app.use(express.json()); // To parse content-type: json
 app.use(require("cookie-parser")());
 app.use(require('cors')({
     credentials: true,
-    origin: ['http://127.0.0.1:3001', 'https://spotimeet.fedele.website'],
+    origin: ['http://10.0.0.35:3000', 'http://localhost:3000', 'https://spotimeet.fedele.website'],
 }));
 
 const router = express.Router();

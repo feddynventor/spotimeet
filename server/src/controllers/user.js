@@ -13,7 +13,7 @@ module.exports = {
         .byCredentials(username, email, password)
         .then(auth.jwtPayload)
         .then(token => res
-            .cookie("token", token, { httpOnly: true })
+            .cookie("token", token, { httpOnly: false })
             .redirect('/')
         )
         .catch(error => res.status(403).send({error}))
@@ -29,7 +29,7 @@ module.exports = {
         })
         .then(auth.jwtPayload)
         .then(token => res
-            .cookie("token", token, { httpOnly: true })
+            .cookie("token", token, { httpOnly: false })
             .redirect('/')
         )
         .catch(error => res.status(403).send({error}))

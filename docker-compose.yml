@@ -1,7 +1,7 @@
 services:
   db:
     image: mongo
-    hostname: mongo
+    hostname: mongodbms
     volumes:
       - db_data:/data/db
       - db_config:/data/configdb
@@ -12,23 +12,24 @@ services:
     build: server/
     ports:
       - "127.0.0.1:8263:3000"
+    env_file:
+      - .env
     environment:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
-      JWT_SECRET: /run/secrets/hmac
-      MONGO_HOST: db
-      SPTF: /run/secrets/spotify
-      SPTF_SECRET: /run/secrets/spotify_secret
+      MONGO_HOST: mongodbms
       BASE_URL: /api
-    secrets:
-      - hmac
+      REDIRECT_HOST: "https://spotimeet.fedele.website/api"
 
-secrets:
-   hmac:
-     file: secrets/hmac.txt
-   spotify:
-     file: secrets/spotify.txt
-   spotify_secret:
-     file: secrets/spotify_secret.txt
+  db-management:
+    image: mongo-express
+    ports:
+      - "127.0.0.1:8264:8081"
+    environment:
+      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_MONGODB_URL: mongodb://mongodbms:27017/spotimeet
+      ME_CONFIG_SITE_BASEURL: /mongo/
+    depends_on:
+      - db
 
 volumes:
     db_config:

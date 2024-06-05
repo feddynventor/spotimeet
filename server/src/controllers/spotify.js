@@ -13,7 +13,7 @@ module.exports = {
                 response_type: 'code',
                 client_id: process.env.SPTF,
                 scope: 'user-read-email user-follow-read user-follow-modify user-top-read user-read-currently-playing user-library-read',
-                redirect_uri: `http://${req.headers.host}/login/oauth/complete`,
+                redirect_uri: process.env['REDIRECT_HOST'].concat('/login/oauth/complete'),
                 // state: '123'  //custom field passed to callback
             })
         ),
@@ -25,7 +25,7 @@ module.exports = {
             res.redirect('/login?error=auth_failed');  // TODO: user credentials side error
         } else {
             const { token, refreshToken, expiresAt } = await spotifyRepository
-            .getAccessToken(req.query.code, `http://${req.headers.host}/login/oauth/complete`)
+            .getAccessToken(req.query.code, process.env['REDIRECT_HOST'].concat('/login/oauth/complete'))
             .catch( err => res.status(403).send({error: err.message}) );
 
             if (token) spotifyRepository
@@ -48,7 +48,7 @@ module.exports = {
                 )
                 .then(auth.jwtPayload)
                 .then(token => res
-                    .cookie("token", token, { httpOnly: true })
+                    .cookie("token", token, { httpOnly: false })
                     .redirect('/')
                 )
                 .catch(error => res.status(403).send({error}))
