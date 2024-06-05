@@ -8,7 +8,7 @@ export const mainNavbarItems = [
     {
         icon: <FavoriteIcon />,
         label: 'Artisti preferiti',
-        path: '/groupList'
+        path: '/preferiti'
     },
     {
         icon: <MusicNoteIcon />,
@@ -23,11 +23,6 @@ export const mainNavbarItems = [
     {
         icon: <People />,
         label: 'Artisti',
-        route: 'route'
-    },
-    {
-        icon: <FavoriteIcon />,
-        label: 'Artisti preferiti',
         route: 'route'
     },
 ];

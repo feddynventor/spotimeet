@@ -35,29 +35,28 @@ const SpotifyLink = styled(Typography)({
   left: 10,
 });
 
-const ArtistCard = ({ groupArtist, isFirst }) => {
+const ArtistCard = ({ artist, isFirst }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-
   const handleArtistClick = () => {
-    if (!groupArtist || !groupArtist._id) {
+    if (!artist || !artist._id) {
       setError("ID dell'artista non valido");
     } else {
-      navigate(`/ArtistProfile/${groupArtist._id}`);
+      navigate(`/artist/${artist._id}`);
     }
   };
   return (
     <StyledCard isFirst={isFirst} onClick={handleArtistClick}>
       <Avatar
-        alt={groupArtist.name}
-        src={groupArtist.image || 'path_to_default_image.jpg'}
+        alt={artist.name}
+        src={artist.image || 'path_to_default_image.jpg'}
         sx={{ width: 150, height: 150, marginBottom: 2, transition: '.3s ease' }}
       />
-      <ArtistName variant={"h5"}>{groupArtist.name}</ArtistName>
-      {/*<Typography variant="subtitle1">{`Followers: ${groupArtist.followers}`}</Typography>*/}
+      <ArtistName variant={"h5"}>{artist.name}</ArtistName>
+      <Typography variant="subtitle1">{`Followers: ${artist.followers}`}</Typography>
       <SpotifyLink>
-        <a href={groupArtist.url} target="_blank" rel="noopener noreferrer">
+        <a href={artist.url} target="_blank" rel="noopener noreferrer">
           <img src={SpotifyLogo} alt="Spotify Logo" style={{width: '15%'}} />
         </a>
       </SpotifyLink>

@@ -3,22 +3,16 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SearchIcon from '@mui/icons-material/Search';
-import Grid from '@mui/material/Grid';
-import Avatar from '@mui/material/Avatar';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import { mainNavbarItems } from './consts/mainNavbarItems';
+import { mainNavbarItems } from './sidebarItems';
 import { useNavigate } from 'react-router-dom';
-
+import UserCard from './components/UserCard';
+import DebouncedInput from './components/DebouncedInput';
 /**
  * Reference: https://mui.com/material-ui/react-drawer/#mini-variant-drawer
  */
@@ -31,7 +25,6 @@ const openedMixin = (theme) => ({
   // backgroundColor: '#332D2A', // Sfondo grigio
   //border: '4px solid #FF6D2E', // Bordo arancione
   borderRadius: '12px',
-  height:'95vh',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -44,7 +37,6 @@ const closedMixin = (theme) => ({
   // backgroundColor: '#332D2A', // Sfondo grigio
   //border: '4px solid #FF6D2E', // Bordo arancione
   borderRadius: '12px',
-  height:'95vh',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -73,7 +65,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
   })
 );
 
-export default function Sidebar() {
+export default function Sidebar({ user, searchHandler }) {  //utile per eventuali voci del menu tramite permessi
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
@@ -112,16 +104,7 @@ export default function Sidebar() {
         </ListItemButton>
       </ListItem>
 
-      { open ? <Box fullWidth sx={{ m:2 }}>
-          <Box  sx={{justifyContent:"center", display:"flex"}}>
-            <Avatar sx={{ width: 100, height: 100,}}>NC</Avatar>
-          </Box>
-          <Box  sx={{justifyContent:"center", display:"flex"}}>
-          <Typography sx={{ margin: '1rem' }} variant="h5">
-              Nicola Cucinella
-          </Typography>
-          </Box>
-        </Box> : null}
+      { open ? <UserCard user={user} /> : null}
 
       <List>
         { !open ? 
@@ -147,16 +130,7 @@ export default function Sidebar() {
             </ListItemIcon>
           </ListItemButton>
         </ListItem>
-        : <FormControl sx={{ m: 2, width: '90%' }}>
-          <InputLabel htmlFor="searchBar">Ricerca</InputLabel>
-          <OutlinedInput
-            autoFocus
-            id="searchBar"
-            startAdornment={<InputAdornment position="start"><SearchIcon></SearchIcon></InputAdornment>}
-            label="Ricerca"
-            sx={{borderRadius:'25px'}}
-          />
-        </FormControl> }
+        : <DebouncedInput onInput={(q) => {navigate('/'); searchHandler(q)}} />}
         {mainNavbarItems.map((item, index) => (
           <Box key={index} sx={{ m: open ? 2 : null, borderRadius: '10px', border: open ? '2px solid #FF6D2E' : 'unset' }}>
             <ListItem key={index} disablePadding sx={{ display: 'block' }}>
