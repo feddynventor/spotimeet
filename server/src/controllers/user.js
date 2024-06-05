@@ -42,16 +42,19 @@ module.exports = {
     getFavouriteArtists: async (req, res) => ( (checkExpired(req.user.lastUpdate) || !!req.query.all) && !!req.api
             ? spotify
                 .getFavouriteArtists(req.api)
-                .then( artists => {
-                    res.send(artists)
-                    return artists
-                })
+                // voglio sempre ritornare il modello mongoose, quindi devo fare il populate degli _id artisti legati all'utente
+                // .then( artists => {
+                //     res.send(artists)
+                //     return artists
+                // })
                 .then( artists => Promise.all(
                     artists.map( a => Artist.addToCache(a.uri, a) )
                 ))
                 .then( artists => User.addFavourites(req.user._id, artists) )
+                .then( artists => res.send(artists) )
             : User
-                .getFavourites(req.user._id)
+                .getDetails(req.user._id)
+                .then( user => user.populate('favourites') )
                 .then( artists => res.send(artists) )
         ),
         // .catch( error => res.status(500).send({error}) ),

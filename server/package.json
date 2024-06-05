@@ -4,7 +4,7 @@
   "description": "Meet new people flowing with music",
   "main": "index.js",
   "scripts": {
-    "dev": "MONGO_HOST=127.0.0.1 BASE_URL=\/ SPTF=$(cat ../secrets/spotify.txt) SPTF_SECRET=$(cat ../secrets/spotify_secret.txt) JWT_SECRET=$(cat ../secrets/hmac.txt) NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon index.js"
+    "dev": "REDIRECT_HOST=http://127.0.0.1:3000 MONGO_HOST=127.0.0.1 BASE_URL=\/ SPTF=$(cat ../secrets/spotify.txt) SPTF_SECRET=$(cat ../secrets/spotify_secret.txt) JWT_SECRET=$(cat ../secrets/hmac.txt) NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon index.js"
   },
   "author": "Feddy & nk735",
   "license": "ISC",

@@ -147,6 +147,7 @@ User.addFavourites = async function (uid, artists) {
     }, {
         $set: { favourites: artists.map(a => a._id), lastUpdate: new Date().toISOString() },
     })
+    .then(()=>this.findOne({_id: uid}).populate('favourites').select('favourites'))
 }
 
 /**
@@ -177,9 +178,4 @@ User.getDetails = async function (uid) {
         path: 'favourites.artist',
         select: '-__v -tours'
     })
-}
-
-User.getFavourites = async function (uid) {
-    return this.getDetails(uid)
-    .then(user => user.favourites)
 }
