@@ -1,4 +1,9 @@
 services:
+  reactapp:
+    build: client/
+    ports:
+      - "127.0.0.1:8265:80"
+
   db:
     image: mongo
     hostname: mongodbms
