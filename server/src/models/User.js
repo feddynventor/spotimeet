@@ -48,7 +48,7 @@ User.new = async function (data) {
         passwordHash: data.password,
         profile: {
             displayName: data.fullname || data.display_name,  // display_name is from OAuth spotify
-            photo: data.images ? data.images.pop().url : undefined,
+            photo: data.images.length>0 ? data.images.pop().url : undefined,
             url: data.external_urls ? data.external_urls.spotify : undefined,
         },
         oauth: data.oauth
