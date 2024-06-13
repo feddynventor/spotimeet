@@ -24,7 +24,7 @@ module.exports = {
         await Group
         .join(null, event, req.user._id)
         .then( group => res.send(group) )
-        .catch( error => res.status(500).send({error}) )
+        //.catch( error => res.status(500).send({error}) )
     },
 
     byCity: async (req, res) => {
@@ -69,6 +69,11 @@ module.exports = {
         const { event } = req.params;
         return Group
         .getEvent(event)
+        .then( async group => {
+           if (await Group.isMember(req.user._id)) return group
+           else Group.join(undefined, event, req.user._id)
+           return group
+        })
         .then( group => res.send(group) )
         .catch( error => res.status(500).send({error}) )
     },
@@ -76,6 +81,11 @@ module.exports = {
         const { artist } = req.params;
         return Group
         .getGlobal(artist)
+        .then( async group => {
+           if (await Group.isMember(req.user._id)) return group
+           else Group.join(artist, undefined, req.user._id)
+           return group
+        })
         .then( groups => res.send(groups) )
         .catch( error => res.status(500).send({error}) )
     }

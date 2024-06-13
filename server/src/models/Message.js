@@ -5,7 +5,7 @@ const Message = new model('Message', new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    date: Date,
+    timestamp: Date,
     text: String,
 }))
 

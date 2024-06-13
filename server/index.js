@@ -10,17 +10,23 @@ const httpServer = createServer(app);
 
 app.use(express.json()); // To parse content-type: json
 app.use(require("cookie-parser")());
-app.use(require('cors')({
+if (!!!process.env['PRODUCTION']) app.use(require('cors')({
     credentials: true,
-    origin: ['http://10.0.0.35:3000', 'http://localhost:3000', 'https://spotimeet.fedele.website'],
+    origin: ['http://127.0.0.1:3000', 'https://spotimeet.fedele.website'],
 }));
 
 const router = express.Router();
-router.use('/socktest', express.static(__dirname + '/socktest.html'));
 
 const { Server } = require('socket.io');
-const websocket = new Server(httpServer);
-
+const websocket = new Server(httpServer, !!process.env['PRODUCTION'] ? undefined : {
+    cors: {
+	origin: "http://127.0.0.1:3000",
+        credentials: true,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["authorization"],
+    }
+});
+if (!!!process.env['PRODUCTION']) router.use('/socktest', express.static(__dirname + '/socktest.html'));
 
 const spotifyController = require('./src/controllers/spotify');
 router.get('/login/oauth', spotifyController.spotifyOAuth);
@@ -41,7 +47,8 @@ router.use('/group', require('./src/routes/groups'));
 websocket.use( auth.authenticateSocket );  // alla creazione del socket, connessione o riconnessione
 
 const messageController = require('./src/controllers/messages');
-websocket.use( messageController.status );
+websocket.use( messageController.getMessages );
+//websocket.use( messageController.status );
 websocket.use( messageController.new );
 
 app.use(process.env['BASE_URL'], router);

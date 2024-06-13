@@ -65,12 +65,13 @@ module.exports = {
      */
     authenticateSocket: (sock, next) => {
         // parse cookie from handshake in format token=xxxxx
-        if (sock.request.headers.cookie === undefined) return sock.emit('exception', { error: "Token di autenticazione mancante" });
+        if (!sock.request.headers.cookie && !sock.request.headers.authorization) return sock.emit('exception', { error: "Token di autenticazione mancante" });
         if (sock.handshake.query.group === undefined) return sock.emit('exception', { error: "Parametro gruppo mancante" });
 
-        const regex = sock.request.headers.cookie.match(/token=[^;]+/)
-        if (!!!regex) return sock.emit('exception', { error: "Token di autenticazione mancante" });
-        const token = regex[0].split('=')[1]
+        let token = sock.request.headers.authorization
+        const regex = sock.request.headers.cookie ? sock.request.headers.cookie.match(/token=[^;]+/) : undefined
+	if (!!regex) token = regex[0].split('=')[1]
+        if (!!!token) return sock.emit('exception', { error: "Token di autenticazione mancante "+!!sock.request.headers.authorization+!!sock.request.headers.cookie });
 
         jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
             if (err) return sock.emit('exception', { error: "Token di autenticazione non valido" });
@@ -106,7 +107,7 @@ module.exports = {
                 if (!group) return sock.emit('exception', { error: "Non sei un membro del gruppo" });
                 // else
                 sock.join(group._id);  // restringe il broadcast dei messaggi al gruppo
-                sock.to(group._id).emit('message', { status: `${sock.user.profile.displayName} è online` });
+                sock.broadcast.emit('message', { text: `${sock.user.profile.displayName} è online` });
 
                 sock.group = group;
                 next();

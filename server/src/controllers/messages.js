@@ -2,20 +2,35 @@ const Message = require('../models/Message');
 const Group = require('../models/Group');
 
 module.exports = {
+    getMessages: (sock, next) => Group
+	.getMessages(sock.group._id)
+	.then( list => {
+	    sock.emit('message', list )
+	} )
+	.then( next )
+    ,
     new: (sock, next) => {
+        const timestamp = new Date()
         sock.on('message', async data => Group
             .updateOne({ _id: sock.group._id }, { $push: {
                 messages: await Message.create({
                     user: sock.user._id,
-                    date: new Date(),
+                    timestamp,
                     text: data,
                 })
             } })
+            .then( () => sock.broadcast.to(sock.group._id).emit({
+                    user: sock.user, //intero obj (TODO: riduci)
+                    timestamp,
+                    text: data,
+                })
+            )
         )
         next()
     },
     status: (sock, next) => !!sock.api ? sock.api
         .get('/me/player/currently-playing')
+	.then( res => res.status === 204 ? Promise.reject : res)
         .then( res => res.data.item)
         .then( data => sock
             .to(sock.group._id)
@@ -28,7 +43,7 @@ module.exports = {
                 }
             })
         )
-
         .then( next )
+	.catch( next )
         : next()
 }

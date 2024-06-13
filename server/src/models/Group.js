@@ -6,6 +6,7 @@ const Group = new model('Group', new Schema({
         ref: 'Artist',
         validate: {
             validator: async function (artist_id) {
+                if (!!!artist_id) return
                 return await this.model('Artist').exists({ _id: artist_id });
             },
             message: 'Artista non trovato',
@@ -16,7 +17,7 @@ const Group = new model('Group', new Schema({
         ref: 'Event',
         validate: {
             validator: async function (event_id) {
-                if (!!!event_id) return  // facoltativo
+                if (!!!event_id) return
                 else return await this.model('Event').exists({ _id: event_id });
             },
             message: 'Data evento non trovata',
@@ -102,4 +103,42 @@ Group.getEvent = async function (event_id) {
         })
     )
     .catch( error => Promise.reject(error.message) )
+}
+
+Group.getMessages = async function (group_doc_id) {
+    return this.findOne({
+        _id: group_doc_id,
+    })
+    .populate({
+	path: 'messages',
+	perDocumentLimit: 30,
+	populate: {
+            path: 'user',
+            select: '_id profile'
+	}
+    })
+    //.then( messages => messages.map( m => m.user._id===sock.user._id ? {...m, isSelf: true} : m ))
+    .catch( error => Promise.reject(error.message) )
+}
+
+/**
+ * Lista i gruppi a cui l'utente specificato e' unito
+ */
+Group.joined = async function (uid) {
+    return this
+        .find({ members: uid })
+        .then( groups => groups.map(
+            g => ({...g, members: g.members.length})
+        ))
+}
+
+/**
+ * Controlla se si e' membro del gruppo specificato
+ */
+Group.isMember = async function (group_id, uid) {
+    return this
+        .findOne({
+            _id: group_id,
+            members: { $in: [uid] }
+        })
 }
