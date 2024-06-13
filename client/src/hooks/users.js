@@ -18,7 +18,7 @@ export function useUserDetails(){
         })
         .then(processResponse)
         .then(setUser)
-        .catch( err => Error.prototype.isPrototypeOf(err) ? null : alert(err) )
+        .catch( err => { /** ignora */ } )
     }, []);
 
     return user
