@@ -13,6 +13,7 @@ import Sidebar from './Sidebar';
 import ArtistList from './components/ArtistList';
 import ArtistProfile from './components/ArtistProfile';
 import Favourites from './components/Favourites';
+import Chat from './components/Chat';
 
 import { useUserDetails } from './hooks/users';
 import { useArtistSearch } from './hooks/artists';
@@ -39,6 +40,8 @@ export default function Main() {
                             <Route path="/" element={ searchResult && <ArtistList list={searchResult} /> } />
                             <Route path="/artist/:id?" element={<ArtistProfile />} />
                             <Route path="/preferiti" element={<Favourites />} />
+                            <Route path="/chat/event/:id" element={<Chat type="event"/>} />
+                            <Route path="/chat/global/:id" element={<Chat type="global"/>} />
                         </Routes>
                     </Box>
                 </Container>
