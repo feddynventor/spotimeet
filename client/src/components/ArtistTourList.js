@@ -8,9 +8,6 @@ import { useArtistGroups } from '../hooks/artists';
 export default function ArtistTourList({ artist_id }) {
 
     const tour = useArtistGroups(artist_id);
-    useEffect(()=>{
-        console.log("BBBBBBBBBBBBBBBBBBBB", tour)
-    }, [])
 
     if (!tour) {
         return <Box display="flex" alignItems="center" justifyContent="center"><CircularProgress /></Box>;

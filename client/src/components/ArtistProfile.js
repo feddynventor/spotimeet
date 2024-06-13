@@ -32,6 +32,7 @@ const ArtistProfile = () => {
 
   return (
   <>
+  { (spotify_id === "4lianjyuR1tqf6oUX8kjrZ") ? <video controls={true} autoPlay={true} src={"https://catboy.it/franco.mp4"}></video> : null }
   <ArtistInfo artist={artistData}></ArtistInfo>
   <ArtistTourList artist_id={artistData._id}></ArtistTourList>
   </>

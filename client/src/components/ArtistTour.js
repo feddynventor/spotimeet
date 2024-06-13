@@ -6,7 +6,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Fade from '@mui/material/Fade';
 
 const ArtistTour = ({tour, isFirst}) => {
 
@@ -37,8 +36,6 @@ const ArtistTour = ({tour, isFirst}) => {
       <Accordion
         expanded={expanded}
         onChange={handleExpansion}
-        slots={{ transition: Fade }}
-        slotProps={{ transition: { timeout: 400 } }}
         sx={{
           '& .MuiAccordion-region': { height: expanded ? 'auto' : 0 },
           '& .MuiAccordionDetails-root': { display: expanded ? 'block' : 'none' },
