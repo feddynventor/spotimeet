@@ -33,7 +33,7 @@ export default function Main() {
                     <Box sx={{
                         overflowY: "auto", overflowX: "hidden",
                         marginTop: "20px", height: "70vh",
-                        borderRadius: '12px', backgroundColor: '#332D2A',
+                        borderRadius: '12px', backgroundColor: '#332D2A', scrollbarWidth: 'none'
                     }}>
                         <Routes>
                             <Route path="/" element={ searchResult && <ArtistList list={searchResult} /> } />

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import ArtistTour from './ArtistTour'
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
@@ -22,7 +21,7 @@ export default function ArtistTourList({ artist_id }) {
             {tour === null ? 
                 <Typography>L'artista non ha in programma un tour in Italia, unisciti alla chat globale per non perderti gli ultimi aggiornamenti</Typography> :
                 tour.map((tour, index) => (
-                    <ArtistTour tour={tour} key={index}/>
+                    <ArtistTour tour={tour} key={index} isFirst={index===0}/>
                 ))
             }
         </Box>
