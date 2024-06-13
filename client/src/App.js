@@ -23,7 +23,7 @@ export default function Main() {
     const [searchResult, search] = useArtistSearch();
     const [cookies, setCookie, removeCookie] = useCookies('token');
 
-    if (!!cookies.token) return <>
+    if (!!cookies.token) return <Box sx={{ display: 'flex' }}>
             <Sidebar user={user} searchHandler={search} />
             <Container sx={{ boxSizing: "border-box", overflow: "hidden", marginTop: "20px", }} maxWidth="false">
                 <Box sx={{ position: 'relative', flexGrow: 1, justifyContent: 'center', display: "flex" }}>
@@ -44,7 +44,7 @@ export default function Main() {
                     </Box>
                 </Container>
             </Container>
-        </>
+        </Box>
     else return (
         <Navigate to="/login" />
     )
