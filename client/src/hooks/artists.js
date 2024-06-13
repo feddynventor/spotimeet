@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { processResponse } from '../utils';
+import { debugChain } from '../utils';
 
 export const useArtistSearch = () => {
     const [artists, setArtists] = useState(null);
@@ -22,11 +23,7 @@ export const useArtistSearch = () => {
         .catch( err => Error.prototype.isPrototypeOf(err) ? null : err )
     }, [query]);
 
-    const search = (term) => {
-        setQuery(term);
-    }
-
-    return [ artists, search ];
+    return [ artists, setQuery ];
 }
 
 export const useArtistDetails = (spotify_id) => {
@@ -34,6 +31,7 @@ export const useArtistDetails = (spotify_id) => {
     const [cookies, setCookie, removeCookie] = useCookies('token');
 
     useEffect(() => {
+        console.log("useArtistDetails: useEffect", spotify_id);
         if (!spotify_id) return;
         fetch('http://spotimeet.fedele.website/api/artist/'+spotify_id, {
             credentials: "include",
@@ -64,6 +62,7 @@ export const useArtistGroups = (id) => {
             }
         })
         .then(processResponse)
+        .then(debugChain)
         .then(setArtist)
         .catch( err => Error.prototype.isPrototypeOf(err) ? null : err )
     }, [id]);

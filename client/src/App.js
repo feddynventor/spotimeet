@@ -13,6 +13,7 @@ import Sidebar from './Sidebar';
 import ArtistList from './components/ArtistList';
 import ArtistProfile from './components/ArtistProfile';
 import Favourites from './components/Favourites';
+import ArtistTour from './components/ArtistTour';
 
 import { useUserDetails } from './hooks/users';
 import { useArtistSearch } from './hooks/artists';
@@ -30,14 +31,14 @@ export default function Main() {
                 </Box>
                 <Container sx={{ boxSizing: "border-box", overflow: "hidden" }} maxWidth="false" disableGutters>
                     <Box sx={{
-                        overflowY: "scroll", overflowX: "hidden",
-                        marginTop: "20px", padding: "10px",
-                        height: "70vh",
+                        overflowY: "auto", overflowX: "hidden",
+                        marginTop: "20px", height: "70vh",
                         borderRadius: '12px', backgroundColor: '#332D2A',
                     }}>
                         <Routes>
                             <Route path="/" element={ searchResult && <ArtistList list={searchResult} /> } />
-                            <Route path="/artist/:id?" element={<ArtistProfile />} />
+                            <Route path="/artist/:spotify_id?" element={<ArtistProfile />} />
+                            <Route path="/artist/tour/:id?" element={<ArtistTour />} />
                             <Route path="/preferiti" element={<Favourites />} />
                         </Routes>
                     </Box>

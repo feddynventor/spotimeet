@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Typography, Avatar, Box } from '@mui/material';
 import { styled } from '@mui/system';
-import SpotifyLogo from '../assets/Spotify_Icon_CMYK_Black.png';
 import { useNavigate } from 'react-router-dom';
 
 const StyledCard = styled(Card)(({ theme, isFirst }) => ({
@@ -43,7 +42,8 @@ const ArtistCard = ({ artist, isFirst }) => {
     if (!artist || !artist._id) {
       setError("ID dell'artista non valido");
     } else {
-      navigate(`/artist/${artist._id}`);
+      navigate(`/artist/${artist.uri}`);
+      //navigate(`/artist/${artist.id}`);
     }
   };
   return (
@@ -55,11 +55,6 @@ const ArtistCard = ({ artist, isFirst }) => {
       />
       <ArtistName variant={"h5"}>{artist.name}</ArtistName>
       <Typography variant="subtitle1">{`Followers: ${artist.followers}`}</Typography>
-      <SpotifyLink>
-        <a href={artist.url} target="_blank" rel="noopener noreferrer">
-          <img src={SpotifyLogo} alt="Spotify Logo" style={{width: '15%'}} />
-        </a>
-      </SpotifyLink>
     </StyledCard>
   );
 };
