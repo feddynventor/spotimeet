@@ -24,7 +24,7 @@ const openedMixin = (theme) => ({
   margin: "20px 0px 20px 20px",
   // backgroundColor: '#332D2A', // Sfondo grigio
   //border: '4px solid #FF6D2E', // Bordo arancione
-  borderRadius: '12px',
+  borderRadius: "20px",
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -36,7 +36,7 @@ const closedMixin = (theme) => ({
   margin: "20px 0px 20px 20px",
   // backgroundColor: '#332D2A', // Sfondo grigio
   //border: '4px solid #FF6D2E', // Bordo arancione
-  borderRadius: '12px',
+  borderRadius: "20px",
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -133,7 +133,7 @@ export default function Sidebar({ user, searchHandler }) {  //utile per eventual
         : <DebouncedInput onInput={(q) => {navigate('/'); searchHandler(q)}} />}
         {mainNavbarItems.map((item, index) => (
           <Box key={index} sx={{ m: open ? 2 : null, borderRadius: '10px', border: open ? '2px solid #FF6D2E' : 'unset' }}>
-            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+            <ListItem key={index} disablePadding sx={{ display: 'block', borderRadius: '12px' }}>
               <ListItemButton
                 sx={{
                   minHeight: 72,
@@ -141,6 +141,7 @@ export default function Sidebar({ user, searchHandler }) {  //utile per eventual
                   px: 2.5,
                   transition: 'background-color 0.5s ease',
                   backgroundColor: open ? '#FF6D2E' : '#332D2A',
+                  borderRadius: '5px'
                 }}
                 onClick={() => handleNavigation(item.path)}
               >

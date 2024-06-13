@@ -13,6 +13,7 @@ import Sidebar from './Sidebar';
 import ArtistList from './components/ArtistList';
 import ArtistProfile from './components/ArtistProfile';
 import Favourites from './components/Favourites';
+import ArtistTour from './components/ArtistTour';
 import Chat from './components/Chat';
 
 import { useUserDetails } from './hooks/users';
@@ -23,7 +24,7 @@ export default function Main() {
     const [searchResult, search] = useArtistSearch();
     const [cookies, setCookie, removeCookie] = useCookies('token');
 
-    if (!!cookies.token) return <>
+    if (!!cookies.token) return <Box sx={{ display: 'flex' }}>
             <Sidebar user={user} searchHandler={search} />
             <Container sx={{ boxSizing: "border-box", overflow: "hidden", marginTop: "20px", }} maxWidth="false">
                 <Box sx={{ position: 'relative', flexGrow: 1, justifyContent: 'center', display: "flex" }}>
@@ -31,14 +32,14 @@ export default function Main() {
                 </Box>
                 <Container sx={{ boxSizing: "border-box", overflow: "hidden" }} maxWidth="false" disableGutters>
                     <Box sx={{
-                        overflowY: "scroll", overflowX: "hidden",
-                        marginTop: "20px", padding: "10px",
-                        height: "70vh",
-                        borderRadius: '12px', backgroundColor: '#332D2A',
+                        overflowY: "auto", overflowX: "hidden",
+                        marginTop: "20px", height: "70vh",
+                        borderRadius: '12px', backgroundColor: '#332D2A', scrollbarWidth: 'none'
                     }}>
                         <Routes>
                             <Route path="/" element={ searchResult && <ArtistList list={searchResult} /> } />
-                            <Route path="/artist/:id?" element={<ArtistProfile />} />
+                            <Route path="/artist/:spotify_id?" element={<ArtistProfile />} />
+                            <Route path="/artist/tour/:id?" element={<ArtistTour />} />
                             <Route path="/preferiti" element={<Favourites />} />
                             <Route path="/chat/event/:id" element={<Chat type="event"/>} />
                             <Route path="/chat/global/:id" element={<Chat type="global"/>} />
@@ -46,7 +47,7 @@ export default function Main() {
                     </Box>
                 </Container>
             </Container>
-        </>
+        </Box>
     else return (
         <Navigate to="/login" />
     )

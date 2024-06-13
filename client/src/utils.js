@@ -13,5 +13,9 @@ module.exports = {
             }
             return json;
         })
+    },
+    debugChain: (dbg)=>{
+        console.log(dbg)
+        return dbg;
     }
 }
