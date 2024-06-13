@@ -35,22 +35,23 @@ const ArtistTour = ({tour, isFirst}) => {
     <div>
       <Accordion
         expanded={expanded}
-        onChange={handleExpansion}
+        onChange={!!tour && tour.events.length == 0 ? undefined : handleExpansion}
         sx={{
           '& .MuiAccordion-region': { height: expanded ? 'auto' : 0 },
           '& .MuiAccordionDetails-root': { display: expanded ? 'block' : 'none' },
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={!!tour && tour.events.length == 0 ? undefined : <ExpandMoreIcon />}
           aria-controls="panel1-content"
-          id="panel1-header"
+          id={tour._id}
           sx={{backgroundColor:'#332D2A'}}
         >
           <Box display={'flex'} sx={{alignItems: 'center'}}>
             <Avatar alt={name} src={imageUrl.replace("evo/artwork","222x222")} sx={{ width: 200, height: 200, mr: 2 }} variant="rounded"/>
             <Box gap={2}>
               <Typography variant="h5" sx={{ color: '#FF6D2E', }}>{name}</Typography>
+              { !!tour && tour.events.length == 0 ? <Typography sx={{padding:'20px'}}>Siamo spiacenti, al momento non ci sono eventi disponibili per l'artista selezionato</Typography> : null}
             </Box>
           </Box>
         </AccordionSummary>

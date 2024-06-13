@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const StyledCard = styled(Card)(({ theme, isFirst }) => ({
   backgroundColor: isFirst ? '#1DB954' :theme.palette.background.paper,
-  borderRadius: '20px',
+  borderRadius: '12px',
   color: '#fff',
   padding: theme.spacing(3),
   display: 'flex',
@@ -24,14 +24,10 @@ const ArtistName = styled(Typography)({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
+  overflowWrap: 'break-word',
+  whiteSpace: 'normal',
   textAlign: 'center',
   width: '100%',
-});
-
-const SpotifyLink = styled(Typography)({
-  position: 'absolute',
-  bottom: 10,
-  left: 10,
 });
 
 const ArtistCard = ({ artist, isFirst }) => {
@@ -43,7 +39,6 @@ const ArtistCard = ({ artist, isFirst }) => {
       setError("ID dell'artista non valido");
     } else {
       navigate(`/artist/${artist.uri}`);
-      //navigate(`/artist/${artist.id}`);
     }
   };
   return (
@@ -54,7 +49,7 @@ const ArtistCard = ({ artist, isFirst }) => {
         sx={{ width: 150, height: 150, marginBottom: 2, transition: '.3s ease' }}
       />
       <ArtistName variant={"h5"}>{artist.name}</ArtistName>
-      <Typography variant="subtitle1">{`Followers: ${artist.followers}`}</Typography>
+      <Typography variant="subtitle1" sx={{textAlign: 'center',}}>{`Followers: ${artist.followers}`}</Typography>
     </StyledCard>
   );
 };
