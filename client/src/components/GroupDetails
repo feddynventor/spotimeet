@@ -1,0 +1,29 @@
+import React from 'react';
+import { Box, Typography, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+
+const GroupDetails = ({ group, members, onClose }) => {
+  if (!group) return null;
+
+  return (
+    <Box sx={{ padding: 2, position: 'relative', width: '100%', maxWidth: 500, backgroundColor: 'white', borderRadius: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+        <Avatar sx={{ width: 80, height: 80 }} src={group.image} />
+        <Typography variant="h4" sx={{ marginLeft: 2 }}>{group.name}</Typography>
+      </Box>
+      <Typography variant="h6" gutterBottom>Membri del gruppo:</Typography>
+      <List>
+        {members.map(member => (
+          <ListItem key={member.id}>
+            <ListItemAvatar>
+              <Avatar src={member.avatar} />
+            </ListItemAvatar>
+            <ListItemText primary={member.name} />
+          </ListItem>
+        ))}
+      </List>
+      <Button onClick={onClose} sx={{ position: 'absolute', top: 10, right: 10 }}>Chiudi</Button>
+    </Box>
+  );
+};
+
+export default GroupDetails;
