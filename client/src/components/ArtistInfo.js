@@ -1,47 +1,41 @@
 import React from 'react';
 import { Box, Avatar, Typography, Button, Grid } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+//import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/system';
 import SpotifyLogo from '../assets/Spotify_Icon_CMYK_Black.png';
+import Skeleton from '@mui/material/Skeleton';
 
 
 const SpotifyLink = styled(Button)({
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // padding: '10px 20px',
-    // textDecoration: 'none',
-    margin: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '10px 20px',
     borderRadius: '15px',
-    backgroundColor: '#1DB954', 
-    border: '4px solid #FF6D2E', 
+    textDecoration: 'none',
+    backgroundColor: '#1DB954',
     color: '#332D2A', 
-    textTransform: 'none', 
-    minWidth: '150px', 
-    borderRadius: '15px',
+    textTransform: 'none',
     '&:hover': { backgroundColor: '#332D2A', color:'#1DB954'},
 });
 
-const btnFollow = styled(Button)({
+const BtnFollow = styled(Button)({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     padding: '10px 20px',
     textDecoration: 'none',
-    border: '4px solid #FF6D2E',
-    textTransform: 'none', 
-    minWidth: '150px', 
-    borderRadius: '15px',
-    backgroundColor: '#332D2A', 
-    color: '#FF6D2E',
     textTransform: 'none',
-    '&:hover': { backgroundColor: '#235965' },
+    borderRadius: '15px',
+    backgroundColor: '#332D2A',
+    color: '#FF6D2E',
+    '&:hover': { backgroundColor: '#1DB954', color: '#332D2A'},
 });
 
 const ArtistInfo = ({artist}) => {
   
   if (!artist) {
-    return <Box display="flex" alignItems="center" justifyContent="center"><CircularProgress /></Box>;
+    return <Box display="flex" alignItems="center" justifyContent="center"><Skeleton variant="rounded" width={'100%'} height={'100%'} /></Box>;
   }
 
   const { name, image: imageUrl, followers, url} = artist;
@@ -69,18 +63,16 @@ const ArtistInfo = ({artist}) => {
                 <Typography variant="subtitle1" sx={{ color: '#332D2A', textAlign: 'center' }}>
                     {followers.toLocaleString()} followers
                 </Typography>
-                <Grid container spacing={2} sx={{m: 2}}>
-                    <Grid item xs={12} sm={6}>
-                        <SpotifyLink component="a" href={url} target="_blank" rel="noopener noreferrer">
+                <Grid container spacing={2} sx={{mt: 2}}>
+                    <Grid item xs={12} lg={6}>
+                        <SpotifyLink href={url} target="_blank" rel="noopener noreferrer">
                             <img src={SpotifyLogo} alt="Spotify Logo" style={{ width: '5%', marginRight: '10px' }} />
                             Ascolta su Spotify
                         </SpotifyLink>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Button variant="contained" color="error">sdsdsd</Button>
+                    <Grid item xs={12} lg={6}>
+                        <BtnFollow href={url} target="_blank" rel="noopener noreferrer">Entra nel gruppo</BtnFollow>
                     </Grid>
-                    {/* <Grid item xs={12} sm={6}> */}
-                    {/* </Grid> */}
                 </Grid>
             </Grid>
         </Grid>

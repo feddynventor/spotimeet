@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useUserDetails } from "../hooks/users";
 import { useGroup } from "../hooks/groups";
+//import GroupDetails from "./GroupDetails";
 
 export default function Chat({type}) {
     const [cookies, setCookie, removeCookie] = useCookies('token');
@@ -22,6 +23,7 @@ export default function Chat({type}) {
 
     const [message, setTextbox] = useState("")
     const [messages, setMessages] = useState([])
+    //const [showGroupDetails, setShowGroupDetails] = useState(false);
 
     const messagesEndRef = useRef(null)
 
@@ -57,13 +59,24 @@ export default function Chat({type}) {
     }, [messages])
 
     if (!senderUser || !group) return
+    
 
-    return <Box sx={{height: "100%", display: "flex", flexDirection: "column-reverse", m: "-10px"}}>
+    return (
+    <Box sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column-reverse",
+        m: "0px",
+        overflowY: 'scroll', /* Garantire che solo lo scorrimento verticale sia abilitato */
+        '&::-webkit-scrollbar': { display: 'none' }, /*IOS*/
+        scrollbarWidth: 'none', /* Nascondere la barra di scorrimento in Firefox */
+        msOverflowStyle: 'none', /* Nascondere la barra di scorrimento in Internet Explorer e Edge */
+    }}>
         <form onSubmit={(e)=>{e.preventDefault(); handleSend()}}>
-            <Box sx={{display: 'flex', flexDirection: 'row', width: "100%", p:"10px", paddingBottom:0}}>
-                <TextField autoFocus fullWidth placeholder="Scrivi un messaggio..." onChange={(e)=>{setTextbox(e.target.value)}} value={message}></TextField>
-                <Button > <MusicNoteSharpIcon /> </Button>
-                <Button type="submit"> <SendIcon /> </Button>
+            <Box sx={{display: 'flex', flexDirection: 'row', maxWidth: "100%", padding:'0px', margin:'10px', border: '2px solid #FF6D2E', borderRadius:'50px'}}>
+                <TextField autoFocus fullWidth placeholder="Scrivi un messaggio..." onChange={(e)=>{setTextbox(e.target.value)}} value={message} sx={{padding:'0 10 0 0', marginLeft: '20px','& .MuiOutlinedInput-root': {'& fieldset': { borderColor: 'transparent' },'&:hover fieldset': { borderColor: 'transparent' }, '&.Mui-focused fieldset': { borderColor: 'transparent' },},}}></TextField>
+                <Button sx={{margin: '0px'}}> <MusicNoteSharpIcon /> </Button>
+                <Button type="submit" sx={{marginRght:'20px'}}> <SendIcon /> </Button>
             </Box>
         </form>
         <Box ref={messagesEndRef} sx={{overflowY: "scroll", flexGrow: 1, display: "flex", flexDirection: "column"}}>
@@ -73,9 +86,11 @@ export default function Chat({type}) {
                 timestamp={msg.timestamp} 
             />)}
         </Box>
-        <Box sx={{marginBottom: 1, p: 1, borderRadius: '10px 10px 0 0', backgroundColor: '#FF6D2E', display: "flex", alignItems: "center" }}>{
+        <Box /*onClick={() => setShowGroupDetails(true)}*/ sx={{marginBottom: 1, p: 1, borderRadius: '10px 10px 0 0', backgroundColor: '#FF6D2E', display: "flex", alignItems: "center" }}>{
             !!group.artist ? <><Avatar sx={{ width: 64, height: 64, m:1 }} src={group.artist.image}></Avatar><Typography variant="h4">{group.artist.name}</Typography></> :
             !!group.event ? <><Avatar sx={{ width: 64, height: 64, m:1 }} src={group.event.tour.image}></Avatar><Box><Typography variant="h5">{group.event.tour.name} - {group.event.city}</Typography><Typography variant="subtitle1">{new Date(group.event.date).toLocaleDateString()}</Typography></Box></> : null
         }</Box>
+        {/*showGroupDetails && <GroupDetails group={group} members={group.members} onClose={() => setShowGroupDetails(false)} />*/}
     </Box>
+    )
 }
