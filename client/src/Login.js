@@ -4,19 +4,15 @@
  */
 
 import React, { useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { Avatar, Button, TextField, Link, Grid, Box, Typography, Container} from '@mui/material';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
-import Typography from '@mui/material/Typography';
 import { makeStyles } from '@mui/styles';
-import Container from '@mui/material/Container';
 import SpotifyButton from './components/SpotifyButton';
 import { useNavigate } from 'react-router-dom';
 import { processResponse, validateEmail } from './utils';
+import Flower1 from './assets/Flower1.svg';
+import Flower2 from './assets/Flower2.svg';
+import Flower3 from './assets/Flower3.svg';
 
 function Copyright() {
 	return (
@@ -34,18 +30,20 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
-		marginTop: theme.spacing(8),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+		zIndex: 2
 	},
 	avatar: {
 		margin: theme.spacing(1),
 		backgroundColor: theme.palette.secondary.main,
+		zIndex: 2
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
 		marginTop: theme.spacing(2),
+		zIndex: 2
 	}
 }));
 
@@ -79,63 +77,101 @@ export default function Login({ theme }) {
     .catch( err => Error.prototype.isPrototypeOf(err) ? null : setError(err) )
 	}
 
+	useEffect(() => {
+		// Imposta lo stile del body tramite JavaScript
+		document.body.style.background = 'linear-gradient(90deg, rgba(161,56,147,1) 0%, rgba(98,155,238,1) 100%)';
+		document.body.style.height = '100vh'; // Altezza pari all'altezza della viewport
+		document.body.style.margin = '0'; // Rimuove il margine predefinito
+  	}, []);
+
 	return (
-		<Container component="main" maxWidth="xs">
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<GraphicEqIcon />
-				</Avatar>
-				<Typography component="h1" variant="h4" >
-					Spotimeet
-				</Typography>
-				<SpotifyButton oauthUrl="http://spotimeet.fedele.website/api/login/oauth" />
-				<form className={classes.form} onSubmit={handleLogin}>
-					<TextField
-						error={!!error}
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="identifier"
-						label="Email o Nome utente"
-						name="identifier"
-						autoComplete="email"
-						autoFocus
-					/>
-					<TextField
-						error={!!error}
-						helperText={error}
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						name="password"
-						label="Password"
-						type="password"
-						id="password"
-						autoComplete="current-password"
-					/>
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						sx={{ mt: 3, mb: 2 }}
-					>
-						Login
-					</Button>
-					<Grid container>
-						<Grid item>
-							<Link onClick={()=>{navigate("/signup")}} variant="body2" underline="hover">
-								{"Se vuoi creare un nuovo account, clicca qui"}
-							</Link>
-						</Grid>
-					</Grid>
-				</form>
-			</div>
-			<Box m={6}>
-				<Copyright />
-			</Box>
-		</Container>
+		<Box>
+			<img src={Flower1} alt="fiore1" style={{
+				width: '50vw',
+				height: '50vh',
+				zIndex:'-1',
+				position: 'absolute',  
+				right: '0',            
+				top: '20%',            
+				transform: 'translateY(-30%)'  
+			}}/>
+			<img src={Flower2} alt="fiore2" style={{
+				width: '25vw',
+				height: '25vh',
+				zIndex:'-1',
+				position: 'absolute',  
+				right: '0',            
+				top: '50%',            
+				transform: 'translateY(-50%)'  
+			}}/>
+			<img src={Flower3} alt="fiore3" style={{
+				width: '40vw',
+	            height: '70vh',
+                zIndex:'-1',
+                position: 'absolute',  
+                left: '0',            
+                top: '70%',            
+                transform: 'translateY(-70%)'  
+            }}/>
+			<Grid container spacing={2} justifyContent="center">
+				<Grid item lg={6} xs={12}>
+					<Box sx={{marginTop:'8em'}}> <Typography component="h1" variant='h1'align="center"> Spotimeet </Typography> </Box>
+				</Grid>
+				<Grid item lg={6} xs={12}>
+					<Container component="main" maxWidth="xs" sx={{marginTop:'15em', backgroundColor:'rgba(161,56,147,0.3)', borderRadius:'20px', padding:'20px'}}>
+						<div className={classes.paper}>
+							<SpotifyButton oauthUrl="http://spotimeet.fedele.website/api/login/oauth" />
+							<form className={classes.form} onSubmit={handleLogin}>
+								<TextField
+									error={!!error}
+									variant="outlined"
+									margin="normal"
+									required
+									fullWidth
+									id="identifier"
+									label="Email o Nome utente"
+									name="identifier"
+									autoComplete="email"
+									autoFocus
+								/>
+								<TextField
+									error={!!error}
+									helperText={error}
+									variant="outlined"
+									margin="normal"
+									required
+									fullWidth
+									name="password"
+									label="Password"
+									type="password"
+									id="password"
+									autoComplete="current-password"
+									sx={{ borderRadius: 5 }}
+								/>
+								<Button
+									type="submit"
+									fullWidth
+									variant="contained"
+									color="primary"
+									sx={{ mt: 3, mb: 2, borderRadius: 5, padding: 1.5 }}
+								>
+									Login
+								</Button>
+								<Grid container>
+									<Grid item>
+										<Link onClick={()=>{navigate("/signup")}} variant="subtitle" underline="hover">
+											{"Non hai ancora un profilo? Creane uno ora"}
+										</Link>
+									</Grid>
+								</Grid>
+							</form>
+						</div>
+						<Box m={6}>
+							<Copyright />
+						</Box>
+					</Container>
+				</Grid>
+			</Grid>
+		</Box>
 	);
 }
