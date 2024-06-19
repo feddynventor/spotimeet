@@ -19,7 +19,7 @@ module.exports = {
                     text: data,
                 })
             } })
-            .then( () => sock.broadcast.to(sock.group._id).emit({
+            .then( () => sock.broadcast.emit({
                     user: sock.user, //intero obj (TODO: riduci)
                     timestamp,
                     text: data,
