@@ -42,8 +42,8 @@ const ArtistInfo = ({artist}) => {
   return (
     <Box sx={{
         backgroundColor: '#FF6D2E', 
-        borderRadius: '16px 16px 0 0', 
-        p: 3, 
+        borderRadius: '10px 10px 0 0',
+        p: 3,
         width: '100%',
         justifyContent: 'center', 
         alignItems: 'center',

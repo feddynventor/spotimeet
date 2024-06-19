@@ -10,10 +10,9 @@ const darkTheme = createTheme({
     MuiCssBaseline: {
       styleOverrides: `
         @font-face {
-          font-family: 'sans-serif';
+          font-family: 'roboto';
           font-style: normal;
-          src: local('sans-serif'), local('sans-serif'),
-          url(https://fonts.gstatic.com/s/opensans/v26/mem8YaGs126MiZpBA-UFWJ0bf8pkAp6a.woff2) format('woff2');
+          src: local('roboto')
         }
         body {
           font-family: 'sans-serif';

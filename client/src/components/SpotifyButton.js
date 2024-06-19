@@ -14,9 +14,9 @@ const useStyles = makeStyles({
         color: '#fff',
         fontWeight: 'bold',
         cursor: 'pointer',
-        // "&:hover": {
+        "&:hover": {
             borderColor: '#FFF',
-        // }
+        }
     },
     spotifyLogo: {
         width: '40px',

@@ -19,14 +19,14 @@ import Chat from './components/Chat';
 import { useUserDetails } from './hooks/users';
 import { useArtistSearch } from './hooks/artists';
 
-export default function Main() {
+export default function Main({ theme }) {
     const user = useUserDetails();
     const [searchResult, search] = useArtistSearch();
     const [cookies, setCookie, removeCookie] = useCookies('token');
 
-    if (!!cookies.token) return <Box sx={{ display: 'flex' }}>
+    if (!!cookies.token) return <Box sx={{ display: 'flex', background: theme.palette.background.app }}>
             <Sidebar user={user} searchHandler={search} />
-            <Container sx={{ boxSizing: "border-box", overflow: "hidden", marginTop: "20px", }} maxWidth="false">
+            <Container sx={{ boxSizing: "border-box", overflow: "hidden", marginTop: "20px" }} maxWidth="false">
                 <Box sx={{ position: 'relative', flexGrow: 1, justifyContent: 'center', display: "flex" }}>
                     <img src={banner} alt='banner pubblicitario' style={{ width: '100%', maxHeight: "20vh", borderRadius: '12px', maxWidth: "1100px", display: "flex" }} />
                 </Box>
