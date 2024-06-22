@@ -25,7 +25,7 @@ export default function Chat({type}) {
     const [messages, setMessages] = useState([])
     //const [showGroupDetails, setShowGroupDetails] = useState(false);
 
-    const messagesEndRef = useRef(null)
+    const messagesEndRef = useRef(null)  // useRef per scrollare automaticamente alla fine della chat
 
     const [socket, setSocket] = useState(null)
     if (!!group && !socket) setSocket( io("ws://spotimeet.fedele.website/?group="+group._id, {
@@ -38,18 +38,23 @@ export default function Chat({type}) {
     useEffect(() => {
         if (!!!socket) return
         function handleNewMessage(data) {
-            setMessages( current => [...current, ...data.messages] );
+            return setMessages( current => [...current, data] );
+        }
+        function handleHistory(data) {
+            return setMessages( current => [...current, ...data] );
         }
         socket.on("message", handleNewMessage);
+        socket.on("history", handleHistory);
         return () => {
             socket.off("message", handleNewMessage);
+            socket.off("history", handleHistory);
         };
     }, [socket])
 
-    const handleSend = () => {
-        if (!message) return;
+    function handleSend() {
+        if (!message || !socket) return;
         socket.emit("message", message);
-        // replica schema del DB direttamente sul client senza feedback
+        // replica schema del DB direttamente sul client, nessun feedback
         setMessages([...messages, {text: message, user: null, timestamp: new Date()}]);
         setTextbox("");
     };
@@ -75,16 +80,19 @@ export default function Chat({type}) {
         <form onSubmit={(e)=>{e.preventDefault(); handleSend()}}>
             <Box sx={{display: 'flex', flexDirection: 'row', maxWidth: "100%", padding:'0px', margin:'10px', border: '2px solid #FF6D2E', borderRadius:'50px'}}>
                 <TextField autoFocus fullWidth placeholder="Scrivi un messaggio..." onChange={(e)=>{setTextbox(e.target.value)}} value={message} sx={{padding:'0 10 0 0', marginLeft: '20px','& .MuiOutlinedInput-root': {'& fieldset': { borderColor: 'transparent' },'&:hover fieldset': { borderColor: 'transparent' }, '&.Mui-focused fieldset': { borderColor: 'transparent' },},}}></TextField>
-                <Button sx={{margin: '0px'}}> <MusicNoteSharpIcon /> </Button>
+                {/* <Button sx={{margin: '0px'}}> <MusicNoteSharpIcon /> </Button> */}
                 <Button type="submit" sx={{marginRght:'20px'}}> <SendIcon /> </Button>
             </Box>
         </form>
         <Box ref={messagesEndRef} sx={{overflowY: "scroll", flexGrow: 1, display: "flex", flexDirection: "column"}}>
-            {messages.length == 0 ? <Typography align="center" variant="subtitle1">Ancora nessun messaggio... Comincia tu!</Typography> : messages.map((msg, index) => <ChatBubble
-                key={index} text={msg.text}
-                userObj={msg.user && msg.user._id===senderUser._id ? null : msg.user}
-                timestamp={msg.timestamp} 
-            />)}
+            {messages.length == 0
+                ? <Typography align="center" variant="subtitle1">Ancora nessun messaggio... Comincia tu!</Typography>
+                : messages.map((msg, index) => <ChatBubble
+                    key={index} text={msg.text}
+                    userObj={msg.user && msg.user._id===senderUser._id ? null : msg.user}
+                    timestamp={msg.timestamp} 
+                />)
+            }
         </Box>
         <Box /*onClick={() => setShowGroupDetails(true)}*/ sx={{marginBottom: 1, p: 1, borderRadius: '10px 10px 0 0', backgroundColor: '#FF6D2E', display: "flex", alignItems: "center" }}>{
             !!group.artist ? <><Avatar sx={{ width: 64, height: 64, m:1 }} src={group.artist.image}></Avatar><Typography variant="h4">{group.artist.name}</Typography></> :
