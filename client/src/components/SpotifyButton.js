@@ -1,9 +1,11 @@
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import mini_logo from '../assets/Spotify_Icon_CMYK_Black.png';
 
 const useStyles = makeStyles({
     spotifyButton: {
+        width: '60%',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -14,9 +16,10 @@ const useStyles = makeStyles({
         color: '#fff',
         fontWeight: 'bold',
         cursor: 'pointer',
-        "&:hover": {
-            borderColor: '#FFF',
-        }
+        marginBottom: '10px',
+        // "&:hover": {
+        borderColor: '#FFF',
+        // }
     },
     spotifyLogo: {
         width: '40px',
@@ -28,10 +31,9 @@ const useStyles = makeStyles({
 export default function SpotifyButton({oauthUrl}) {
     const styles = useStyles();
     return (
-        <>
+        <Box sx={{margin: 3, width: '100%', textAlign: 'center'}}>
         <button 
             className={styles.spotifyButton} 
-            style={{ width: '60%', margin: '20px', marginBottom: '5px'}}
             onClick={()=>{window.location.href = oauthUrl}}>
             <img src={mini_logo} alt="Spotify logo" className={styles.spotifyLogo} />
             <span>Entra con Spotify</span>
@@ -39,6 +41,6 @@ export default function SpotifyButton({oauthUrl}) {
         <Typography variant="body2">
             Se hai un account Spotify sei già nel flow!
         </Typography>
-        </>
+        </Box>
     );
 }    

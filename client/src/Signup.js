@@ -17,50 +17,34 @@ import Container from '@mui/material/Container';
 import SpotifyButton from './components/SpotifyButton';
 import { useNavigate } from 'react-router-dom';
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Realizzato per l\'esame di Fondamenti di Tecnologie Web'}
-			<br />
-			<Link color="inherit" href="https://fedele.website/">
-				fedele.website
-			</Link>
-		</Typography>
-	);
-}
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	paper: {
-		marginTop: theme.spacing(8),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+		// zIndex: 2
 	},
 	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
+		//margin: theme.spacing(1),
+		//backgroundColor: theme.palette.secondary.main,
+		// zIndex: 2
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing(2),
+		marginTop: 2,
+		// zIndex: 2
 	}
 }));
 
-export default function Login({ theme }) {
-	const classes = useStyles(theme);
+export default function Signup({ footer }) {
+	const classes = useStyles();
 
 	const navigate = useNavigate();
 
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container component="main" maxWidth="xs" sx={{backgroundColor:'rgba(1,1,1,0.5)', borderRadius:'20px', padding:'20px'}}>
 			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<GraphicEqIcon />
-				</Avatar>
-				<Typography component="h1" variant="h4">
-					Spotimeet
-				</Typography>
 				<SpotifyButton oauthUrl="http://spotimeet.fedele.website/api/login/oauth" />
 				<Box className={classes.form}>
 					<TextField
@@ -114,15 +98,15 @@ export default function Login({ theme }) {
 					</Button>
 					<Grid container>
 						<Grid item>
-							<Link onClick={()=>{navigate("/login")}} variant="body2" underline="hover">
+							<Link onClick={()=>{navigate("/home/login")}} variant="body2" underline="hover">
 								{"Hai già un account? Clicca qui per accedere"}
 							</Link>
 						</Grid>
 					</Grid>
 				</Box>
 			</div>
-			<Box mt={8}>
-				<Copyright />
+			<Box m={6}>
+				{footer}
 			</Box>
 		</Container>
 	);

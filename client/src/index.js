@@ -16,8 +16,7 @@ root.render(
     <CssBaseline />
     <Router>
       <Routes>
-        <Route path="/login" element={<Home component={Login} theme={darkTheme}/>} />
-        <Route path="/signup" element={<Home component={Signup} />} theme={darkTheme} />
+        <Route path="/home/*" element={<Home />} />
         <Route path="/*" element={<App theme={darkTheme} />} />
       </Routes>
     </Router>

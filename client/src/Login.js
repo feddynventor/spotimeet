@@ -10,19 +10,6 @@ import SpotifyButton from './components/SpotifyButton';
 import { useNavigate } from 'react-router-dom';
 import { processResponse, validateEmail } from './utils';
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			Realizzato per l'esame di Fondamenti di Tecnologie Web
-			<br />
-			<Link color="inherit" href="https://fedele.website/">
-				fedele.website
-			</Link>
-			<br />
-			Nicola Cucinella's dream
-		</Typography>
-	);
-}
 
 const useStyles = makeStyles(() => ({
 	paper: {
@@ -43,7 +30,7 @@ const useStyles = makeStyles(() => ({
 	}
 }));
 
-export default function Login() {
+export default function Login({ footer }) {
 	const [error, setError] = React.useState(false);
 	const navigate = useNavigate();
 	// useEffect(() => {
@@ -115,7 +102,7 @@ export default function Login() {
 					</Button>
 					<Grid container>
 						<Grid item>
-							<Link onClick={()=>{navigate("/signup")}} variant="subtitle" underline="hover">
+							<Link onClick={()=>{navigate("/home/signup")}} variant="subtitle" underline="hover">
 								{"Non hai ancora un profilo? Creane uno ora"}
 							</Link>
 						</Grid>
@@ -123,7 +110,7 @@ export default function Login() {
 				</form>
 			</div>
 			<Box m={6}>
-				<Copyright />
+				{footer}
 			</Box>
 		</Container>
 	);
