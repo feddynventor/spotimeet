@@ -5,7 +5,7 @@ module.exports = {
     getMessages: (sock, next) => Group
 	.getMessages(sock.group._id)
 	.then( list => {
-	    sock.emit('message', list )
+	    sock.emit('history', list.messages )
 	} )
 	.then( next )
     ,
@@ -19,7 +19,7 @@ module.exports = {
                     text: data,
                 })
             } })
-            .then( () => sock.broadcast.emit({
+            .then( () => sock.broadcast.emit('message', {
                     user: sock.user, //intero obj (TODO: riduci)
                     timestamp,
                     text: data,
@@ -30,12 +30,12 @@ module.exports = {
     },
     status: (sock, next) => !!sock.api ? sock.api
         .get('/me/player/currently-playing')
-	.then( res => res.status === 204 ? Promise.reject : res)
+	.then( res => res.status === 204 ? Promise.reject() : res)
         .then( res => res.data.item)
-        .then( data => sock
-            .to(sock.group._id)
+        .then( data => sock.broadcast
             .emit('message', {
-                status: `Sto ascoltando ${data.name} di ${data.artists[0].name}`, 
+                user: sock.user,
+                text: `Sto ascoltando ${data.name} di ${data.artists[0].name}`, 
                 payload: {
                     image: data.album.images.pop().url,
                     preview: data.preview_url,
@@ -43,7 +43,7 @@ module.exports = {
                 }
             })
         )
-        .then( next )
-	.catch( next )
+        .then( ()=>next() )
+	.catch( ()=>next() )
         : next()
 }

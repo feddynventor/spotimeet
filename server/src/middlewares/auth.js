@@ -102,6 +102,7 @@ module.exports = {
                     _id: sock.handshake.query.group,
                     members: { $in: [user._id] }
                 })
+                .select('-messages -members')
             })
             .then( group => {
                 if (!group) return sock.emit('exception', { error: "Non sei un membro del gruppo" });
