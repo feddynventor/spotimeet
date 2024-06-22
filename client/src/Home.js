@@ -11,6 +11,8 @@ import Flower3 from './assets/Flower3.svg';
 import Flower4 from './assets/Flower4.svg';
 import Flower5 from './assets/Flower5.svg';
 import SpotifyButton from './components/SpotifyButton';
+import Avatar from '@mui/material/Avatar';
+import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import Login from './Login.js';
 import Signup from './Signup.js';
 import { Route, Routes } from 'react-router-dom';
@@ -35,7 +37,10 @@ export default function Home() {
 			</style>
 			<Grid container spacing={2} justifyContent="center" alignItems="center" sx={{height:'100vh', zIndex: '10'}}>
 				<Grid item lg={6} xs={12}>
-					<Box sx={{marginTop:'0em'}}> <Typography component="h1" variant='h1'align="center"> Spotimeet </Typography> </Box>
+					<Box sx={{margin: 2, marginTop: 0, width: '100%'}}>
+						<Avatar sx={{ width: 64, height: 64 }}><GraphicEqIcon style={{ color: 'white' }}></GraphicEqIcon></Avatar>
+						<Typography component="h1" variant='h1' align="center">Spotimeet</Typography>
+					</Box>
 				</Grid>
 				<Grid item lg={6} xs={12} sx={{verticalAlign: 'middle'}}>
                 <Box>

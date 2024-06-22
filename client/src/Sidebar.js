@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import SearchIcon from '@mui/icons-material/Search';
-import { mainNavbarItems } from './sidebarItems';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
 import UserCard from './components/UserCard';
 import DebouncedInput from './components/DebouncedInput';
+import SidebarEntry from './SidebarEntry';
+import { mainNavbarItems } from './sidebarItems';
 /**
  * Reference: https://mui.com/material-ui/react-drawer/#mini-variant-drawer
  */
@@ -67,6 +70,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 export default function Sidebar({ user, searchHandler }) {  //utile per eventuali voci del menu tramite permessi
   const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies('token');
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -131,34 +135,14 @@ export default function Sidebar({ user, searchHandler }) {  //utile per eventual
           </ListItemButton>
         </ListItem>
         : <DebouncedInput onInput={(q) => {navigate('/'); searchHandler(q)}} />}
-        {mainNavbarItems.map((item, index) => (
-          <Box key={index} sx={{ m: open ? 2 : null, borderRadius: '10px', border: open ? '2px solid #FF6D2E' : 'unset' }}>
-            <ListItem key={index} disablePadding sx={{ display: 'block', borderRadius: '12px' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 72,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                  transition: 'background-color 0.5s ease',
-                  backgroundColor: open ? '#FF6D2E' : '#332D2A',
-                  borderRadius: '5px'
-                }}
-                onClick={() => handleNavigation(item.path)}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          </Box>
-        ))}
+
+        {mainNavbarItems.map( (item, index) => <SidebarEntry index={index} isOpened={open} icon={item.icon} label={item.label} callback={() => handleNavigation(item.path)}></SidebarEntry> )}
+        <SidebarEntry index={0} isOpened={open} icon={<LogoutIcon />} label={"Esci"} callback={() => {setCookie("token", '', {
+            maxAge: 0,
+            sameSite: 'strict'
+          })
+          navigate("/home/login")
+        }}></SidebarEntry>
       </List>
     </Drawer>
   );
