@@ -28,7 +28,7 @@ export default function Chat({type}) {
     const messagesEndRef = useRef(null)  // useRef per scrollare automaticamente alla fine della chat
 
     const [socket, setSocket] = useState(null)
-    if (!!group && !socket) setSocket( io("ws://spotimeet.fedele.website/?group="+group._id, {
+    if (!!group && !socket) setSocket( io("//spotimeet.fedele.website/?group="+group._id, {
         withCredentials: true,
         extraHeaders: {
             "Authorization": cookies.token

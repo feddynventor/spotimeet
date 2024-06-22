@@ -9,7 +9,7 @@ export function useUserDetails(){
 
     useEffect(() => {
         // fetch user info
-        fetch('http://spotimeet.fedele.website/api/user/me', {
+        fetch('//spotimeet.fedele.website/api/user/me', {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export function useUserFavourites(){
 
     useEffect(() => {
         // fetch user info
-        fetch('http://spotimeet.fedele.website/api/user/favourites', {
+        fetch('//spotimeet.fedele.website/api/user/favourites', {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",

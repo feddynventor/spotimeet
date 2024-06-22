@@ -39,7 +39,7 @@ export default function Login({ footer }) {
 
 	const handleLogin = (e) => {
 		e.preventDefault();
-		fetch('http://spotimeet.fedele.website/api/login', {
+		fetch('//spotimeet.fedele.website/api/login', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -63,7 +63,7 @@ export default function Login({ footer }) {
 	return (
 		<Container component="main" maxWidth="xs" sx={{backgroundColor:'rgba(1,1,1,0.5)', borderRadius:'20px', padding:'20px'}}>
 			<div className={classes.paper}>
-				<SpotifyButton oauthUrl="http://spotimeet.fedele.website/api/login/oauth" />
+				<SpotifyButton oauthUrl="//spotimeet.fedele.website/api/login/oauth" />
 				<form className={classes.form} onSubmit={handleLogin}>
 					<TextField
 						error={!!error}

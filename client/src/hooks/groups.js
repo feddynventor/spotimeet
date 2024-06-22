@@ -9,7 +9,7 @@ export function useGroup(type, id){
 
     useEffect(() => {
         // fetch user info
-        fetch('http://spotimeet.fedele.website/api/group/'+type+'/'+id, {
+        fetch('//spotimeet.fedele.website/api/group/'+type+'/'+id, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",

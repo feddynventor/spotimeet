@@ -43,7 +43,7 @@ export default function Signup({ footer }) {
 		else if (!validateEmail(e.target.email.value))
 			return setError('Email non valida');
 		else 
-			fetch('http://spotimeet.fedele.website/api/signup', {
+			fetch('//spotimeet.fedele.website/api/signup', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -67,7 +67,7 @@ export default function Signup({ footer }) {
 	return (
 		<Container component="main" maxWidth="xs" sx={{backgroundColor:'rgba(1,1,1,0.5)', borderRadius:'20px', padding:'20px'}}>
 			<div className={classes.paper}>
-				<SpotifyButton oauthUrl="http://spotimeet.fedele.website/api/login/oauth" />
+				<SpotifyButton oauthUrl="//spotimeet.fedele.website/api/login/oauth" />
 				<form className={classes.form} onSubmit={handleSignup}>
 					<TextField
 						error={!!error}

@@ -11,7 +11,7 @@ export const useArtistSearch = () => {
 
     useEffect(() => {
         if (!query) return;
-        fetch('http://spotimeet.fedele.website/api/artist?q='+query, {
+        fetch('//spotimeet.fedele.website/api/artist?q='+query, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export const useArtistDetails = (spotify_id) => {
     useEffect(() => {
         console.log("useArtistDetails: useEffect", spotify_id);
         if (!spotify_id) return;
-        fetch('http://spotimeet.fedele.website/api/artist/'+spotify_id, {
+        fetch('//spotimeet.fedele.website/api/artist/'+spotify_id, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const useArtistGroups = (id) => {
 
     useEffect(() => {
         if (!id) return;
-        fetch('http://spotimeet.fedele.website/api/group/artist/'+id, {
+        fetch('//spotimeet.fedele.website/api/group/artist/'+id, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
