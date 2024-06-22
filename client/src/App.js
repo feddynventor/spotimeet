@@ -30,7 +30,7 @@ export default function Main({ theme }) {
             <Sidebar user={user} searchHandler={search} />
             <Container sx={{ boxSizing: "border-box", overflow: "hidden", marginTop: "20px" }} maxWidth="false">
                 <Link underline='none' component={RouterLink} to='/artist/0Y5tJX1MQlPlqiwlOH1tJY'>
-                    <Box to="/artist/0Y5tJX1MQlPlqiwlOH1tJY" sx={{ position: 'relative', flexGrow: 1, justifyContent: 'center', display: "flex" }}>
+                    <Box sx={{ position: 'relative', flexGrow: 1, justifyContent: 'center', display: "flex" }}>
                         <img src={banner} alt='banner pubblicitario' style={{ width: '100%', maxHeight: "20vh", borderRadius: '12px', maxWidth: "1100px", display: "flex" }} />
                     </Box>
                 </Link>
