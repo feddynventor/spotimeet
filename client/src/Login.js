@@ -8,6 +8,7 @@ import { Button, TextField, Link, Grid, Box, Typography, Container} from '@mui/m
 import { makeStyles } from '@mui/styles';
 import SpotifyButton from './components/SpotifyButton';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { processResponse, validateEmail } from './utils';
 
 
@@ -33,15 +34,11 @@ const useStyles = makeStyles(() => ({
 export default function Login({ footer }) {
 	const [error, setError] = React.useState(false);
 	const navigate = useNavigate();
-	// useEffect(() => {
-	// 	console.log("I run everytime this component rerenders")
-	// }, []);
-	
 	const classes = useStyles();
+    const [cookies, setCookie, removeCookie] = useCookies('token');
 
 	const handleLogin = (e) => {
 		e.preventDefault();
-		console.log(e.target.identifier.value, e.target.password.value)
 		fetch('http://spotimeet.fedele.website/api/login', {
 			method: 'POST',
 			headers: {
@@ -55,9 +52,12 @@ export default function Login({ footer }) {
 			})
 		})
 		.then( processResponse )
-    //.then( Promise.reject )
-		.then( () => navigate("/home") )
-    .catch( err => Error.prototype.isPrototypeOf(err) ? null : setError(err) )
+		.then( token => setCookie('token', token.token, {
+			sameSite: 'strict',
+			path: '/'
+		}) )
+		.then( () => navigate("/") )
+    	.catch( err => Error.prototype.isPrototypeOf(err) ? null : setError(err) )
 	}
 
 	return (

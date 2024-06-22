@@ -14,7 +14,7 @@ module.exports = {
         .then(auth.jwtPayload)
         .then(token => res
             .cookie("token", token, { httpOnly: false })
-            .redirect('/')
+            .status(200)
         )
         .catch(error => res.status(403).send({error}))
     },
@@ -22,7 +22,7 @@ module.exports = {
         const { username, fullname, email, password } = req.body;
         if (!fullname || !email || !password) return res.status(400).send({error: "Campi mancanti"});
         User.new({
-            username,
+            username: username || email.split('@')[0],
             email,
             password,
             fullname
@@ -30,7 +30,7 @@ module.exports = {
         .then(auth.jwtPayload)
         .then(token => res
             .cookie("token", token, { httpOnly: false })
-            .redirect('/')
+            .status(200)
         )
         .catch(error => res.status(403).send({error}))
     },

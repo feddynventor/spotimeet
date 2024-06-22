@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.connect(`mongodb://${process.env['MONGO_HOST']}:27017/spotimeet`);
-// mongoose fa buffering delle calls a model functions internamente, quindi non serve await
+// mongoose fa buffering delle calls a model functions a runtime, quindi non serve await
 
 const express = require('express');
 const app = express();
@@ -10,17 +10,22 @@ const httpServer = createServer(app);
 
 app.use(express.json()); // To parse content-type: json
 app.use(require("cookie-parser")());
-if (!!!process.env['PRODUCTION']) app.use(require('cors')({
-    credentials: true,
-    origin: ['http://127.0.0.1:3000', 'https://spotimeet.fedele.website'],
-}));
+if (!!!process.env['PRODUCTION'])
+    app.use(require('cors')({
+        origin: ['http://127.0.0.1:3000', 'http://localhost:3000'],
+    }))
+else
+    app.use(require('cors')({
+        origin: ['https://spotimeet.fedele.website'],
+        credentials: true,
+    }))
 
 const router = express.Router();
 
 const { Server } = require('socket.io');
 const websocket = new Server(httpServer, !!process.env['PRODUCTION'] ? undefined : {
     cors: {
-	origin: "http://127.0.0.1:3000",
+	    origin: "http://127.0.0.1:3000",
         credentials: true,
         methods: ["GET", "POST"],
         allowedHeaders: ["authorization"],
