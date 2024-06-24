@@ -1,6 +1,6 @@
 
 const artistSchema = artist => ({
-    name: artist.name, //.replace(" ", "-").replace("\'", "-").toLowerCase(), // TODO: slug for artist name
+    name: artist.name,
     uri: artist.id,
     image: artist.images.length > 0 ? artist.images[0].url : null,
     url: artist.external_urls ? artist.external_urls.spotify : null,
@@ -21,9 +21,9 @@ module.exports = {
         .get(`/artists/${id}`)
         .then( res => artistSchema(res.data) )
     },
-    getFavouriteArtists: (api) => {
+    getFavouriteArtists: (api, limit) => {
         return api
-        .get(`/me/following?type=artist&limit=10`)
+        .get(`/me/following?type=artist&limit=${limit}`)
         .then( res => res.data.artists.items.map( artistSchema ))
     },
     removeFavouriteArtist: (api, id) => {

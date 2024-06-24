@@ -174,8 +174,4 @@ User.getDetails = async function (uid) {
         _id: uid
     })
     .select("-passwordHash -__v -oauth -lastUpdate")
-    .populate({
-        path: 'favourites.artist',
-        select: '-__v -tours'
-    })
 }
