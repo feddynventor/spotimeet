@@ -9,29 +9,29 @@ module.exports = {
 	} )
     ,
     new: (sock, next) => {
-        const timestamp = new Date()
-        sock.on('message', async data => Group
+        sock.on('message', async data => {
+            const messageObj = await Message.create({
+                user: sock.user._id,
+                timestamp: new Date(),
+                text: data,
+            })
+            return Group
             .updateOne({ _id: sock.group._id }, { $push: {
-                messages: await Message.create({
-                    user: sock.user._id,
-                    timestamp,
-                    text: data,
-                })
+                messages: messageObj
             } })
             .then( () => sock.broadcast.to(sock.group._id.valueOf()).emit('message', {
+                    ...messageObj,
                     user: sock.user, //intero obj (TODO: riduci)
-                    timestamp,
-                    text: data,
                 })
             )
-        )
+	})
         next()
     },
     status: (sock, next) => !!sock.api ? sock.api
         .get('/me/player/currently-playing')
 	.then( res => res.status === 204 ? Promise.reject() : res)
         .then( res => res.data.item)
-        .then( data => sock.broadcast
+        .then( data => sock.broadcast.to(sock.group._id.valueOf())
             .emit('message', {
                 user: sock.user,
                 text: `Sto ascoltando ${data.name} di ${data.artists[0].name}`, 
