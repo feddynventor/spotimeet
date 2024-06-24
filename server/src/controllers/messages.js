@@ -2,12 +2,11 @@ const Message = require('../models/Message');
 const Group = require('../models/Group');
 
 module.exports = {
-    getMessages: (sock, next) => Group
+    getMessages: (sock) => Group
 	.getMessages(sock.group._id)
 	.then( list => {
-	    sock.emit('history', list.messages )
+	    sock.emit('history', list.messages.reverse() ) // sono ritornati in ordine inverso per colpa di sort DESC
 	} )
-	.then( next )
     ,
     new: (sock, next) => {
         const timestamp = new Date()
@@ -19,7 +18,7 @@ module.exports = {
                     text: data,
                 })
             } })
-            .then( () => sock.broadcast.emit('message', {
+            .then( () => sock.broadcast.to(sock.group._id.valueOf()).emit('message', {
                     user: sock.user, //intero obj (TODO: riduci)
                     timestamp,
                     text: data,

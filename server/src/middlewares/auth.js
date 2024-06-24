@@ -107,8 +107,8 @@ module.exports = {
             .then( group => {
                 if (!group) return sock.emit('exception', { error: "Non sei un membro del gruppo" });
                 // else
-                sock.join(group._id);  // restringe il broadcast dei messaggi al gruppo
-                sock.broadcast.emit('message', { text: `${sock.user.profile.displayName} è online` });
+                sock.join(group._id.valueOf());  // restringe il broadcast dei messaggi al gruppo
+                sock.broadcast.to(group._id.valueOf()).emit('message', { text: `${sock.user.profile.displayName} è online` });
 
                 sock.group = group;
                 next();

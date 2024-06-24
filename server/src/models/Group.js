@@ -111,7 +111,10 @@ Group.getMessages = async function (group_doc_id) {
     })
     .populate({
 	path: 'messages',
-	perDocumentLimit: 30,
+	perDocumentLimit: 30, //limite superiore
+        options: {
+            sort: {'timestamp': -1},  //necessario per limitare alle ultime 30 voci
+        },
 	populate: {
             path: 'user',
             select: '_id profile'
