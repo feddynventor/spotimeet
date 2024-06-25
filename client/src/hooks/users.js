@@ -24,13 +24,13 @@ export function useUserDetails(){
     return user
 }
 
-export function useUserFavourites(){
+export function useUserFavourites(limit){
     const [favourites, setFavourites] = useState(null);
     const [cookies, setCookie, removeCookie] = useCookies('token');
-
+    if (!limit) limit = 20
     useEffect(() => {
         // fetch user info
-        fetch('//spotimeet.fedele.website/api/user/favourites', {
+        fetch('//spotimeet.fedele.website/api/user/favourites?limit='+limit, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",

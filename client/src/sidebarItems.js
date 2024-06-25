@@ -3,6 +3,7 @@ import People from '@mui/icons-material/People';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import TourIcon from '@mui/icons-material/Tour';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const mainNavbarItems = [
     {
@@ -13,7 +14,7 @@ export const mainNavbarItems = [
     {
         icon: <MusicNoteIcon />,
         label: 'Concerti',
-        path: '/artistProfile'
+        path: '/groupList'
     },
     {
         icon: <TourIcon/>,
@@ -21,9 +22,9 @@ export const mainNavbarItems = [
         path: '/artistList'
     },
     {
-        icon: <People />,
-        label: 'Artisti',
-        route: 'route'
+        icon: <AccountCircleIcon />,
+        label: 'Visualizza il tuo profilo',
+        path: '/me'
     },
 ];
 

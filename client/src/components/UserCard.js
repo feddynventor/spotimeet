@@ -1,7 +1,6 @@
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function UserCard({ user }) {

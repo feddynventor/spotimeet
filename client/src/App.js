@@ -14,6 +14,8 @@ import ArtistProfile from './components/ArtistProfile';
 import Favourites from './components/Favourites';
 import ArtistTour from './components/ArtistTour';
 import Chat from './components/Chat';
+import UserProfile from './components/UserProfile';
+import GroupList from './components/GroupList';
 
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@mui/material/Link';
@@ -45,8 +47,10 @@ export default function Main({ theme }) {
                             <Route path="/artist/:spotify_id?" element={<ArtistProfile />} />
                             <Route path="/artist/tour/:id?" element={<ArtistTour />} />
                             <Route path="/preferiti" element={<Favourites />} />
+                            <Route path="/groupList" element={<GroupList /> } />
                             <Route path="/chat/event/:id" element={<Chat type="event"/>} />
                             <Route path="/chat/global/:id" element={<Chat type="global"/>} />
+                            <Route path="/me" element={<UserProfile />} />
                         </Routes>
                     </Box>
                 </Container>
