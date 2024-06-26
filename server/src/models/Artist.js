@@ -1,5 +1,4 @@
 const { model, Schema } = require('mongoose');
-const Tour = require('./Tour');
 
 const Artist = new model('Artist', new Schema({
     name: {
@@ -19,10 +18,13 @@ const Artist = new model('Artist', new Schema({
         type: [String],
         index: true,
     },
-    tours: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Tour',
-    }],
+    tours: [ new Schema({
+        repo_id: String,
+        name: String,
+        image: String,
+        url: String,
+        //dates: tanti eventi referenziano questo tour tramite repo_id
+    }, { _id: false })],  // consente a addToSet di controllare questi attributi per il controllo dei duplicati
     lastUpdate: Date
 }));
 
@@ -47,16 +49,19 @@ Artist.searchCache = async function (name) {
  * @returns 
  */
 Artist.updateTours = async function (id, tours) {
-    return this
-    .findByIdAndUpdate(
-        id, 
-        {
-            tours: await Promise.all(tours.map( t => Tour.add(t) )),
-            lastUpdate: (new Date()).toISOString() 
-        },
-        { returnDocument: 'after' }
-    )
-    .populate('tours')
+    console.log("updating", id)
+    return this.findOneAndUpdate({_id: id}, {
+        $addToSet: { tours: {
+            $each: tours.map( t => ({
+                repo_id: t.id,
+                name: t.name,
+                image: t.image,
+                url: t.url,
+            }))
+        }},
+        lastUpdate: (new Date()).toISOString()
+    }, { new: true })
+    .select("tours")
 }
 
 /**
@@ -90,5 +95,4 @@ Artist.addToCache = async function (uri, artist, query) {
 Artist.get = async function (uri) {
     return this
     .findOne({ uri })
-    .populate('tours')
 }

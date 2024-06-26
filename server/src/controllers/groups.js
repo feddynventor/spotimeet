@@ -21,10 +21,12 @@ module.exports = {
      */
     joinEvent: async (req, res) => {
         const { event } = req.params;
-        await Group
-        .join(null, event, req.user._id)
+        const artist = await Event.findOne({ _id: event }).select('artist')
+        if (!artist) return res.status(404).send({error: "Evento non trovato"})
+        return Group
+        .join(artist.artist, event, req.user._id)
         .then( group => res.send(group) )
-        //.catch( error => res.status(500).send({error}) )
+        .catch( error => res.status(500).send({error}) )
     },
 
     byCity: async (req, res) => {
@@ -38,55 +40,47 @@ module.exports = {
         const { artist } = req.params;
         return Artist
         .findOne({ _id: artist })
-        .populate('tours')
-        .select('tours')
-        .then( artist => artist.tours )
-        .then( tours => Promise.all(tours.map( async t => ({
-            ...t._doc,
-            events: await Event.find({ tour: t }).sort('date')
-        }))))
-        .then( groups => res.send(groups) )
-        .catch( error => res.status(500).send({error}) )
+        .select('-searchTerm -lastUpdate')
+        .then( async artist => ({
+                ...artist._doc,
+                tours: await Promise.all(artist._doc.tours.map( async t => ({
+                    ...t._doc,
+                    events: await Event
+                        .find({ tour: t._doc.repo_id, date: { $gte: new Date() } })
+                        .select('city date url')
+                        .sort('date')
+                })))
+        }) )
+        .then( artist => res.send(artist) )
     },
+
     favourites: async (req, res) => {
         const artists_ids = await User
         .getFavourites(req.user._id)
-        .then( favourites => favourites.map(f => f.artist._id) )
         return Artist
         .find({ _id: {$in: artists_ids} })
-        .populate('tours')
-        .select('tours')
-        .then( artist => artist.filter( a => a.tours.length > 0).map( a => a.tours ).flat() )  // mescola tutti gli eventi di ogni artista in 1
-        .then( tours => Promise.all(tours.map( async t => ({
-            ...t._doc,
-            events: await Event.find({ tour: t }).sort('date')
-        }))))
+        .select('-searchTerm -lastUpdate')
+        .then( artists => Promise.all(artists.map( async a => ({
+            ...a._doc,
+            tours: await Promise.all(a.tours.map( async t => ({
+                ...t._doc,
+                events: await Event.find({ tour: t.repo_id }).sort('date')
+            })))
+        }))) )
         .then( groups => res.send(groups) )
         .catch( error => res.status(500).send({error}) )
     },
 
-    getEventGroup: async (req, res) => {
-        const { event } = req.params;
+    getJoined: async (req, res) => {
         return Group
-        .getEvent(event)
-        .then( async group => {
-           if (await Group.isMember(req.user._id)) return group
-           else Group.join(undefined, event, req.user._id)
-           return group
-        })
-        .then( group => res.send(group) )
-        .catch( error => res.status(500).send({error}) )
-    },
-    getArtistGroup: async (req, res) => {
-        const { artist } = req.params;
-        return Group
-        .getGlobal(artist)
-        .then( async group => {
-           if (await Group.isMember(req.user._id)) return group
-           else Group.join(artist, undefined, req.user._id)
-           return group
-        })
+        .joined(req.user._id)
         .then( groups => res.send(groups) )
-        .catch( error => res.status(500).send({error}) )
+        // .catch( error => res.status(500).send({error}) )
+    },
+    getTop10: async (req, res) => {
+        return Group
+        .top10()
+        .then( groups => res.send(groups) )
+        // .catch( error => res.status(500).send({error}) )
     }
 }

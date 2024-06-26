@@ -45,64 +45,28 @@ Group.join = async function (artist_id, event_id, user_id) {
         new: true,
         upsert: true,
     })
+    .select('-messages')
+    .populate('event')
+    .populate('artist')
     .then( async doc => {
-        await doc.validate()
+        await doc.validate()   // la validazione avviene post inserimento
         return doc
     })
+    .then( g => ({...g._doc, members: g._doc.members.length}) )
     .catch( async error => {
-        await this.deleteOne({
+        await this.deleteOne({ // rollback manuale
             artist: artist_id,
             event: event_id,
         })
-        return Promise.reject({error: error.errors.message}) //validation error message
+        return Promise.reject({error: error._message}) //validation error message
     })
 }
 
-Group.getGlobal = async function (artist_id) {
-    return this.findOne({
+Group.getBy = async function (artist_id, event_id) {
+    return commonOp( this.findOne({
         artist: artist_id,
-        event: null,  // forzato null
-    })
-    .select('-messages')
-    .then( group => !!group
-        ? group
-        : this.create({
-            artist: artist_id,
-        })
-    )
-    .then( group => group
-        .populate({
-            path: 'artist',
-            populate: {
-                path: 'tours',
-            }
-        })
-    )
-    .catch( error => Promise.reject(error.message) )
-}
-
-Group.getEvent = async function (event_id) {
-    return this.findOne({
         event: event_id,
-        artist: null // non è necessario ai fini della query
-    })
-    .select('-messages')
-    .then( group => !!group
-        ? group
-        : this.create({
-            event: event_id,
-        })
-    )
-    // TODO: artista non valorizzato
-    .then( group => group
-        .populate({
-            path: 'event',
-            populate: {
-                path: 'tour',
-            }
-        })
-    )
-    .catch( error => Promise.reject(error.message) )
+    }) )
 }
 
 Group.getMessages = async function (group_doc_id) {
@@ -120,19 +84,7 @@ Group.getMessages = async function (group_doc_id) {
             select: '_id profile'
 	}
     })
-    //.then( messages => messages.map( m => m.user._id===sock.user._id ? {...m, isSelf: true} : m ))
     .catch( error => Promise.reject(error.message) )
-}
-
-/**
- * Lista i gruppi a cui l'utente specificato e' unito
- */
-Group.joined = async function (uid) {
-    return this
-        .find({ members: uid })
-        .then( groups => groups.map(
-            g => ({...g, members: g.members.length})
-        ))
 }
 
 /**
@@ -145,3 +97,31 @@ Group.isMember = async function (group_id, uid) {
             members: { $in: [uid] }
         })
 }
+
+/**
+ * Lista i gruppi a cui l'utente specificato e' unito
+ */
+Group.joined = async function (uid) {
+    return commonOp( this.find({ members: uid }) )
+}
+
+/**
+ * Lista i gruppi top
+ */
+Group.top10 = async function (uid) {
+    return commonOp( this.find({}) )
+        .then( groups => groups.sort( (a, b) => b.members - a.members ) )
+        .then( groups => groups.slice(0, 10) )
+}
+
+const commonOp = (query) => query
+    .select('-messages')
+    .populate({
+        path: 'event',
+        select: 'city date url',
+    })
+    .populate({
+        path: 'artist',
+        select: '-searchTerm -lastUpdate -tours',
+    })
+    .then( groups => groups.map( g => ({...g._doc, members: g._doc.members.length}) ) )

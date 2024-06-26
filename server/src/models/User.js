@@ -141,13 +141,22 @@ User.byMail = async function (email) {
  * @param {*} artists array of artist objects
  * @returns rejected promise se update fallisce
  */
-User.addFavourites = async function (uid, artists) {
-    return this.updateMany({
+User.addFavourites = async function (uid, artist_ids) {
+    return this.updateOne({
         _id: uid
     }, {
-        $set: { favourites: artists.map(a => a._id), lastUpdate: new Date().toISOString() },
+        $addToSet: { favourites: {$each: artist_ids} },
+        lastUpdate: new Date().toISOString()
     })
-    .then(()=>this.findOne({_id: uid}).populate('favourites').select('favourites'))
+}
+
+User.getFavourites = async function (uid) {
+    return this.findOne({
+        _id: uid
+    })
+    .populate('favourites')
+    .select('favourites')
+    .then( user => user.favourites )
 }
 
 /**
@@ -160,7 +169,7 @@ User.removeFavourite = async function (uid, artist_id) {
     return this.updateOne({
         _id: uid
     }, {
-        $pull: { favourites: { artist: artist_id } }
+        $pull: { favourites: artist_id }
     })
 }
 

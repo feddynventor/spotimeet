@@ -12,8 +12,8 @@ router.put('/global/:artist', groupsController.joinArtist);
 router.put('/event/:event', groupsController.joinEvent);
 
 // get by artist _id or event _id
-router.get('/global/:artist', groupsController.getArtistGroup);
-router.get('/event/:event', groupsController.getEventGroup);
+router.get('/global/:artist', groupsController.joinArtist);
+router.get('/event/:event', groupsController.joinEvent);
 
 // search events by city
 router.get('/city/:city', groupsController.byCity);
@@ -21,3 +21,6 @@ router.get('/city/:city', groupsController.byCity);
 router.get('/artist/:artist', groupsController.byArtist);
 // list groups by tours degli artisti preferiti
 router.get('/favourites', groupsController.favourites);
+
+router.get('/top', groupsController.getTop10);
+router.get('/', groupsController.getJoined);

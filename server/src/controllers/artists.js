@@ -1,6 +1,7 @@
 const Artist = require('../models/Artist');
+const Event = require('../models/Event');
 const spotify = require('../repositories/spotify_api');
-const events = require('../repositories/events');  // no Model for events
+const events_repo = require('../repositories/events');  // no Model for events
 
 const checkExpired = date => !date || new Date((new Date(date)).getTime() + 24*60*60*1000) < new Date();
 
@@ -17,18 +18,16 @@ module.exports = {
     search: (req, res) => {
         const name = req.query.q;
         if (!name) return res.status(400).send({error: 'Specifica un artista'});
-        (req.query.all && !!req.api
-            ? spotify.searchArtist(req.api, name) 
-            : Artist.searchCache(name)
-                .then( artists => artists.length==0 && !!req.api
-                    ? spotify
-                        .searchArtist(req.api, name)
-                        .then(artists => Promise.all(artists.map( 
-                            a => Artist.addToCache(a.uri, a, name)
-                        )))
-                    : artists
-                    )
-        )
+        Artist
+        .searchCache(name)
+        .then( artists => artists.length==0 && !!req.api
+            ? spotify
+                .searchArtist(req.api, name)
+                .then(artists => Promise.all(artists.map( 
+                    a => Artist.addToCache(a.uri, a, name)
+                )))
+            : artists
+            )
         .then( artists => {
             if (artists.length === 0) return Promise.reject({code: 404, message: "Artista non trovato"})
             res.send(artists)  // invia immediatamente lista di artisti
@@ -37,9 +36,15 @@ module.exports = {
         // fuori dal ciclo req-res per evitare timeout, dovuto a fetchByArtist
         // aggiorna solo almeno una volta ogni 24h
         .then( artists => Promise.all(artists.map( 
+            // Artista sicuramente in cache, posso usare il document _id
             async a => checkExpired(a.lastUpdate)
-                ? Artist.updateTours(a._id, await events.fetchByArtist(a.name))
-                : a
+                ? new Promise( async () => {
+                    const events = await events_repo.fetchByArtist(a.name)
+                    return Promise
+                        .all(events.map( t => Event.addMany(a, t) ))
+                        .then( () => Artist.updateTours(a._id, events) )
+                })
+                : null
         )) )
         .catch( err => err.code === 11000 ? Promise.resolve() : res.status(404).send(err) )
     },
@@ -58,17 +63,24 @@ module.exports = {
         if (!id) return res.status(400).send({error: 'Specifica un artista'});
         Artist
         .get(id)
-        .then( artist => !!req.api && (!artist || checkExpired(artist.lastUpdate) || !!req.query.all)
+        .then( artist => !!req.api && (!artist || checkExpired(artist.lastUpdate) || !!req.api && !!req.query.all)
             ? spotify
                 .getArtist(req.api, id)
                 .then( a=> Artist.addToCache(a.uri, a))
             : artist
             )
-        .then( async artist => {
-            if (checkExpired(artist.lastUpdate) || !!req.query.all) return Artist.updateTours(artist._id, await events.fetchByArtist(artist.name))
-            else return artist
+        .then( async a => {
+            if (!a) return Promise.reject("Non trovato")
+            // Artista sicuramente in cache, posso usare il document _id
+            if (checkExpired(a.lastUpdate) || !!req.query.all){ //`all` consente anche un fetch sulle api di ticketone
+                const events = await events_repo.fetchByArtist(a.name)
+                await Promise
+                    .all(events.map( t => Event.addMany(a, t) ))
+                    .then( () => Artist.updateTours(a._id, events) )
+            }
+            return a
         } )
         .then( artist => res.send(artist) )
-        .catch( err => res.status(404).send({error: err}) )
+        .catch( error => res.status(404).send({error}) )
     },
 }

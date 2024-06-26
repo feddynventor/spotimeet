@@ -9,4 +9,5 @@ module.exports = router;
 router.get('/me', userController.me);
 router.get('/token', userController.tokenInfo);
 router.get('/favourites', userController.getFavouriteArtists);
-router.delete('/favourites/:id', userController.removeFavouriteArtist);
+router.post('/favourites', userController.addFavouriteArtist);
+router.delete('/favourites', userController.removeFavouriteArtist);

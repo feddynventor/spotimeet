@@ -36,33 +36,44 @@ module.exports = {
         )
         .catch(error => res.status(403).send({error}))
     },
+
     tokenInfo: async (req, res) => res.send(req.user),
     me: async (req, res) => User
         .getDetails(req.user._id)
         .then( user => res.send(user) )
         .catch( error => res.status(404).send({error}) ),
+
     getFavouriteArtists: async (req, res) => ( (checkExpired(req.user.lastUpdate) || !!req.query.all) && !!req.api
             ? spotify
                 .getFavouriteArtists(req.api, req.query.limit)
                 .then( artists => Promise.all(
                     artists.map( a => Artist.addToCache(a.uri, a) )
                 ))
-                .then( artists => User.addFavourites(req.user._id, artists) )
+                .then( artists => User.addFavourites(req.user._id, artists.map( a => a._id )) )
                 .then( artists => res.send(artists) )
             : User
                 .getDetails(req.user._id, req.query.limit)
                 .then( user => user.populate({
                     path: 'favourites',
+                    select: '-searchTerm -lastUpdate -tours',
                     options: { sort: { followers: -1 } },
                     limit: req.query.limit || undefined,
                 }) )
-                .then( user => res.send(user) )
-        ),
-        // .catch( error => res.status(500).send({error}) ),
+                .then( user => res.send(user.favourites) )
+        )
+        .catch( error => res.status(500).send({error}) ),
+
+    addFavouriteArtist: async (req, res) => Artist
+        .findOne({ _id: req.body.id })
+        // .findOne({ $or: [{_id: req.body.id}, {uri: req.body.id}] })
+        .then( artist => artist ? User.addFavourites(req.user._id, [artist._id]) : Promise.reject("Artista non trovato") )
+        .then( () => res.sendStatus(200) )
+        .catch( error => res.status(500).send({error}) ),
+
     removeFavouriteArtist: async (req, res) => Artist
-        .findOne({ uri: req.params.id })
-        .then( object_id => User.removeFavourite(req.user._id, object_id) )
+        .findOne({ _id: req.body.id })
+        .then( artist => artist ? User.removeFavourite(req.user._id, artist._id) : Promise.reject("Artista non trovato") )
         .then( () => !!req.api ? spotify.removeFavouriteArtist(req.api, req.params.id) : Promise.resolve() )
         .then( () => res.sendStatus(200) )
-        // .catch( error => res.status(500).send({error}) ),
+        .catch( error => res.status(500).send({error}) ),
 }

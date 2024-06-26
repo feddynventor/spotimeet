@@ -12,25 +12,29 @@ const Event = new model('Event', new Schema({
     },
     date: Date,
     url: String,
-    tour: {
+    tour: String,
+    artist: {
         type: Schema.Types.ObjectId,
-        ref: 'Tour',
-        required: true,
+        ref: 'Artist',
     },
 }));
 
 module.exports = Event;
 
-Event.addMany = async function (events, tour_id) {
-    return events
+Event.addMany = async function (artist, tour) {
+    return tour.dates
     .map( e => ({
         repo_id: e.id,
         city: e.city,
         date: e.date,
         url: "https://ticketone.it".concat(e.uri),
-        tour: tour_id,
+        tour: tour.id,  //API id
+        artist: artist._id,  //object id
     }) )
-    .reduce( (acc, e) => acc.then( () => this.findOneAndUpdate({ repo_id: e.repo_id }, e, { new: true, upsert: true }) ), Promise.resolve() )   
+    .reduce( (acc, e) => acc.then(
+        () => this.findOneAndUpdate({ repo_id: e.repo_id }, e, { new: true, upsert: true })
+    ), Promise.resolve() )
+    .then( () => this.find({ tour: tour.id }) )
 }
 
 Event.byCity = async function (city) {
