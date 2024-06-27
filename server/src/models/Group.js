@@ -97,12 +97,13 @@ Group.getMessages = async function (group_doc_id) {
 /**
  * Controlla se si e' membro del gruppo specificato
  */
-Group.isMember = async function (group_id, uid) {
+Group.attendingEvent = async function (event_id, uid) {
     return this
         .findOne({
-            _id: group_id,
+            event: event_id,
             members: { $in: [uid] }
         })
+        .then( group => group!==null)
 }
 
 /**

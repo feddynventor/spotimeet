@@ -30,7 +30,7 @@ module.exports = {
             ...group,
             event: {
                 ...group.event._doc,
-                tour: artist.tours.filter( t => t.repo_id == group.event.tour )
+                tour: artist.tours.filter( t => t.repo_id == group.event.tour )[0]
             }
         }) )
         .catch( error => res.status(500).send({error}) )
@@ -60,6 +60,10 @@ module.exports = {
                         .find({ tour: t._doc.repo_id, date: { $gte: new Date() } })
                         .select('city date url')
                         .sort('date')
+                        .then( events => Promise.all(events.map( async e => ({
+                            ...e._doc,
+                            isMember: await Group.attendingEvent(e._doc._id, req.user._id)
+                        }))))
                 })))
         }) )
         .then( artist => res.send(artist) )
