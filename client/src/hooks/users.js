@@ -38,7 +38,6 @@ export function useUserFavourites(limit){
             }
         })
         .then(processResponse)
-        .then( user => user.favourites )  //TODO: dimenticanza sul server
         .then(setFavourites)
         .catch( err => Error.prototype.isPrototypeOf(err) ? null : alert(err) )
     }, []);

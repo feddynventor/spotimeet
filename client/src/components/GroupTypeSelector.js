@@ -1,9 +1,16 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 
 export default function GroupTypeSelector() {
+
+  const chipStyles = {
+    fontSize: '16px',
+    borderRadius: '50px',
+    padding: '10px',
+  };
+
   return (
     <Box
       sx={{
@@ -11,15 +18,16 @@ export default function GroupTypeSelector() {
         flexDirection: 'column',
         alignItems: 'center',
         '& > *': {
-          m: 1,
+          m: 2,
         },
       }}
     >
-      <ButtonGroup variant="outlined" aria-label="Basic button group">
-        <Button>Tutto</Button>
-        <Button>Concerti</Button>
-        <Button>Globale</Button>
-      </ButtonGroup>
+    
+    <Stack direction="row" spacing={1}>
+      <Chip label="Tutti i gruppi" sx={chipStyles}/>
+      <Chip label="Artisti" variant="outlined" sx={chipStyles}/>
+      <Chip label="Concerti" variant="outlined" sx={chipStyles}/>
+    </Stack>
 
     </Box>
   );

@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Avatar, Typography, Button, Grid } from '@mui/material';
-//import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/system';
 import SpotifyLogo from '../assets/Spotify_Icon_CMYK_Black.png';
 import Skeleton from '@mui/material/Skeleton';
 import { useNavigate } from 'react-router-dom';
-
 
 const SpotifyLink = styled(Button)({
     display: 'flex',
@@ -50,7 +48,7 @@ const ArtistInfo = ({ artist }) => {
                     <Grid item lg={8} xs={12} display="flex" flexDirection="column" justifyContent="center">
                         <Typography variant="h2" sx={{ color: '#332D2A', textAlign: 'center' }}>{name}</Typography>
                         <Typography variant="subtitle1" sx={{ color: '#332D2A', textAlign: 'center' }}>
-                            {followers.toLocaleString()} followers
+                            {followers && followers.toLocaleString()} followers
                         </Typography>
                         <Grid container spacing={2} sx={{ mt: 2 }}>
                             <Grid item xs={12} lg={6}>
@@ -68,7 +66,7 @@ const ArtistInfo = ({ artist }) => {
                                     color: '#FF6D2E',
                                     textDecoration: 'none',
                                     '&:hover': { backgroundColor: '#1DB954', color: '#332D2A' },
-                                }} onClick={() => navigate(`/chat/global/${artist._id}`)}>Entra nel gruppo</Button>
+                                }} onClick={() => navigate(`/chat/artist/${artist._id}`)}>Entra nel gruppo</Button>
                             </Grid>
                         </Grid>
                     </Grid>

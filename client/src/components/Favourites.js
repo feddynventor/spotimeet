@@ -1,18 +1,16 @@
-import { Typography } from "@mui/material";
 import ArtistList from "./ArtistList";
 import { useUserFavourites } from "../hooks/users";
-import { useEffect } from "react";
-import CircularProgress from '@mui/material/CircularProgress';
+import { Box, Typography } from '@mui/material';
+import CustomSkeleton from "./CustomSkeleton";
 
-export default function Favourites() {
-    const favourites = useUserFavourites();
+export default function Favourites({ number }) {
+    const favourites = useUserFavourites( number || 50);
 
-    useEffect(() => {
-        console.log(favourites);
-    })
-
-    if (!favourites) return <CircularProgress />
+    if (!favourites) return <CustomSkeleton />
     else return favourites.length === 0 ? 
         <Typography variant="h5">Nessun artista trovato</Typography> : 
-        <><Typography variant="h4" sx={{m: 2}}>I tuoi preferiti</Typography><ArtistList list={favourites} /></>
+        <Box>
+            <Box sx={{backgroundColor: '#FF6D2E', borderRadius: '0px 0px 10px 0px',p:2, mb:2, width:'350px'}}><Typography variant="h4" sx={{color: '#332D2A'}}>I tuoi artisti preferiti</Typography></Box>
+            <ArtistList list={favourites} indexes/>
+        </Box>
 }

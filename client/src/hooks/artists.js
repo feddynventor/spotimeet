@@ -31,7 +31,6 @@ export const useArtistDetails = (spotify_id) => {
     const [cookies, setCookie, removeCookie] = useCookies('token');
 
     useEffect(() => {
-        console.log("useArtistDetails: useEffect", spotify_id);
         if (!spotify_id) return;
         fetch('//spotimeet.fedele.website/api/artist/'+spotify_id, {
             credentials: "include",

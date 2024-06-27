@@ -7,18 +7,23 @@ import SendIcon from '@mui/icons-material/Send';
 import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 import Button from "@mui/material/Button";
 import { io } from 'socket.io-client';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useUserDetails } from "../hooks/users";
 import { useGroup } from "../hooks/groups";
 //import GroupDetails from "./GroupDetails";
+import CustomSkeleton from './CustomSkeleton';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
 
 export default function Chat({type}) {
     const [cookies, setCookie, removeCookie] = useCookies('token');
     const senderUser = useUserDetails()
+    const navigate = useNavigate();
 
     //id Artista o Evento, conosciuti nel resto del frontend
-    const entity_id = useParams().id
+    const entity_id = useParams().id  // id artista o concerto
     const group = useGroup(type, entity_id)
 
     const [message, setTextbox] = useState("")
@@ -63,7 +68,9 @@ export default function Chat({type}) {
         messagesEndRef.current?.lastElementChild?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
 
-    if (!senderUser || !group) return
+    useEffect(()=>{ console.log(group,type, entity_id)}, []);
+
+    if (!senderUser || !group) return <CustomSkeleton></CustomSkeleton>
     
 
     return (
@@ -72,10 +79,6 @@ export default function Chat({type}) {
         display: "flex",
         flexDirection: "column-reverse",
         m: "0px",
-        overflowY: 'scroll', /* Garantire che solo lo scorrimento verticale sia abilitato */
-        '&::-webkit-scrollbar': { display: 'none' }, /*IOS*/
-        scrollbarWidth: 'none', /* Nascondere la barra di scorrimento in Firefox */
-        msOverflowStyle: 'none', /* Nascondere la barra di scorrimento in Internet Explorer e Edge */
     }}>
         <form onSubmit={(e)=>{e.preventDefault(); handleSend()}}>
             <Box sx={{display: 'flex', flexDirection: 'row', maxWidth: "100%", padding:'0px', margin:'10px', border: '2px solid #FF6D2E', borderRadius:'50px'}}>
@@ -85,7 +88,7 @@ export default function Chat({type}) {
             </Box>
         </form>
         <Box ref={messagesEndRef} sx={{overflowY: "scroll", flexGrow: 1, display: "flex", flexDirection: "column"}}>
-            {messages.length == 0
+            { messages.length == 0
                 ? <Typography align="center" variant="subtitle1">Ancora nessun messaggio... Comincia tu!</Typography>
                 : messages.map((msg, index) => <ChatBubble
                     key={index} text={msg.text}
@@ -94,11 +97,37 @@ export default function Chat({type}) {
                 />)
             }
         </Box>
-        <Box /*onClick={() => setShowGroupDetails(true)}*/ sx={{marginBottom: 1, p: 1, borderRadius: '10px 10px 0 0', backgroundColor: '#FF6D2E', display: "flex", alignItems: "center" }}>{
-            !!group.artist ? <><Avatar sx={{ width: 64, height: 64, m:1 }} src={group.artist.image}></Avatar><Typography variant="h4">{group.artist.name}</Typography></> :
-            !!group.event ? <><Avatar sx={{ width: 64, height: 64, m:1 }} src={group.event.tour.image}></Avatar><Box><Typography variant="h5">{group.event.tour.name} - {group.event.city}</Typography><Typography variant="subtitle1">{new Date(group.event.date).toLocaleDateString()}</Typography></Box></> : null
-        }</Box>
-        {/*showGroupDetails && <GroupDetails group={group} members={group.members} onClose={() => setShowGroupDetails(false)} />*/}
+        <Box sx={{marginBottom: 1, p: 1, borderRadius: '10px 10px 0 0', backgroundColor: '#FF6D2E'}}>
+            <Box sx={{marginBottom: 1, p: 1, borderRadius: '10px 10px 0 0', backgroundColor: '#FF6D2E', display: "flex", alignItems: "center" }}>{
+                !group.event ? <>
+                    <Avatar sx={{ width: 80, height: 80 }} src={group.artist.image}></Avatar>
+                    <Typography variant="h4">{group.artist.name}</Typography>
+                </> :
+                !!group.event ? <>
+                    <Avatar sx={{ width: 80, height: 80 }} src={group.event.tour.image}></Avatar>
+                    <Box sx={{m:1}}>
+                        <Typography variant="h5">{group.artist.name} - {group.event.city}</Typography><Typography variant="subtitle1">{new Date(group.event.date).toLocaleDateString()} | {group.event.tour.name}</Typography>
+                    </Box>
+                </> : null
+            }</Box>
+            <Stack direction="row" spacing={1} sx={{m:1}}>
+                {
+                    !!group.event
+                    ? <>
+                        <Chip label="Invita un amico" onClick={()=> {navigator.clipboard.writeText('https://spotimeet.fedele.website/chat/' + (group.event==null ? 'artist/'+group.artist._id : 'event/'+group.event._id))}} />
+                        <Chip label="Acquista biglietto" onClick={()=> {window.open(group.event.url, "_blank")}}/>
+                        <Chip label="Profilo TicketOne" onClick={()=> {window.open(group.event.tour.url, "_blank")}}/>
+                        <Chip label="Spotify" onClick={()=> {window.open(group.artist.url, "_blank")}}/>
+                        <Chip label="Artista" onClick={()=> {navigate('/artist/'+group.artist.uri)}}/>
+                    </>
+                    : <>
+                        <Chip label="Invita un amico" onClick={()=> {navigator.clipboard.writeText('https://spotimeet.fedele.website/chat/' + (group.event==null ? 'artist/'+group.artist._id : 'event/'+group.event._id))}} />
+                        <Chip label="Spotify" onClick={()=> {window.open(group.artist.url, "_blank")}}/>
+                        <Chip label="Artista" onClick={()=> {navigate('/artist/'+group.artist.uri)}}/>
+                    </>
+                }
+            </Stack>
+        </Box>
     </Box>
     )
 }

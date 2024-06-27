@@ -55,7 +55,7 @@ function UserInfo ({ user }) {
                         <Typography variant="h1" sx={{ color: '#332D2A'}}>{user.profile.displayName}</Typography>
                         <Box>
                             <Typography variant="subtitle1" sx={{ color: '#332D2A'}}>
-                                {user.profile.bio}Lorem ipsum dolor sit amet. Eos neque quas et recusandae veniam hic nesciunt omnis ea voluptatibus corporis et nulla quisquam et voluptates fugit. Quo dignissimos reiciendis et dolores nobis sed culpa vitae qui libero ducimus qui molestiae dignissimos ad saepe nemo et quas doloremque. Ut optio suscipit eos veritatis harum id porro delectus ut consequatur eveniet? A nisi officiis rem omnis Quis ex asperiores quia qui tempore modi.
+                                {user.profile.bio}
                             </Typography>
                         </Box>
                         <Box display="flex" flexDirection="row" sx={{ mt: 2 }}>

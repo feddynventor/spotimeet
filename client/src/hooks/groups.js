@@ -23,3 +23,24 @@ export function useGroup(type, id){
 
     return group
 }
+
+export function useJoinedGroup(modificatore) {
+    const [group, setGroup] = useState(null);
+    const [cookies, setCookie, removeCookie] = useCookies('token');
+
+    useEffect(() => {
+        // fetch user info
+        fetch('//spotimeet.fedele.website/api/group/' + (!!modificatore ? modificatore : ""), {
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${cookies.token}`
+            }
+        })
+        .then(processResponse)
+        .then(setGroup)
+        .catch( err => { /** ignora */ } )
+    }, []);
+
+    return group
+}

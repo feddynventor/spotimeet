@@ -18,8 +18,8 @@ export const mainNavbarItems = [
     },
     {
         icon: <TourIcon/>,
-        label: 'Tourneè',
-        path: '/artistList'
+        label: 'Top Gruppi',
+        path: '/topGroups'
     },
     {
         icon: <AccountCircleIcon />,

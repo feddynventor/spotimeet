@@ -6,20 +6,12 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Chip from '@mui/material/Chip';
+import { useNavigate } from "react-router-dom";
 
 const ArtistTour = ({tour, isFirst}) => {
-
-  const [likedEvents, setLikedEvents] = useState([]);
-  
-  const handleLikeEvent = (event) => {
-    if (likedEvents.indexOf(event) !== -1)
-      setLikedEvents(likedEvents.filter((e) => e !== event));
-    else
-      setLikedEvents([...likedEvents, event]);
-    console.log("handleLikeEvent", likedEvents);
-    };
-
-  const { name, image: imageUrl, repo_id } = tour
+  const { name, image: imageUrl} = tour
+  const navigate = useNavigate();
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -32,7 +24,7 @@ const ArtistTour = ({tour, isFirst}) => {
   }, []); 
 
   return (
-    <div>
+    <>
       <Accordion
         expanded={expanded}
         onChange={!!tour && tour.events.length == 0 ? undefined : handleExpansion}
@@ -59,7 +51,7 @@ const ArtistTour = ({tour, isFirst}) => {
           <Grid container spacing={2}>
             {!!tour && tour.events.map((event, index) => (
               <Grid item lg={3} md={4} xs={12} key={event._id}>
-                <Card sx={{ display: 'flex', backgroundColor: '#FF6D2E', mt: 1, borderRadius: '10px' }}>
+                <Card sx={{ display: 'flex', backgroundColor: '#FF6D2E', mt: 1, borderRadius: '10px' }} onClick={()=>{navigate('/chat/event/'+event._id)}}>
                   <CardContent>
                     <Typography component="div" variant="body1">{
                       new Date(event.date).toLocaleDateString("IT-it", {
@@ -67,10 +59,10 @@ const ArtistTour = ({tour, isFirst}) => {
                       })
                     }</Typography>
                     <Typography variant="body2" color="text.secondary">{event.city}</Typography>
-                    {/* <Button sx={{ backgroundColor: '#FF6D2E', color: '#332D2A', textTransform: 'none', justifyContent: 'center', minWidth: '200px', borderRadius: '15px', '&:hover': { backgroundColor: '#235965', }, }}>96 membri</Button> */}
+                    <Chip sx={{mt:1}}label="Acquista biglietto" onClick={()=> {window.open(event.url, "_blank")}}/>
                   </CardContent>
-                  <IconButton sx={{ marginLeft: 'auto' }} onClick={() => handleLikeEvent(event._id)}>
-                    {likedEvents.indexOf(event._id)!==-1 ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  <IconButton sx={{ marginLeft: 'auto' }}>
+                    { event.isMember ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                   </IconButton>
                 </Card>
               </Grid>
@@ -78,7 +70,7 @@ const ArtistTour = ({tour, isFirst}) => {
           </Grid>
         </AccordionDetails>
       </Accordion>
-    </div>
+    </>
   );
 };
 

@@ -30,7 +30,7 @@ const ArtistName = styled(Typography)({
   width: '100%',
 });
 
-const ArtistCard = ({ artist, isFirst }) => {
+const ArtistCard = ({ artist, isFirst, index, indexPosition }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
@@ -50,6 +50,16 @@ const ArtistCard = ({ artist, isFirst }) => {
       />
       <ArtistName variant={"h5"}>{artist.name}</ArtistName>
       <Typography variant="subtitle1" sx={{textAlign: 'center',}}>{`Followers: ${artist.followers}`}</Typography>
+      <Box
+        sx={{
+          position: indexPosition || 'absolute',
+          fontSize: '20px',
+          bottom: '10px',
+          left: '10px' 
+        }}
+      >
+        {!!index ? <Typography>{index}</Typography> : null}
+      </Box>
     </StyledCard>
   );
 };

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Typography, Avatar, Button, Box, Badge } from '@mui/material';
+import { Card, Typography, Button, Box, Badge } from '@mui/material';
 import { styled } from '@mui/system';
-import Sky from '../assets/Sky.png';
-
+import Burano from '../assets/Burano.png';
 
 const FlipCard = styled(Box)(({ theme }) => ({
   perspective: '1000px',
@@ -37,7 +36,7 @@ const FlipCardSide = styled(Box)(({ theme }) => ({
 }));
 
 const FlipCardFront = styled(FlipCardSide)(({ theme }) => ({
-  backgroundImage: `url(${Sky})`,
+  backgroundImage: `url(${Burano})`,
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   color: 'black',
@@ -74,19 +73,8 @@ const EventInfo = styled(Box)(({ theme }) => ({
   padding: theme.spacing(0.5, 1),
 }));
 
-const DateBadge = styled(Box)(({ theme }) => ({
-  backgroundColor: 'blue',
-  color: 'white',
-  borderRadius: '16px',
-  padding: theme.spacing(0.5, 1),
-  marginBottom: theme.spacing(1),
-  position: 'absolute',
-  right: 20,
-  top: 20,
-}));
-
 const ConcertBadge = styled(Badge)(({ theme }) => ({
-  backgroundColor: 'blue',
+  backgroundColor: 'rgba(	255, 109, 46, 0.8)',
   color: 'white',
   borderRadius: '16px',
   padding: theme.spacing(0.5, 1),
@@ -105,11 +93,14 @@ const ChatBadge = styled(Badge)(({ theme }) => ({
   bottom: 20,
 }));
 
-const ConcertCard = ({ group }) => {
+const GlobalCard = ({ group }) => {
   const [hover, setHover] = useState(false);
-  const eventImage = group.artist.image;
-  const navigate = useNavigate();
+  const navigate = useNavigate(false);
+  const artistImage = group.event ? group.event.tour.image : group.artist.image;
 
+  useEffect(() => {
+    console.log(group.artist)
+  },[])
   return (
     <FlipCard onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <FlipCardInner className="flipCardInner" style={{ transform: hover ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
@@ -117,21 +108,17 @@ const ConcertCard = ({ group }) => {
           <EventInfo>
               <>
                 <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
-                <EventInfo>
-                  <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.event.city}</Typography>
-                </EventInfo>
-                <ConcertBadge>Evento</ConcertBadge>
+                <ConcertBadge>Artista</ConcertBadge>
                 <ChatBadge>Membri: {group.members}</ChatBadge>
-                <DateBadge>{new Date(group.event.date).toLocaleDateString()}</DateBadge>
               </>
-          </EventInfo>
+          </EventInfo>.
         </FlipCardFront>
-        <FlipCardBack artistImage={eventImage}> 
-          <StyledButton onClick={()=>{navigate('/chat/event/'+group.event._id)}} variant="contained">Entra nella chat</StyledButton>
+        <FlipCardBack artistImage={artistImage}>
+          <StyledButton onClick={()=>{navigate('/chat/artist/'+group.artist._id)}} variant="contained">Entra nella chat</StyledButton>
         </FlipCardBack>
       </FlipCardInner>
     </FlipCard>
   );
 };
 
-export default ConcertCard;
+export default GlobalCard;
