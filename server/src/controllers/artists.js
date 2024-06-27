@@ -71,7 +71,11 @@ module.exports = {
             )
         .then( async a => {
             if (!a) return Promise.reject("Non trovato")
-            // Artista sicuramente in cache, posso usare il document _id
+            if (!!!req.query.all) res.send(a)  //se setto ?all aspetta anche ticketone
+            return a
+	})
+        .then( async a => {
+            // Artista sicuramente in cache, posso usare il document _id per fetching di Eventi
             if (checkExpired(a.lastUpdate) || !!req.query.all){ //`all` consente anche un fetch sulle api di ticketone
                 const events = await events_repo.fetchByArtist(a.name)
                 await Promise
@@ -80,7 +84,7 @@ module.exports = {
             }
             return a
         } )
-        .then( artist => res.send(artist) )
+        .then( artist => !!req.query.all ? res.send(artist) : null )
         .catch( error => res.status(404).send({error}) )
     },
 }

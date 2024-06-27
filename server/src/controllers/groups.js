@@ -21,11 +21,18 @@ module.exports = {
      */
     joinEvent: async (req, res) => {
         const { event } = req.params;
-        const artist = await Event.findOne({ _id: event }).select('artist')
+        const artist = await Event.findOne({ _id: event }).select('artist').populate('artist').then( a => a.artist)
+        console.log(artist.tours)
         if (!artist) return res.status(404).send({error: "Evento non trovato"})
         return Group
-        .join(artist.artist, event, req.user._id)
-        .then( group => res.send(group) )
+        .join(artist._id, event, req.user._id)
+        .then( group => res.send({
+            ...group,
+            event: {
+                ...group.event._doc,
+                tour: artist.tours.filter( t => t.repo_id == group.event.tour )[0]
+            }
+        }) )
         .catch( error => res.status(500).send({error}) )
     },
 
@@ -41,6 +48,10 @@ module.exports = {
         return Artist
         .findOne({ _id: artist })
         .select('-searchTerm -lastUpdate')
+        .then( artist => {
+            if (!artist) return Promise.reject("Artista non trovato")
+            return artist
+        })
         .then( async artist => ({
                 ...artist._doc,
                 tours: await Promise.all(artist._doc.tours.map( async t => ({
@@ -49,9 +60,14 @@ module.exports = {
                         .find({ tour: t._doc.repo_id, date: { $gte: new Date() } })
                         .select('city date url')
                         .sort('date')
+                        .then( events => Promise.all(events.map( async e => ({
+                            ...e._doc,
+                            isMember: await Group.attendingEvent(e._doc._id, req.user._id)
+                        }))))
                 })))
         }) )
         .then( artist => res.send(artist) )
+        .catch( error => res.status(500).send({error}) )
     },
 
     favourites: async (req, res) => {

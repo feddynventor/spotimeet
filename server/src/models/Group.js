@@ -46,9 +46,16 @@ Group.join = async function (artist_id, event_id, user_id) {
         upsert: true,
     })
     .select('-messages')
-    .populate('event')
-    .populate('artist')
+    .populate({
+        path: 'event',
+        select: '-artist -repo_id',
+    })
+    .populate({
+        path: 'artist',
+        select: '-searchTerm -lastUpdate -tours',
+    })
     .then( async doc => {
+        if (!doc) return Promise.reject("Artista non trovato")
         await doc.validate()   // la validazione avviene post inserimento
         return doc
     })
@@ -90,12 +97,13 @@ Group.getMessages = async function (group_doc_id) {
 /**
  * Controlla se si e' membro del gruppo specificato
  */
-Group.isMember = async function (group_id, uid) {
+Group.attendingEvent = async function (event_id, uid) {
     return this
         .findOne({
-            _id: group_id,
+            event: event_id,
             members: { $in: [uid] }
         })
+        .then( group => group!==null)
 }
 
 /**

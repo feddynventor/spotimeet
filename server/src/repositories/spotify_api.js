@@ -23,7 +23,7 @@ module.exports = {
     },
     getFavouriteArtists: (api, limit) => {
         return api
-        .get(`/me/following?type=artist&limit=${limit}`)
+        .get("/me/following?type=artist" + (!!limit ? "&limit="+limit : ""))
         .then( res => res.data.artists.items.map( artistSchema ))
     },
     removeFavouriteArtist: (api, id) => {
