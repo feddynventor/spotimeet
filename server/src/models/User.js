@@ -142,12 +142,17 @@ User.byMail = async function (email) {
  * @returns rejected promise se update fallisce
  */
 User.addFavourites = async function (uid, artist_ids) {
-    return this.updateOne({
+    return this.findOneAndUpdate({
         _id: uid
     }, {
         $addToSet: { favourites: {$each: artist_ids} },
         lastUpdate: new Date().toISOString()
+    }, {new: true})
+    .populate({
+        path: 'favourites',
+        options: { sort: {'followers':-1} }
     })
+    .then( a => a.favourites )
 }
 
 User.getFavourites = async function (uid) {
