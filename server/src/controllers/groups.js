@@ -21,11 +21,18 @@ module.exports = {
      */
     joinEvent: async (req, res) => {
         const { event } = req.params;
-        const artist = await Event.findOne({ _id: event }).select('artist')
+        const artist = await Event.findOne({ _id: event }).select('artist').populate('artist').then( a => a.artist)
+        console.log(artist.tours)
         if (!artist) return res.status(404).send({error: "Evento non trovato"})
         return Group
-        .join(artist.artist, event, req.user._id)
-        .then( group => res.send(group) )
+        .join(artist._id, event, req.user._id)
+        .then( group => res.send({
+            ...group,
+            event: {
+                ...group.event._doc,
+                tour: artist.tours.filter( t => t.repo_id == group.event.tour )
+            }
+        }) )
         .catch( error => res.status(500).send({error}) )
     },
 

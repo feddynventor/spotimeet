@@ -46,8 +46,14 @@ Group.join = async function (artist_id, event_id, user_id) {
         upsert: true,
     })
     .select('-messages')
-    .populate('event')
-    .populate('artist')
+    .populate({
+        path: 'event',
+        select: '-artist -repo_id',
+    })
+    .populate({
+        path: 'artist',
+        select: '-searchTerm -lastUpdate -tours',
+    })
     .then( async doc => {
         if (!doc) return Promise.reject("Artista non trovato")
         await doc.validate()   // la validazione avviene post inserimento
