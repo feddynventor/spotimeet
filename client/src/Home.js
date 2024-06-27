@@ -8,14 +8,11 @@ import { Link, Grid, Box, Typography } from '@mui/material';
 import Flower1 from './assets/Flower1.svg';
 import Flower2 from './assets/Flower2.svg';
 import Flower3 from './assets/Flower3.svg';
-import Flower4 from './assets/Flower4.svg';
-import Flower5 from './assets/Flower5.svg';
-import SpotifyButton from './components/SpotifyButton';
 import Avatar from '@mui/material/Avatar';
-import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import Login from './Login.js';
 import Signup from './Signup.js';
 import { Route, Routes } from 'react-router-dom';
+import GraphicEqRoundedIcon from '@mui/icons-material/GraphicEqRounded';
 
 export default function Home() {
 	
@@ -37,9 +34,9 @@ export default function Home() {
 			</style>
 			<Grid container spacing={2} justifyContent="center" alignItems="center" sx={{height:'100vh', zIndex: '10'}}>
 				<Grid item lg={6} xs={12}>
-					<Box sx={{margin: 2, marginTop: 0, width: '100%'}}>
-						<Avatar sx={{ width: 64, height: 64 }}><GraphicEqIcon style={{ color: 'white' }}></GraphicEqIcon></Avatar>
-						<Typography component="h1" variant='h1' align="center">Spotimeet</Typography>
+					<Box display="flex" flexDirection="column" alignItems="center" sx={{margin: 2, marginTop: 0, width: '100%'}}>
+						<Avatar sx={{ width: 128, height: 128 }}><GraphicEqRoundedIcon fontSize="large" style={{ color: 'white', width: 128, height: 128 }}></GraphicEqRoundedIcon></Avatar>
+						<Typography component="h1" variant='h1'>Spotimeet</Typography>
 					</Box>
 				</Grid>
 				<Grid item lg={6} xs={12} sx={{verticalAlign: 'middle'}}>
