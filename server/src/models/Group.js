@@ -49,6 +49,7 @@ Group.join = async function (artist_id, event_id, user_id) {
     .populate('event')
     .populate('artist')
     .then( async doc => {
+        if (!doc) return Promise.reject("Artista non trovato")
         await doc.validate()   // la validazione avviene post inserimento
         return doc
     })

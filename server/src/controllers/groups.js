@@ -41,6 +41,10 @@ module.exports = {
         return Artist
         .findOne({ _id: artist })
         .select('-searchTerm -lastUpdate')
+        .then( artist => {
+            if (!artist) return Promise.reject("Artista non trovato")
+            return artist
+        })
         .then( async artist => ({
                 ...artist._doc,
                 tours: await Promise.all(artist._doc.tours.map( async t => ({
@@ -52,6 +56,7 @@ module.exports = {
                 })))
         }) )
         .then( artist => res.send(artist) )
+        .catch( error => res.status(500).send({error}) )
     },
 
     favourites: async (req, res) => {
