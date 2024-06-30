@@ -13,9 +13,7 @@ export default function GroupList({ modificatore, list }) {
     const [groupType, setGroupType] = React.useState(null);
 
     if (!groups) return (
-      <>
-      { list ? null : <GroupTypeSelector onSelect={setGroupType} selected={groupType} /> } <CustomSkeleton />
-      </>
+      <>{ list ? null : <GroupTypeSelector onSelect={setGroupType} selected={groupType} /> } <CustomSkeleton /></>
     )
     const groupList = !!!list && !!groups && groups
       .filter( g => groupType==null ? true : groupType=='event' ? g.event!=null : g.event==null)
@@ -27,8 +25,11 @@ export default function GroupList({ modificatore, list }) {
           : <GroupTypeSelector onSelect={setGroupType} selected={groupType} />
         }
         <Grid container spacing={2}>
-          { groupList && groupList.length==0 ? <Typography variant="h5">Nessun gruppo trovato</Typography> : null }
-          { !!list && list.length>0 ? list.map(groupMap) : <Typography variant="h5">Nessun gruppo trovato</Typography> }
+          {
+              !!!list && !!groupList && groupList.length>0 ? groupList
+            : !!!groupList && !!list && list.length>0 ? list.map(groupMap)
+            : <Typography variant="h5" sx={{textAlign: 'center', width: '100%', m:3}}>Nessun gruppo trovato</Typography>
+          }
         </Grid>
       </Box>
     );
