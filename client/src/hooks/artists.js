@@ -11,6 +11,7 @@ export const useArtistSearch = () => {
 
     useEffect(() => {
         if (!query) return;
+        setArtists(null);
         fetch('//spotimeet.fedele.website/api/artist?q='+query, {
             credentials: "include",
             headers: {

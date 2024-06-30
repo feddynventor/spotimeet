@@ -3,13 +3,15 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
-export default function GroupTypeSelector() {
+export default function GroupTypeSelector({ onSelect, selected }) {
 
   const chipStyles = {
     fontSize: '16px',
     borderRadius: '50px',
     padding: '10px',
   };
+
+  if(!onSelect) return;
 
   return (
     <Box
@@ -24,9 +26,9 @@ export default function GroupTypeSelector() {
     >
     
     <Stack direction="row" spacing={1}>
-      <Chip label="Tutti i gruppi" sx={chipStyles}/>
-      <Chip label="Artisti" variant="outlined" sx={chipStyles}/>
-      <Chip label="Concerti" variant="outlined" sx={chipStyles}/>
+      <Chip label="Tutti i gruppi" variant={selected==null ? 'filled' : 'outlined'} sx={chipStyles} onClick={()=>{onSelect(null)}} />
+      <Chip label="Artisti" variant={selected=='artist' ? 'filled' : 'outlined'} sx={chipStyles} onClick={()=>{onSelect('artist')}} />
+      <Chip label="Concerti" variant={selected=='event' ? 'filled' : 'outlined'} sx={chipStyles} onClick={()=>{onSelect('event')}} />
     </Stack>
 
     </Box>

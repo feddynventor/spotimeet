@@ -16,17 +16,27 @@ import ArtistTour from './components/ArtistTour';
 import Chat from './components/Chat';
 import UserProfile from './components/UserProfile';
 import GroupList from './components/GroupList';
+import CustomSkeleton from './components/CustomSkeleton';
 
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@mui/material/Link';
 
 import { useUserDetails } from './hooks/users';
 import { useArtistSearch } from './hooks/artists';
+import { useCitySearch } from './hooks/groups';
+import { useState, useEffect } from 'react';
 
 export default function Main({ theme }) {
     const user = useUserDetails();
-    const [searchResult, search] = useArtistSearch();
+    const [artistSearchResult, searchArtist] = useArtistSearch();
+    const [citySearchResult, searchCity] = useCitySearch();
+    const [query, search] = useState(null);
     const [cookies, setCookie, removeCookie] = useCookies('token');
+
+    useEffect(() => {
+        searchArtist(query);
+        searchCity(query);
+    }, [query]);
 
     if (!!cookies.token) return <Box sx={{ display: 'flex', background: theme.palette.background.app }}>
             <Sidebar user={user} searchHandler={search} />
@@ -43,7 +53,12 @@ export default function Main({ theme }) {
                         borderRadius: '12px', backgroundColor: '#332D2A', scrollbarWidth: 'none'
                     }}>
                         <Routes>
-                            <Route path="/" element={ searchResult && <ArtistList list={searchResult} /> } />
+                            <Route path="/" element={
+                                citySearchResult && citySearchResult.length>0 && <GroupList list={citySearchResult} />
+                                || artistSearchResult && artistSearchResult.length>0 && <ArtistList list={artistSearchResult} />
+                                || <GroupList></GroupList>
+                                || <CustomSkeleton></CustomSkeleton>
+                            } />
                             <Route path="/artist/:spotify_uri" element={<ArtistProfile />} />
                             <Route path="/artist/tour/:id?" element={<ArtistTour />} />
                             <Route path="/preferiti" element={<Favourites />} />

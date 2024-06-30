@@ -24,7 +24,7 @@ export function useGroup(type, id){
     return group
 }
 
-export function useJoinedGroup(modificatore) {
+export function useGroupList(modificatore) {
     const [group, setGroup] = useState(null);
     const [cookies, setCookie, removeCookie] = useCookies('token');
 
@@ -43,4 +43,27 @@ export function useJoinedGroup(modificatore) {
     }, []);
 
     return group
+}
+
+export const useCitySearch = () => {
+    const [events, setEvents] = useState(null);
+    const [query, setQuery] = useState();
+    const [cookies, setCookie, removeCookie] = useCookies('token');
+
+    useEffect(() => {
+        if (!query) return;
+        setEvents(null);
+        fetch('//spotimeet.fedele.website/api/group/city?q='+query, {
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${cookies.token}`
+            }
+        })
+        .then(processResponse)
+        .then(setEvents)
+        .catch( err => Error.prototype.isPrototypeOf(err) ? null : err )
+    }, [query]);
+
+    return [ events, setQuery ];
 }
