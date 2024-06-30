@@ -70,10 +70,11 @@ Group.join = async function (artist_id, event_id, user_id) {
 }
 
 Group.getBy = async function (artist_id, event_id) {
-    return commonOp( this.findOne({
+    return commonOp( this.find({
         artist: artist_id,
-        event: event_id,
+        event: event_id
     }) )
+    .then( group => group.length>0 ? group[0] : null )
 }
 
 Group.getMessages = async function (group_doc_id) {
@@ -132,4 +133,5 @@ const commonOp = (query) => query
         path: 'artist',
         select: '-searchTerm -lastUpdate -tours',
     })
+    //.then( groups => groups.map( g => g._doc ? ({...g._doc, members: g._doc.members.length}) : ({...g, members: g.members.length}) ) )
     .then( groups => groups.map( g => ({...g._doc, members: g._doc.members.length}) ) )

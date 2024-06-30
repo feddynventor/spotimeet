@@ -3,7 +3,7 @@ const { model, Schema } = require('mongoose');
 const Artist = new model('Artist', new Schema({
     name: {
         type: String,
-        index: true,
+        //index: true,
         text: true,
     },
     uri: {
@@ -19,7 +19,10 @@ const Artist = new model('Artist', new Schema({
         index: true,
     },
     tours: [ new Schema({
-        repo_id: String,
+        repo_id: {
+            type: String,
+            unique: true,
+        },
         name: String,
         image: String,
         url: String,
@@ -37,7 +40,7 @@ module.exports = Artist;
  */
 Artist.searchCache = async function (name) {
     return this
-    .find({ $or: [{ $text: {$search: name} }, { searchTerm: {"$in": [name]} }] })
+    .find({ $or: [{ name: new RegExp(name, "gi") }, { searchTerm: {"$in": [name]} }] })
     .then( docs => Promise.all(docs.map( d => this.findOneAndUpdate({ uri: d.uri }, { $addToSet: { searchTerm: name } }, { new: true, returnDocument: 'after' }) )) )
 }
 
@@ -49,7 +52,6 @@ Artist.searchCache = async function (name) {
  * @returns 
  */
 Artist.updateTours = async function (id, tours) {
-    console.log("updating", id)
     return this.findOneAndUpdate({_id: id}, {
         $addToSet: { tours: {
             $each: tours.map( t => ({
