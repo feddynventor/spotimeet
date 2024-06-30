@@ -20,7 +20,7 @@ module.exports = {
                 messages: messageObj
             } })
             .then( () => sock.broadcast.to(sock.group._id.valueOf()).emit('message', {
-                    ...messageObj,
+                    ...messageObj._doc,
                     user: sock.user, //intero obj (TODO: riduci)
                 })
             )

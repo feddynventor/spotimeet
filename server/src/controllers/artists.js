@@ -71,7 +71,7 @@ module.exports = {
             )
         .then( async a => {
             if (!a) return Promise.reject("Non trovato")
-            if (!!!req.query.all) res.send(a)  //se setto ?all aspetta anche ticketone
+            if (!checkExpired(a.lastUpdate) && !!!req.query.all) res.send(a)  //se dati scaduti aspetta anche ticketone
             return a
 	})
         .then( async a => {

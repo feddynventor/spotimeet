@@ -13,6 +13,7 @@ module.exports = {
         return Group
         .join(artist, null, req.user._id)
         .then( group => res.send(group) )
+        .then( ()=>{ User.addFavourites(req.user._id, [artist]) } )
         .catch( error => res.status(500).send({error}) )
     },
     /**
@@ -33,13 +34,19 @@ module.exports = {
                 tour: artist.tours.filter( t => t.repo_id == group.event.tour )[0]
             }
         }) )
+        .then( ()=>{ User.addFavourites(req.user._id, [artist._id]) } )
         .catch( error => res.status(500).send({error}) )
     },
 
     byCity: async (req, res) => {
-        const { city } = req.params;
         return Event
-        .byCity(city)
+        .byCity(req.query.q)
+        .then( events => events.length==0 ? Promise.reject("Nessun evento trovato") : events )
+        .then( events => Promise.all(events.map( async e => {
+            const g = await Group.getBy(e.artist._id, e._id) 
+            if (g) return g
+            else return { _id: null, event: {...e._doc, artist: undefined}, artist: {...e._doc.artist._doc, tours: undefined} }
+        }) ))
         .then( groups => res.send(groups) )
         .catch( error => res.status(500).send({error}) )
     },
@@ -91,12 +98,12 @@ module.exports = {
         return Group
         .joined(req.user._id)
         .then( groups => res.send(groups) )
-        // .catch( error => res.status(500).send({error}) )
+        .catch( error => res.status(500).send({error}) )
     },
     getTop10: async (req, res) => {
         return Group
         .top10()
         .then( groups => res.send(groups) )
-        // .catch( error => res.status(500).send({error}) )
+        .catch( error => res.status(500).send({error}) )
     }
 }
