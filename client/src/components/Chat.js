@@ -116,7 +116,7 @@ export default function Chat({type}) {
                     ? <>
                         <Chip label="Invita un amico" onClick={()=> {navigator.clipboard.writeText('https://spotimeet.fedele.website/chat/' + (group.event==null ? 'artist/'+group.artist._id : 'event/'+group.event._id))}} />
                         <Chip label="Acquista biglietto" onClick={()=> {window.open(group.event.url, "_blank")}}/>
-                        <Chip label="Profilo TicketOne" onClick={()=> {window.open(group.event.tour.url, "_blank")}}/>
+                        { group.event.tour && !group.event.tour.url.includes("undefined") ? <Chip label="Profilo TicketOne" onClick={()=> {window.open(group.event.tour.url, "_blank")}}/> : null /* TODO: Cagata del crawler} */}
                         <Chip label="Spotify" onClick={()=> {window.open(group.artist.url, "_blank")}}/>
                         <Chip label="Artista" onClick={()=> {navigate('/artist/'+group.artist.uri)}}/>
                     </>

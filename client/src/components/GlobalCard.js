@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Typography, Button, Box, Badge } from '@mui/material';
 import { styled } from '@mui/system';
@@ -98,18 +98,15 @@ const GlobalCard = ({ group }) => {
   const navigate = useNavigate(false);
   const artistImage = group.event ? group.event.tour.image : group.artist.image;
 
-  useEffect(() => {
-    console.log(group.artist)
-  },[])
   return (
     <FlipCard onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <FlipCardInner className="flipCardInner" style={{ transform: hover ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
         <FlipCardFront>
           <EventInfo>
               <>
-                <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
+                <Typography variant="h4" align='center' sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
                 <ConcertBadge>Artista</ConcertBadge>
-                <ChatBadge>Membri: {group.members}</ChatBadge>
+                <ChatBadge>{ !!group.members ? ("Membri: "+group.members) : "Entra per primo" }</ChatBadge>
               </>
           </EventInfo>.
         </FlipCardFront>

@@ -22,6 +22,7 @@ export default function DebouncedInput({ onInput }) {
           <OutlinedInput
             autoFocus
             id="searchBar"
+            placeholder='Artista o Città...'
             onChange={(e) => setSearchTerm(e.target.value)}
             startAdornment={<InputAdornment position="start"><SearchIcon></SearchIcon></InputAdornment>}
             label="Ricerca"

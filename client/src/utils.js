@@ -10,7 +10,6 @@ module.exports = {
         .then(json => {
             console.log(response.ok, json)
             if (!response.ok) {
-                alert(json.error || json.message)
                 return Promise.reject(Object.keys(json.error).length==0 ? json.message || "Errore sconosciuto" : json.error);
             }
             return json;
