@@ -19,6 +19,7 @@ services:
       - "127.0.0.1:8263:3000"
     env_file:
       - .env
+    restart: always
     environment:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
       MONGO_HOST: mongodbms
@@ -35,6 +36,15 @@ services:
       ME_CONFIG_SITE_BASEURL: /mongo/
     depends_on:
       - db
+
+  swagger:
+    image: swaggerapi/swagger-ui:latest
+    ports:
+      - "127.0.0.1:8267:8080"
+    volumes:
+      - ./server/swagger.json:/app/swagger.json
+    environment:
+      BASE_URL: "/swagger"
 
 volumes:
     db_config:
