@@ -60,13 +60,12 @@ export default function Main({ theme }) {
                                 || <CustomSkeleton></CustomSkeleton>
                             } />
                             <Route path="/artist/:spotify_uri" element={<ArtistProfile />} />
-                            <Route path="/artist/tour/:id?" element={<ArtistTour />} />
                             <Route path="/preferiti" element={<Favourites />} />
-                            <Route path="/groupList" element={<GroupList /> } />
+                            <Route path="/myGroups" element={<GroupList /> } />
                             <Route path="/topGroups" element={<GroupList modificatore="top" /> } />
                             <Route path="/chat/event/:id" element={<Chat type="event"/>} />
                             <Route path="/chat/artist/:id" element={<Chat type="global"/>} />
-                            <Route path="/me" element={<UserProfile />} />
+                            <Route path="/user" element={<UserProfile />} />
                         </Routes>
                     </Box>
                 </Container>
