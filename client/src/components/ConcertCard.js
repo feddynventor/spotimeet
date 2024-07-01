@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Typography, Avatar, Button, Box, Badge } from '@mui/material';
+import { Typography, Button, Box, Badge } from '@mui/material';
 import { styled } from '@mui/system';
 import Sky from '../assets/Sky.png';
 
@@ -75,7 +75,7 @@ const EventInfo = styled(Box)(({ theme }) => ({
 }));
 
 const DateBadge = styled(Box)(({ theme }) => ({
-  backgroundColor: 'blue',
+  backgroundColor: '#2E3DFF',
   color: 'white',
   borderRadius: '16px',
   padding: theme.spacing(0.5, 1),
@@ -86,7 +86,7 @@ const DateBadge = styled(Box)(({ theme }) => ({
 }));
 
 const ConcertBadge = styled(Badge)(({ theme }) => ({
-  backgroundColor: 'blue',
+  backgroundColor: '#2E3DFF',
   color: 'white',
   borderRadius: '16px',
   padding: theme.spacing(0.5, 1),
@@ -97,7 +97,7 @@ const ConcertBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const ChatBadge = styled(Badge)(({ theme }) => ({
-  backgroundColor: '#ff7043',
+  backgroundColor: '#2E3DFF',
   color: '#fff',
   borderRadius: '16px',
   padding: theme.spacing(0.5, 1),
@@ -116,7 +116,7 @@ const ConcertCard = ({ group }) => {
         <FlipCardFront>
           <EventInfo>
               <>
-                <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
+                <Typography variant="h4" sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
                 <EventInfo>
                   <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.event.city}</Typography>
                 </EventInfo>
