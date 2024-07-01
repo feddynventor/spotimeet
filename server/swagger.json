@@ -1,0 +1,1147 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Spotimeet - social musicale",
+        "version": "1.0.0",
+        "contact": {},
+        "description": "L’applicativo mira a unificare i dati riguardo la musica preferita dagli utenti delle maggiori piattaforme di streaming con i dati riguardanti concerti ed eventi. \nSi vuole infine a mettere in comunicazione gli utenti attraverso chat di gruppo, nonché a socializzare, congiungendo soggetti grazie ai gusti musicali e agli artisti preferiti. "
+    },
+    "paths": {
+        "/artist": {
+            "get": {
+                "summary": "Cerca artisti per keyword",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "La keyword per cercare artisti"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista di artisti trovati",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "665228cdc7f742572b7feac8"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Gigi D'Alessio"
+                                            },
+                                            "uri": {
+                                                "type": "string",
+                                                "example": "4eSMsVzRJHhN1aq0IvZcyn"
+                                            },
+                                            "followers": {
+                                                "type": "integer",
+                                                "example": 502913
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://i.scdn.co/image/ab6761610000e5eb4d76c44c7fb0a3784ebbd77f"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://open.spotify.com/artist/4eSMsVzRJHhN1aq0IvZcyn"
+                                            },
+                                            "searchTerm": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                },
+                                                "example": [
+                                                    "gigi",
+                                                    "d'alessio"
+                                                ]
+                                            },
+                                            "tours": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                },
+                                                "example": []
+                                            },
+                                            "__v": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "lastUpdate": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-06-01T10:19:48.016Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "artisti"
+                ]
+            }
+        },
+        "/artist/{uri}": {
+            "get": {
+                "summary": "Restituisce artista tramite URI di Spotify",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uri",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "L'URI di Spotify dell'artista"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dettagli dell'artista",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "665228cdc7f742572b7feac8"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Gigi D'Alessio"
+                                        },
+                                        "uri": {
+                                            "type": "string",
+                                            "example": "4eSMsVzRJHhN1aq0IvZcyn"
+                                        },
+                                        "followers": {
+                                            "type": "integer",
+                                            "example": 502913
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "example": "https://i.scdn.co/image/ab6761610000e5eb4d76c44c7fb0a3784ebbd77f"
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "example": "https://open.spotify.com/artist/4eSMsVzRJHhN1aq0IvZcyn"
+                                        },
+                                        "searchTerm": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": [
+                                                "gigi",
+                                                "Gigi D'Alessio",
+                                                "d'alessio"
+                                            ]
+                                        },
+                                        "tours": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "repo_id": {
+                                                        "type": "string",
+                                                        "example": "3502211"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Gigi Outdoor 2024"
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://ticketone.it/obj/media/IT-eventim/teaser/222x222/2024/gigi-outdoor-biglietti-2.jpg"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://ticketone.it//artist/gigi-d-alessio/gigi-outdoor-2024-3502211/"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "lastUpdate": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-06-19T17:48:08.359Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "artisti"
+                ]
+            }
+        },
+        "/group/artist/{artistId}": {
+            "get": {
+                "summary": "Cerca gruppi di eventi per l'artista selezionato",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "artistId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "L'ID del documento dell'artista"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista di gruppi di eventi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "repo_id": {
+                                                "type": "string",
+                                                "example": "3502211"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Gigi Outdoor 2024"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://ticketone.it/obj/media/IT-eventim/teaser/222x222/2024/gigi-outdoor-biglietti-2.jpg"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://ticketone.it//artist/gigi-d-alessio/gigi-outdoor-2024-3502211/"
+                                            },
+                                            "events": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "_id": {
+                                                            "type": "string",
+                                                            "example": "667da5d89918f6cfb952e2d9"
+                                                        },
+                                                        "city": {
+                                                            "type": "string",
+                                                            "example": "PALERMO"
+                                                        },
+                                                        "date": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-07-05T19:00:00.000Z"
+                                                        },
+                                                        "url": {
+                                                            "type": "string",
+                                                            "format": "uri",
+                                                            "example": "https://ticketone.it/event/gigi-dalessio-gigi-outdoor-2024-velodromo-borsellino-17798170/"
+                                                        },
+                                                        "isMember": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gruppi",
+                    "artisti"
+                ]
+            }
+        },
+        "/group/favourites": {
+            "get": {
+                "summary": "Ritorna tutti i gruppi degli artisti e degli eventi seguiti dagli artisti preferiti",
+                "responses": {
+                    "200": {
+                        "description": "Lista di artisti ed eventi preferiti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "667da15c5fddf4f6d83f4e97"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Thomas Vx"
+                                            },
+                                            "uri": {
+                                                "type": "string",
+                                                "example": "0DRjWD89m5B2XsOFphVngO"
+                                            },
+                                            "followers": {
+                                                "type": "integer",
+                                                "example": 1810
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://i.scdn.co/image/ab6761610000e5ebcadfc5343b6accc54766d82f"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://open.spotify.com/artist/0DRjWD89m5B2XsOFphVngO"
+                                            },
+                                            "tours": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "repo_id": {
+                                                            "type": "string",
+                                                            "example": "3580439"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Annalisa - Tutti nel Vortice Outdoor"
+                                                        },
+                                                        "image": {
+                                                            "type": "string",
+                                                            "format": "uri",
+                                                            "example": "https://ticketone.it/obj/media/IT-eventim/teaser/222x222/2024/annalisa-estate-biglietti.jpg"
+                                                        },
+                                                        "url": {
+                                                            "type": "string",
+                                                            "format": "uri",
+                                                            "example": "https://ticketone.it//artist/annalisa/annalisa-tutti-nel-vortice-outdoor-3580439/"
+                                                        },
+                                                        "events": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "_id": {
+                                                                        "type": "string",
+                                                                        "example": "667da17b9918f6cfb952df91"
+                                                                    },
+                                                                    "repo_id": {
+                                                                        "type": "string",
+                                                                        "example": "18241246"
+                                                                    },
+                                                                    "__v": {
+                                                                        "type": "integer",
+                                                                        "example": 0
+                                                                    },
+                                                                    "artist": {
+                                                                        "type": "string",
+                                                                        "example": "667da15c5fddf4f6d83f4e99"
+                                                                    },
+                                                                    "city": {
+                                                                        "type": "string",
+                                                                        "example": "CATTOLICA"
+                                                                    },
+                                                                    "date": {
+                                                                        "type": "string",
+                                                                        "format": "date-time",
+                                                                        "example": "2024-07-06T19:00:00.000Z"
+                                                                    },
+                                                                    "tour": {
+                                                                        "type": "string",
+                                                                        "example": "3580439"
+                                                                    },
+                                                                    "url": {
+                                                                        "type": "string",
+                                                                        "format": "uri",
+                                                                        "example": "https://ticketone.it/event/annalisa-tutti-nel-vortice-outdoor-arena-della-regina-18241246/"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "example": []
+                                            },
+                                            "__v": {
+                                                "type": "integer",
+                                                "example": 0
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "utente",
+                    "gruppi",
+                    "artisti"
+                ]
+            }
+        },
+        "/group": {
+            "get": {
+                "summary": "Ottieni tutti i gruppi di artisti ed eventi, elencando i gruppi a cui ci si è già uniti",
+                "responses": {
+                    "200": {
+                        "description": "Lista di gruppi di artisti ed eventi a cui ci si è uniti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "667da1859918f6cfb952dfb0"
+                                            },
+                                            "artist": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "667da15c5fddf4f6d83f4e99"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Annalisa"
+                                                    },
+                                                    "uri": {
+                                                        "type": "string",
+                                                        "example": "0EqkKYDK9EkKY5N7zU3FPv"
+                                                    },
+                                                    "followers": {
+                                                        "type": "integer",
+                                                        "example": 1508901
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://i.scdn.co/image/ab6761610000e5eb58829778a596dfff366198f3"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://open.spotify.com/artist/0EqkKYDK9EkKY5N7zU3FPv"
+                                                    },
+                                                    "__v": {
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    }
+                                                }
+                                            },
+                                            "event": {
+                                                "type": [
+                                                    "object",
+                                                    "null"
+                                                ],
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "667da17b9918f6cfb952df95"
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "GENOVA"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-17T19:30:00.000Z"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://ticketone.it/event/annalisa-tutti-nel-vortice-outdoor-arena-mare-area-porto-antico-18256297/"
+                                                    }
+                                                }
+                                            },
+                                            "__v": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "members": {
+                                                "type": "integer",
+                                                "example": 3
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "utente",
+                    "gruppi"
+                ]
+            }
+        },
+        "/group/top": {
+            "get": {
+                "summary": "Ottieni i primi 10 gruppi di artisti ed eventi in ordine di membri",
+                "responses": {
+                    "200": {
+                        "description": "Lista di gruppi di artisti ed eventi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "667da1859918f6cfb952dfb0"
+                                            },
+                                            "artist": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "667da15c5fddf4f6d83f4e99"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Annalisa"
+                                                    },
+                                                    "uri": {
+                                                        "type": "string",
+                                                        "example": "0EqkKYDK9EkKY5N7zU3FPv"
+                                                    },
+                                                    "followers": {
+                                                        "type": "integer",
+                                                        "example": 1508901
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://i.scdn.co/image/ab6761610000e5eb58829778a596dfff366198f3"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://open.spotify.com/artist/0EqkKYDK9EkKY5N7zU3FPv"
+                                                    },
+                                                    "__v": {
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    }
+                                                }
+                                            },
+                                            "event": {
+                                                "type": [
+                                                    "object",
+                                                    "null"
+                                                ],
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "667da17b9918f6cfb952df95"
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "GENOVA"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-17T19:30:00.000Z"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://ticketone.it/event/annalisa-tutti-nel-vortice-outdoor-arena-mare-area-porto-antico-18256297/"
+                                                    }
+                                                }
+                                            },
+                                            "__v": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "members": {
+                                                "type": "integer",
+                                                "example": 3
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "gruppi"
+                ]
+            }
+        },
+        "/group/event/{eventId}": {
+            "get": {
+                "summary": "Restituisce il documento Group per autenticarsi al socket della chat",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "eventId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "L'ID dell'evento"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dettagli del gruppo per l'evento specificato",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "667db0939918f6cfb952e895"
+                                        },
+                                        "event": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "667da5d89918f6cfb952e2e8"
+                                                },
+                                                "city": {
+                                                    "type": "string",
+                                                    "example": "BARLETTA"
+                                                },
+                                                "date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-07-17T19:00:00.000Z"
+                                                },
+                                                "tour": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "repo_id": {
+                                                            "type": "string",
+                                                            "example": "3502211"
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Gigi Outdoor 2024"
+                                                        },
+                                                        "image": {
+                                                            "type": "string",
+                                                            "format": "uri",
+                                                            "example": "https://ticketone.it/obj/media/IT-eventim/teaser/222x222/2024/gigi-outdoor-biglietti-2.jpg"
+                                                        },
+                                                        "url": {
+                                                            "type": "string",
+                                                            "format": "uri",
+                                                            "example": "https://ticketone.it//artist/gigi-d-alessio/gigi-outdoor-2024-3502211/"
+                                                        }
+                                                    }
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "format": "uri",
+                                                    "example": "https://ticketone.it/event/gigi-dalessio-gigi-outdoor-2024-fossato-del-castello-18494887/"
+                                                }
+                                            }
+                                        },
+                                        "artist": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "example": "667da5d65fddf4f6d83f5024"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Gigi D'Alessio"
+                                                },
+                                                "uri": {
+                                                    "type": "string",
+                                                    "example": "4eSMsVzRJHhN1aq0IvZcyn"
+                                                },
+                                                "followers": {
+                                                    "type": "integer",
+                                                    "example": 515007
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "format": "uri",
+                                                    "example": "https://i.scdn.co/image/ab6761610000e5eb4d76c44c7fb0a3784ebbd77f"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "format": "uri",
+                                                    "example": "https://open.spotify.com/artist/4eSMsVzRJHhN1aq0IvZcyn"
+                                                }
+                                            }
+                                        },
+                                        "members": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gruppi"
+                ]
+            }
+        },
+        "/user": {
+            "get": {
+                "summary": "Ottieni le informazioni dell'utente",
+                "responses": {
+                    "200": {
+                        "description": "Informazioni dell'utente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "profile": {
+                                            "type": "object",
+                                            "properties": {
+                                                "displayName": {
+                                                    "type": "string",
+                                                    "example": "feddy"
+                                                },
+                                                "photo": {
+                                                    "type": "string",
+                                                    "format": "uri",
+                                                    "example": "https://i.scdn.co/image/ab6775700000ee851f0fd554b8e7d31c9d41a3c8"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "format": "uri",
+                                                    "example": "https://open.spotify.com/user/allerta12"
+                                                }
+                                            }
+                                        },
+                                        "_id": {
+                                            "type": "string",
+                                            "example": "667da1565fddf4f6d83f4e82"
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "example": "allerta12"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "allerta12@gmail.com"
+                                        },
+                                        "favourites": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "667da15c5fddf4f6d83f4e97"
+                                            }
+                                        },
+                                        "lastActivity": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-06-28T14:23:19.268Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "utente"
+                ]
+            }
+        },
+        "/user/favourites": {
+            "post": {
+                "summary": "Aggiungi un artista ai preferiti dell'utente, eventualmente anche su spotify",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "example": "667da15c5fddf4f6d83f4e99"
+                                    }
+                                },
+                                "required": [
+                                    "id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Artista aggiunto ai preferiti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Artista aggiunto ai preferiti"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "utente"
+                ]
+            },
+            "delete": {
+                "summary": "Rimuovi un artista dai preferiti dell'utente, eventualmente anche su spotify",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "example": "667da15c5fddf4f6d83f4e99"
+                                    }
+                                },
+                                "required": [
+                                    "id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Artista rimosso dai preferiti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Artista rimosso dai preferiti"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "utente"
+                ]
+            },
+            "get": {
+                "summary": "Ottieni gli artisti preferiti dell'utente",
+                "responses": {
+                    "200": {
+                        "description": "Lista degli artisti preferiti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "example": "667da15c5fddf4f6d83f4e99"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Annalisa"
+                                            },
+                                            "uri": {
+                                                "type": "string",
+                                                "example": "0EqkKYDK9EkKY5N7zU3FPv"
+                                            },
+                                            "followers": {
+                                                "type": "integer",
+                                                "example": 1508901
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://i.scdn.co/image/ab6761610000e5eb58829778a596dfff366198f3"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "format": "uri",
+                                                "example": "https://open.spotify.com/artist/0EqkKYDK9EkKY5N7zU3FPv"
+                                            }
+                                        }
+                                    },
+                                    "example": [
+                                        {
+                                            "_id": "667da15c5fddf4f6d83f4e99",
+                                            "name": "Annalisa",
+                                            "uri": "0EqkKYDK9EkKY5N7zU3FPv",
+                                            "followers": 1508901,
+                                            "image": "https://i.scdn.co/image/ab6761610000e5eb58829778a596dfff366198f3",
+                                            "url": "https://open.spotify.com/artist/0EqkKYDK9EkKY5N7zU3FPv"
+                                        },
+                                        {
+                                            "_id": "667da15c5fddf4f6d83f4ea9",
+                                            "name": "Gigi D'Agostino",
+                                            "uri": "1OAjDaKgg00KCUYqDe68un",
+                                            "followers": 887535,
+                                            "image": "https://i.scdn.co/image/ab6761610000e5eb3547c85b33443eb3d8abd004",
+                                            "url": "https://open.spotify.com/artist/1OAjDaKgg00KCUYqDe68un"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    "utente"
+                ]
+            }
+        },
+        "/group/global/{artistId}": {
+            "get": {
+                "summary": "Restituisce l'object ID del gruppo globale per l'artista",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "artistId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "L'ID del documento dell'artista"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dettagli del gruppo globale per l'artista specificato"
+                    }
+                },
+                "tags": [
+                    "gruppi",
+                    "artisti"
+                ]
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "User login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "test@test.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123"
+                                    }
+                                },
+                                "required": [
+                                    "username",
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid username or password"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": []
+            }
+        },
+        "/group/city": {
+            "get": {
+                "summary": "Ottieni lista eventi nella città cercata",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "La città per cercare eventi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista di eventi trovati nella città specificata",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "event": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "example": "667da5d89918f6cfb952e2e8"
+                                                    },
+                                                    "repo_id": {
+                                                        "type": "string",
+                                                        "example": "18494887"
+                                                    },
+                                                    "__v": {
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "BARLETTA"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-17T19:00:00.000Z"
+                                                    },
+                                                    "tour": {
+                                                        "type": "string",
+                                                        "example": "3502211"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "format": "uri",
+                                                        "example": "https://ticketone.it/event/gigi-dalessio-gigi-outdoor-2024-fossato-del-castello-18494887/"
+                                                    }
+                                                }
+                                            },
+                                            "artist": {
+                                                "type": "string",
+                                                "example": "667da5d65fddf4f6d83f5024"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gruppi"
+                ]
+            }
+        }
+    },
+    "security": [],
+    "servers": [
+        {
+            "url": "https://spotimeet.fedele.website/api/",
+            "description": ""
+        }
+    ],
+    "components": {
+        "links": {},
+        "callbacks": {},
+        "schemas": {},
+        "securitySchemes": {}
+    },
+    "tags": [
+        {
+            "name": "artisti"
+        },
+        {
+            "name": "utente"
+        },
+        {
+            "name": "gruppi"
+        }
+    ]
+}

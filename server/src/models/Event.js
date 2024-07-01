@@ -3,7 +3,7 @@ const { model, Schema } = require('mongoose');
 const Event = new model('Event', new Schema({
     repo_id: {
         type: String,
-        unique: true,
+        unique: true
     },
     city: {
         type: String,
@@ -21,14 +21,21 @@ const Event = new model('Event', new Schema({
 
 module.exports = Event;
 
+/**
+ * Aggiunge all'Event fetchato da API, il tour e Artist corrispondente
+ * avendo cosi' le due chiavi esterne
+ * Poi aggiungi al DB ogni singolo evento
+ * ogni query viene eseguita in sequenza
+ * Infine ritorna tutti gli eventi dello stesso tour
+ */
 Event.addMany = async function (artist, tour) {
     return tour.dates
     .map( e => ({
         repo_id: e.id,
         city: e.city,
         date: e.date,
-        url: "https://ticketone.it".concat(e.uri),
-        tour: tour.id,  //API id
+        url: e.url,
+        tour: tour.id,  //API id, non creiamo il modello dati per Tour
         artist: artist._id,  //object id
     }) )
     .reduce( (acc, e) => acc.then(
@@ -37,9 +44,11 @@ Event.addMany = async function (artist, tour) {
     .then( () => this.find({ tour: tour.id }) )
 }
 
+/**
+ * Partial text search per le citta' di tutti gli eventi
+ */
 Event.byCity = async function (city) {
     return this
-    // .find({ $text: {$city: city} })  //TODO: text search index
-    .find({ city })
-    .populate('tour')
+    .find({ city: new RegExp(city, "gi") })
+    .populate('artist')
 }

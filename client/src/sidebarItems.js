@@ -14,7 +14,7 @@ export const mainNavbarItems = [
     {
         icon: <MusicNoteIcon />,
         label: 'Concerti',
-        path: '/groupList'
+        path: '/myGroups'
     },
     {
         icon: <TourIcon/>,
@@ -24,7 +24,7 @@ export const mainNavbarItems = [
     {
         icon: <AccountCircleIcon />,
         label: 'Visualizza il tuo profilo',
-        path: '/me'
+        path: '/user'
     },
 ];
 

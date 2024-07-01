@@ -10,7 +10,7 @@ export default function Favourites({ number }) {
     else return favourites.length === 0 ? 
         <Typography variant="h5">Nessun artista trovato</Typography> : 
         <Box>
-            <Box sx={{backgroundColor: '#FF6D2E', borderRadius: '0px 0px 10px 0px',p:2, mb:2, width:'350px'}}><Typography variant="h4" sx={{color: '#332D2A'}}>I tuoi artisti preferiti</Typography></Box>
+            <Box sx={{backgroundColor: '#FF6D2E', borderRadius: '0px 0px 10px 0px',p:2, mb:2, width:'60%'}}><Typography variant="h4" sx={{color: '#332D2A'}}>I tuoi artisti preferiti</Typography></Box>
             <ArtistList list={favourites} indexes/>
         </Box>
 }

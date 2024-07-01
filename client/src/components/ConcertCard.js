@@ -116,13 +116,13 @@ const ConcertCard = ({ group }) => {
         <FlipCardFront>
           <EventInfo>
               <>
-                <Typography variant="h4" sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
+                <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.artist.name}</Typography>
                 <EventInfo>
-                  <Typography variant="h3" sx={{whiteSpace: 'normal', color:'white'}}>{group.event.city}</Typography>
+                  <Typography variant="h5" align='center' sx={{whiteSpace: 'normal', color:'white'}}>{group.event.city}</Typography>
                 </EventInfo>
                 <ConcertBadge>Evento</ConcertBadge>
-                <ChatBadge>Membri: {group.members}</ChatBadge>
-                <DateBadge>{new Date(group.event.date).toLocaleDateString()}</DateBadge>
+                <ChatBadge>{ !!group.members ? ("Membri: "+group.members) : "Entra per primo" }</ChatBadge>
+                <DateBadge>{new Date(group.event.date).toLocaleDateString('it-IT', { weekday: 'short', year: '2-digit', month: 'long', day: 'numeric' })}</DateBadge>
               </>
           </EventInfo>
         </FlipCardFront>
