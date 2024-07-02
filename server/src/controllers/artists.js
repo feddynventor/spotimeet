@@ -78,13 +78,13 @@ module.exports = {
             // Artista sicuramente in cache, posso usare il document _id per fetching di Eventi
             if (checkExpired(a.lastUpdate) || !!req.query.all){ //`all` consente anche un fetch sulle api di ticketone
                 const events = await events_repo.fetchByArtist(a.name)
-                await Promise
+                return Promise
                     .all(events.map( t => Event.addMany(a, t) ))
                     .then( () => Artist.updateTours(a._id, events) )
+		    .then( () => res.send(a) )
             }
-            return a
+            return
         } )
-        .then( artist => !!req.query.all ? res.send(artist) : null )
         .catch( error => res.status(404).send({error}) )
     },
 }

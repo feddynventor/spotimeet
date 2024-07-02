@@ -34,7 +34,7 @@ Event.addMany = async function (artist, tour) {
         repo_id: e.id,
         city: e.city,
         date: e.date,
-        url: e.url,
+        url: "https://ticketone.it"+e.uri,
         tour: tour.id,  //API id, non creiamo il modello dati per Tour
         artist: artist._id,  //object id
     }) )

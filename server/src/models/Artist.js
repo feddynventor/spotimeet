@@ -21,7 +21,7 @@ const Artist = new model('Artist', new Schema({
     tours: [ new Schema({
         repo_id: {
             type: String,
-            unique: true,
+            //unique: true,
         },
         name: String,
         image: String,
