@@ -38,8 +38,11 @@ export default function SpotifyButton({oauthUrl}) {
             <img src={mini_logo} alt="Spotify logo" className={styles.spotifyLogo} />
             <span>Entra con Spotify</span>
         </button>
-        <Typography variant="body2">
+        <Typography variant="body1">
             Se hai un account Spotify sei già nel flow!
+        </Typography>
+        <Typography variant="subtitle" color="#ff0000">
+	    Disclaimer! OAuth attivo solo per utenti di Test! API in Dev mode
         </Typography>
         </Box>
     );

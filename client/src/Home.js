@@ -36,7 +36,7 @@ export default function Home() {
 				<Grid item lg={6} xs={12}>
 					<Box display="flex" flexDirection="column" alignItems="center" sx={{margin: 2, marginTop: 0, width: '100%'}}>
 						<Avatar sx={{ width: 128, height: 128 }}><GraphicEqRoundedIcon fontSize="large" style={{ color: 'white', width: 128, height: 128 }}></GraphicEqRoundedIcon></Avatar>
-						<Typography component="h1" variant='h1'>Spotimeet</Typography>
+						<Typography variant='h2'>Spotimeet</Typography>
 					</Box>
 				</Grid>
 				<Grid item lg={6} xs={12} sx={{verticalAlign: 'middle'}}>

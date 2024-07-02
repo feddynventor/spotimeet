@@ -61,8 +61,8 @@ export default function Main({ theme }) {
                             } />
                             <Route path="/artist/:spotify_uri" element={<ArtistProfile />} />
                             <Route path="/preferiti" element={<Favourites />} />
-                            <Route path="/myGroups" element={<GroupList /> } />
-                            <Route path="/topGroups" element={<GroupList modificatore="top" /> } />
+                            <Route path="/myGroups" element={<GroupList key="myGroups" /> } />
+                            <Route path="/topGroups" element={<GroupList key="topGroups" modificatore="top" /> } />
                             <Route path="/chat/event/:id" element={<Chat type="event"/>} />
                             <Route path="/chat/artist/:id" element={<Chat type="global"/>} />
                             <Route path="/user" element={<UserProfile />} />

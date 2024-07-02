@@ -38,6 +38,7 @@ export function useGroupList(modificatore) {
             }
         })
         .then(processResponse)
+        .then( g => g.filter( g => g.artist!=null ) )
         .then(setGroup)
         .catch( err => { /** ignora */ } )
     }, []);
