@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Button, Box, Badge } from '@mui/material';
 import { styled } from '@mui/system';
-import Sky from '../assets/Sky.png';
+import Sky from '../assets/Sky.jpeg';
 
 
 const FlipCard = styled(Box)(({ theme }) => ({

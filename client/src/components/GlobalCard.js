@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Typography, Button, Box, Badge } from '@mui/material';
 import { styled } from '@mui/system';
-import Burano from '../assets/Burano.png';
+import Burano from '../assets/Burano.jpeg';
 
 const FlipCard = styled(Box)(({ theme }) => ({
   perspective: '1000px',
