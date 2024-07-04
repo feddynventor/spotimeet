@@ -1,6 +1,7 @@
 const { model, Schema } = require('mongoose');
+const bcrypt = require('bcrypt')
 
-const User = new model('User', new Schema({
+const schema = new Schema({
     username: {
         type: String,
         unique: true,
@@ -32,7 +33,13 @@ const User = new model('User', new Schema({
     }],
     lastActivity: Date,
     lastUpdate: Date,
-}));
+});
+
+schema.pre('save', function(next){
+    let user = this
+    bcrypt.hash(user.passwordHash, 10).then(hash => {user.passwordHash = hash; next()})
+})
+const User = new model('User', schema)
 
 module.exports = User;
 
@@ -87,11 +94,11 @@ User.byCredentials = async function (username, email, password) {
     const id = username ? ({username}) : ({email});
     return this.findOne({
         ...id,
-        passwordHash: password
     })
-    .select("-passwordHash -__v")
+    .select("-__v")
     .then(user => {
         if (!user) return Promise.reject('Utente non trovato o combinazione errata');
+        if (!bcrypt.compare(password, user.passwordHash)) return Promise.reject('Password errata')
         else return user;
     })
 }
