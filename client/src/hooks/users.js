@@ -9,7 +9,7 @@ export function useUserDetails(){
 
     useEffect(() => {
         // fetch user info
-        fetch('//spotimeet.fedele.website/api/user/me', {
+        fetch('//spotimeet.fedele.website/api/user', {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",

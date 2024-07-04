@@ -6,7 +6,7 @@ const userController = require('../controllers/user');
 
 module.exports = router;
 
-router.get('/me', userController.me);
+router.get('/', userController.me);
 router.get('/token', userController.tokenInfo);
 router.get('/favourites', userController.getFavouriteArtists);
 router.post('/favourites', userController.addFavouriteArtist);
