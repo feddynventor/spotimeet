@@ -47,7 +47,7 @@ export default function Login({ footer }) {
 			},
 			body: JSON.stringify({
 				username: e.target.identifier.value,
-				email: validateEmail(e.target.identifier.value),
+				email: validateEmail(e.target.identifier.value) ? e.target.identifier.value : null,
 				password: e.target.password.value
 			})
 		})

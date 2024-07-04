@@ -91,7 +91,7 @@ User.refreshToken = async function (uid, data) {
  * @returns the user object
  */
 User.byCredentials = async function (username, email, password) {
-    const id = username ? ({username}) : ({email});
+    const id = email ? ({email}) : ({username});
     return this.findOne({
         ...id,
     })
